@@ -64,3 +64,11 @@ def _load_airports():
 AIRPORTS = _load_airports()
 COUNTRIES = _load_country_continents()
 DISTANCES = _load_aeroplan_distances()
+
+
+DEFAULT_ORIGIN_AIRPORT_INDEX, DEFAULT_ORIGIN_AIRPORT = next(
+    filter(lambda e: e[1].iata_code == "YYC", enumerate(AIRPORTS))
+)
+DEFAULT_DESTINATION_AIRPORT_INDEX, DEFAULT_DESTINATION_AIRPORT = next(
+    filter(lambda e: e[1].iata_code == "YYZ", enumerate(AIRPORTS))
+)

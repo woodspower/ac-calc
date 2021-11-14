@@ -1,7 +1,7 @@
 import pandas as pd
 import streamlit as st
 
-from ac_aqd.data import AIRPORTS, COUNTRIES, DISTANCES
+from ac_aqd.data import AIRPORTS, COUNTRIES, DISTANCES, DEFAULT_ORIGIN_AIRPORT_INDEX
 
 
 def main():
@@ -26,8 +26,7 @@ def browse_distances(title):
     origin = st.selectbox(
         "Origin 🛫",
         AIRPORTS,
-        # index=DEFAULT_ORIGIN_AIRPORT_INDEX,
-        index=0,
+        index=DEFAULT_ORIGIN_AIRPORT_INDEX,
         format_func=lambda airport: airport.iata_code,
         help="Flight origin airport code.",
     )
