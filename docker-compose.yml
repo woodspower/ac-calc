@@ -2,16 +2,16 @@ version: "3.9"
 
 services:
   ac-aqd:
+    image: ac-aqd:latest
     build:
       context: .
-      dockerfile: Dockerfile
     environment:
       PIP_CACHE_DIR: /var/cache/pip
     networks:
       - app
     volumes:
       - type: bind
-        source: ../
+        source: ./
         target: /project
         consistency: delegated
       - type: volume
