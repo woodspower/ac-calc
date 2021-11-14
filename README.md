@@ -1,2 +1,3 @@
 # ac-aqd-st
-Streamlit app for ac-aqd calculator
+
+A Streamlit app based on [scottkennedy/ac-aqd](https://github.com/scottkennedy/ac-aqd).
