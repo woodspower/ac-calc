@@ -1,0 +1,30 @@
+version: "3.9"
+
+services:
+  ac-aqd:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      PIP_CACHE_DIR: /var/cache/pip
+    networks:
+      - app
+    volumes:
+      - type: bind
+        source: ../
+        target: /project
+        consistency: delegated
+      - type: volume
+        source: pip-cache
+        target: /var/cache/pip
+    ports:
+      - target: 8501
+        published: 8501
+        protocol: tcp
+
+networks:
+  app:
+
+volumes:
+  pip-cache:
+    name: pip-cache
