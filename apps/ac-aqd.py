@@ -105,6 +105,7 @@ def browse_carriers(title):
     )
 
     st.subheader(carrier.name)
+    st.text(", ".join(carrier.codes))
 
 
 def browse_distances(title):
