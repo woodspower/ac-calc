@@ -2,7 +2,7 @@ import pandas as pd
 import streamlit as st
 
 from ac_aqd.aeroplan import AEROPLAN_STATUSES, FARE_BRANDS
-from ac_aqd.carriers import CARRIERS
+from ac_aqd.carriers import CARRIERS, DEFAULT_CARRIER_INDEX
 from ac_aqd.data import AIRPORTS, COUNTRIES, DISTANCES, DEFAULT_ORIGIN_AIRPORT_INDEX
 from ac_aqd.itinerary import Itinerary, Segment
 
@@ -12,6 +12,7 @@ def main():
 
     tools = {
         "Calculate Miles and Dollars": calculate_miles_dollars,
+        "Browse Carriers": browse_carriers,
         "Browse Distances": browse_distances,
     }
     tool_title = st.sidebar.radio("Tool", tools.keys())
@@ -34,6 +35,7 @@ def calculate_miles_dollars(title):
             itinerary.segments.append(Segment(
                 airline=ref_segment.airline,
                 origin=ref_segment.destination,
+                destination=ref_segment.origin,
                 fare_class=ref_segment.fare_class,
                 fare_brand=ref_segment.fare_brand,
             ))
@@ -52,7 +54,7 @@ def calculate_miles_dollars(title):
                 airline_col, origin_col, destination_col, fare_brand_col, fare_class_col = st.columns((3, 2, 2, 3, 1))
 
                 segment.airline = airline_col.selectbox(
-                    "Airline ✈️",
+                    "Carrier ✈️",
                     CARRIERS,
                     index=CARRIERS.index(segment.airline),
                     format_func=lambda carrier: carrier.name,
@@ -89,6 +91,20 @@ def calculate_miles_dollars(title):
                     index=segment.fare_brand.fare_classes.index(segment.fare_class) if segment.fare_class in segment.fare_brand.fare_classes else 0,
                     key=f"fare_class-{index}",
                 )
+
+
+def browse_carriers(title):
+    st.header(title)
+
+    carrier = st.selectbox(
+        "Carrier ✈️",
+        CARRIERS,
+        index=DEFAULT_CARRIER_INDEX,
+        format_func=lambda carrier: carrier.name,
+        help="Operating carrier.",
+    )
+
+    st.subheader(carrier.name)
 
 
 def browse_distances(title):
