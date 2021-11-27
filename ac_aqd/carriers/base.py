@@ -7,11 +7,11 @@ class Carrier(object):
     def __init__(
         self,
         name: str,
-        codes=None,
+        codes: tuple[str] = tuple(),
         status_factors: dict={},
     ):
         self.name = name
-        self.codes = codes if codes else (self.__class__.__name__,)
+        self.codes = codes
         self.status_factors = status_factors
 
     def __eq__(self, other):
