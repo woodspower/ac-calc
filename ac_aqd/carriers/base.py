@@ -1,5 +1,5 @@
-from .aeroplan import AeroplanStatus, FareBrand
-from .data import Airport
+from ..aeroplan import AeroplanStatus, FareBrand
+from ..data import Airport
 
 
 class Carrier(object):

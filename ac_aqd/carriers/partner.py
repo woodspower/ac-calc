@@ -1,4 +1,4 @@
-from .model import Carrier
+from .base import Carrier
 
 
 class PartnerCarrier(Carrier):
