@@ -2,7 +2,7 @@ import pandas as pd
 import streamlit as st
 
 from ac_aqd.aeroplan import AEROPLAN_STATUSES, FARE_BRANDS
-from ac_aqd.carriers import CARRIERS, DEFAULT_CARRIER_INDEX
+from ac_aqd.airlines import AIRLINES, DEFAULT_AIRLINE_INDEX
 from ac_aqd.data import AIRPORTS, COUNTRIES, DISTANCES, DEFAULT_ORIGIN_AIRPORT_INDEX
 from ac_aqd.itinerary import Itinerary, Segment
 
@@ -12,7 +12,7 @@ def main():
 
     tools = {
         "Calculate Miles and Dollars": calculate_miles_dollars,
-        "Browse Carriers": browse_carriers,
+        "Browse Airlines": browse_airlines,
         "Browse Distances": browse_distances,
     }
     tool_title = st.sidebar.radio("Tool", tools.keys())
@@ -54,11 +54,11 @@ def calculate_miles_dollars(title):
                 airline_col, origin_col, destination_col, fare_brand_col, fare_class_col = st.columns((3, 2, 2, 3, 1))
 
                 segment.airline = airline_col.selectbox(
-                    "Carrier ✈️",
-                    CARRIERS,
-                    index=CARRIERS.index(segment.airline),
-                    format_func=lambda carrier: carrier.name,
-                    help="Flight segment operating carrier.",
+                    "Airline ✈️",
+                    AIRLINES,
+                    index=AIRLINES.index(segment.airline),
+                    format_func=lambda airline: airline.name,
+                    help="Flight segment operating airline.",
                     key=f"airline-{index}",
                 )
                 segment.origin = origin_col.selectbox(
@@ -93,19 +93,19 @@ def calculate_miles_dollars(title):
                 )
 
 
-def browse_carriers(title):
+def browse_airlines(title):
     st.header(title)
 
-    carrier = st.selectbox(
-        "Carrier ✈️",
-        CARRIERS,
-        index=DEFAULT_CARRIER_INDEX,
-        format_func=lambda carrier: carrier.name,
-        help="Operating carrier.",
+    airline = st.selectbox(
+        "Airline ✈️",
+        AIRLINES,
+        index=DEFAULT_AIRLINE_INDEX,
+        format_func=lambda airline: airline.name,
+        help="Operating airline.",
     )
 
-    st.subheader(carrier.name)
-    st.text(", ".join(carrier.codes))
+    st.subheader(airline.name)
+    st.text(", ".join(airline.codes))
 
 
 def browse_distances(title):
