@@ -47,3 +47,7 @@ FARE_BRANDS = (
     BusinessLowest,
     BusinessFlexible,
 )
+
+
+DEFAULT_FARE_BRAND = Flex
+DEFAULT_FARE_CLASS = "M"
