@@ -2,7 +2,7 @@ from ..aeroplan import AeroplanStatus, FareBrand
 from ..data import Airport
 
 
-class Carrier(object):
+class Airline(object):
 
     def __init__(
         self,
