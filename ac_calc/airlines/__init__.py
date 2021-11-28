@@ -47,7 +47,7 @@ class Airline:
 
             return EarthRadiusMi * c
 
-    def calculate(
+    def calculate_earnings(
         self,
         origin: Airport,
         destination: Airport,
@@ -62,10 +62,10 @@ class Airline:
         if not earning_rate or not distance:
             return EarningResult(0.0, 0.0, 0.0)
 
-        sqm = max(distance * earning_rate, aeroplan_status.min_status_value) if self.earns_sqm else 0.0
+        sqm = max(distance * earning_rate, aeroplan_status.min_earning_value) if self.earns_sqm else 0.0
         sqm_bonus = min(sqm, distance) * aeroplan_status.bonus_factor
 
-        app = max(distance * earning_rate, aeroplan_status.min_status_value) if self.earns_app else 0.0
+        app = max(distance * earning_rate, aeroplan_status.min_earning_value) if self.earns_app else 0.0
         app_bonus = min(app, distance) * aeroplan_status.bonus_factor
 
         return EarningResult(sqm, sqm_bonus, app, app_bonus)
