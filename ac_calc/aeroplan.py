@@ -1,7 +1,7 @@
 from collections import namedtuple
 
 
-AeroplanStatus = namedtuple("AeroplanStatus", ("name,bonus_factor,min_status_value"))
+AeroplanStatus = namedtuple("AeroplanStatus", ("name,bonus_factor,min_earning_value"))
 FareBrand = namedtuple("FareBrand", ("name", "basis_codes", "fare_classes", "status_factor", "redeemable_factor"))
 
 
