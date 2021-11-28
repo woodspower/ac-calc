@@ -8,14 +8,14 @@ from ac_calc.itinerary import Itinerary, Segment
 
 
 def main():
-    st.set_page_config(page_title="AC Aeroplan Calculator", layout="wide")
+    st.set_page_config(page_title="AC Calculator", layout="wide")
 
     tools = {
         "Calculate Miles and Dollars": calculate_miles_dollars,
         "Browse Airlines": browse_airlines,
         "Browse Distances": browse_distances,
     }
-    tool_title = st.sidebar.radio("Tool", tools.keys())
+    tool_title = st.sidebar.radio("Tool:", tools.keys())
     tool = tools[tool_title]
     tool(tool_title)
 
