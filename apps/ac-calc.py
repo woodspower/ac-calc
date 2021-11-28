@@ -21,7 +21,7 @@ def main():
 
 
 def calculate_miles_dollars(title):
-    st.title(title)
+    # st.title(title)
 
     if "itineraries" not in st.session_state:
         st.session_state["itineraries"] = [Itinerary()]
@@ -94,7 +94,7 @@ def calculate_miles_dollars(title):
 
 
 def browse_airlines(title):
-    st.title(title)
+    # st.title(title)
 
     airline = st.selectbox(
         "Airline ✈️",
@@ -109,7 +109,7 @@ def browse_airlines(title):
 
 
 def browse_distances(title):
-    st.title(title)
+    # st.title(title)
 
     origin = st.selectbox(
         "Origin 🛫",
