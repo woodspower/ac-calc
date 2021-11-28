@@ -11,7 +11,7 @@ Distance = namedtuple("Distance", ("origin,destination,old_distance,distance"))
 
 @cache
 def _load_country_continents():
-    with resources.open_text("ac_aqd.data", "country_continents.csv") as f:
+    with resources.open_text("ac_aqd.locations", "country_continents.csv") as f:
         reader = csv.reader(f)
         assert(next(reader) == ["country", "continent"])
         countries = tuple(map(Country._make, reader))
@@ -21,7 +21,7 @@ def _load_country_continents():
 
 @cache
 def _load_aeroplan_distances():
-    with resources.open_text("ac_aqd.data", "aeroplan_distances.csv") as f:
+    with resources.open_text("ac_aqd.locations", "aeroplan_distances.csv") as f:
         reader = csv.reader(f)
         assert(next(reader) == ["origin", "destination", "old_distance", "distance"])
         distances = defaultdict(dict)
@@ -44,7 +44,7 @@ def _load_airports():
 
     # Load and return list of airports, resolving the countries to
     # Country tuples and including distances to other airports.
-    with resources.open_text("ac_aqd.data", "airports.csv") as f:
+    with resources.open_text("ac_aqd.locations", "airports.csv") as f:
         reader = csv.reader(f)
         assert(next(reader) == ["iata_code", "country", "latitude", "longitude"])
         airports = [

@@ -2,7 +2,7 @@ from dataclasses import dataclass, field
 
 from .aeroplan import FareBrand, DEFAULT_FARE_BRAND, DEFAULT_FARE_CLASS
 from .airlines import Airline, DEFAULT_AIRLINE
-from .data import Airport, DEFAULT_ORIGIN_AIRPORT, DEFAULT_DESTINATION_AIRPORT
+from .locations import Airport, DEFAULT_ORIGIN_AIRPORT, DEFAULT_DESTINATION_AIRPORT
 
 
 @dataclass

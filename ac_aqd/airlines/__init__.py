@@ -5,7 +5,7 @@ import json
 
 
 from ..aeroplan import AeroplanStatus, FareBrand
-from ..data import Airport
+from ..locations import Airport
 
 
 @dataclass
