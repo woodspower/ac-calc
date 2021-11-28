@@ -2,7 +2,7 @@ import pandas as pd
 import streamlit as st
 
 from ac_calc.aeroplan import AEROPLAN_STATUSES, FARE_BRANDS
-from ac_calc.airlines import AIRLINES, DEFAULT_AIRLINE_INDEX
+from ac_calc.airlines import AirCanada, AIRLINES, DEFAULT_AIRLINE_INDEX
 from ac_calc.locations import AIRPORTS, COUNTRIES, DISTANCES, DEFAULT_ORIGIN_AIRPORT_INDEX
 from ac_calc.itinerary import Itinerary, Segment
 
@@ -100,20 +100,23 @@ def calculate_miles_dollars(title):
                     help="Flight segment destination airport code.",
                     key=f"destination-{index}",
                 )
-                segment.fare_brand = fare_brand_col.selectbox(
-                    "Fare Brand",
-                    FARE_BRANDS,
-                    index=FARE_BRANDS.index(segment.fare_brand),
-                    format_func=lambda brand: brand.name,
-                    help="Air Canada fare brand. Select “None” for non-Air Canada fares.",
-                    key=f"fare_brand-{index}",
-                )
+                if segment.airline == AirCanada:
+                    segment.fare_brand = fare_brand_col.selectbox(
+                        "Fare Brand",
+                        FARE_BRANDS,
+                        index=FARE_BRANDS.index(segment.fare_brand),
+                        format_func=lambda brand: brand.name,
+                        help="Air Canada fare brand. Select “None” for non-Air Canada fares.",
+                        key=f"fare_brand-{index}",
+                    )
                 segment.fare_class = fare_class_col.selectbox(
                     "Fare Class",
                     segment.fare_brand.fare_classes,
                     index=segment.fare_brand.fare_classes.index(segment.fare_class) if segment.fare_class in segment.fare_brand.fare_classes else 0,
                     key=f"fare_class-{index}",
                 )
+
+                print(segment.origin.iata_code, segment.destination.iata_code, segment.calculate_earnings())
 
 
 def browse_airlines(title):
