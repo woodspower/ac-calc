@@ -26,10 +26,9 @@ def calculate_miles_dollars(title):
     # Initialize itineraries. Although this code supports multiple itineraries, this will not be
     # presented at this time.
     if "itineraries" not in st.session_state:
-        itinerary = Itinerary()
-        itinerary.segments.append(Segment(itinerary=itinerary))
-
-        st.session_state["itineraries"] = [itinerary]
+        st.session_state["itineraries"] = [Itinerary(segments=[
+            Segment(),
+        ])]
 
     for itinerary in st.session_state["itineraries"]:
         with st.sidebar:
