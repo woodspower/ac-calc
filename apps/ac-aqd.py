@@ -105,7 +105,7 @@ def browse_airlines(title):
     )
 
     st.subheader(airline.name)
-    st.text(", ".join(airline.codes))
+    st.markdown(airline.region)
 
 
 def browse_distances(title):
