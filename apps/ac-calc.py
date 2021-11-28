@@ -23,22 +23,46 @@ def main():
 def calculate_miles_dollars(title):
     # st.title(title)
 
+    # Initialize itineraries. Although this code supports multiple itineraries, this will not be
+    # presented at this time.
     if "itineraries" not in st.session_state:
-        st.session_state["itineraries"] = [Itinerary()]
+        itinerary = Itinerary()
+        itinerary.segments.append(Segment(itinerary=itinerary))
+
+        st.session_state["itineraries"] = [itinerary]
 
     for itinerary in st.session_state["itineraries"]:
+        with st.sidebar:
+            itinerary.ticket_number = st.text_input(
+                "Ticket Number:",
+                value=itinerary.ticket_number,
+                help="First three digits or full ticket number. Air Canada is 014.",
+            )
+
+            itinerary.aeroplan_status = st.selectbox(
+                "Aeroplan Status:",
+                AEROPLAN_STATUSES,
+                index=AEROPLAN_STATUSES.index(itinerary.aeroplan_status),
+                format_func=lambda status: status.name,
+                help="Air Canada Aeroplan elite status.",
+            )
+
         segments_placeholder = st.empty()
 
         if st.button("Add Segment"):
-            ref_segment = itinerary.segments[-1]
+            if itinerary.segments:
+                ref_segment = itinerary.segments[-1]
 
-            itinerary.segments.append(Segment(
-                airline=ref_segment.airline,
-                origin=ref_segment.destination,
-                destination=ref_segment.origin,
-                fare_class=ref_segment.fare_class,
-                fare_brand=ref_segment.fare_brand,
-            ))
+                itinerary.segments.append(Segment(
+                    itinerary=itinerary,
+                    airline=ref_segment.airline,
+                    origin=ref_segment.destination,
+                    destination=ref_segment.origin,
+                    fare_class=ref_segment.fare_class,
+                    fare_brand=ref_segment.fare_brand,
+                ))
+            else:
+                itinerary.segments.append(Segment(itinerary=itinerary))
 
         with segments_placeholder.container():
             st.markdown("""
@@ -50,7 +74,6 @@ def calculate_miles_dollars(title):
             for index, segment in enumerate(itinerary.segments):
                 is_first = index == 0
 
-                # with st.expander(f"Segment {index + 1}", expanded=True):
                 airline_col, origin_col, destination_col, fare_brand_col, fare_class_col = st.columns((3, 2, 2, 3, 1))
 
                 segment.airline = airline_col.selectbox(

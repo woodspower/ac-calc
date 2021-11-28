@@ -23,6 +23,9 @@ AEROPLAN_STATUSES = (
 )
 
 
+DEFAULT_AEROPLAN_STATUS = NoStatus
+
+
 NoBrand = FareBrand("None", tuple(), [c for c in "JCDZPOENYBMUHQVWGSTLAK"], 0.0, 0.0)
 Basic = FareBrand("Basic", ("BA", "GT"), [c for c in "YBMUHQVWGSTLAK"], 0.25, 0.25)
 Standard = FareBrand("Standard", ("TG",), [c for c in "YBMUHQVWGSTLAK"], 0.5, 0.25)
