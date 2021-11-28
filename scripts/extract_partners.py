@@ -39,17 +39,22 @@ def main(
         if earnings_text := next(filter(lambda section: section["id"] == "2", eligible_flights_tab["sections"]), {}).get("content"):
             soup = BeautifulSoup(earnings_text, "html5lib")
 
-            earning_rates = []
+            earning_rates = {}
             for tr in soup.find_all("tr"):
                 if tds := tr.find_all("td"):
                     if len(tds) >= 2:
-                        codes = [
+                        try:
+                            rate = float(tds[-1].text.rstrip("%")) / 100.0
+                        except:
+                            rate = 0.0
+                        codes = (
                             c.strip()
                             for c in tds[-2].text.split(",")
                             if len(c.strip()) == 1  # Ignore special conditions
-                        ]
-                        rates = tds[-1].text.rstrip("%")
-                        earning_rates.append((codes, rates))
+                        )
+
+                        for code in codes:
+                            earning_rates[code] = rate
         else:
             earning_rates = None
 
