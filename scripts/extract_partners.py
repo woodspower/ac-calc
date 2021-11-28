@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 from pathlib import Path
+from typing import Optional
 
 from bs4 import BeautifulSoup
 import srsly
@@ -14,6 +15,7 @@ import typer
 
 def main(
     partners_file: Path = typer.Argument("airline-en.json", help="Airline partners data file."),
+    output_file: Optional[Path] = typer.Argument(None),
 ):
     airline_partners = srsly.read_json(partners_file)
 
@@ -70,7 +72,8 @@ def main(
             "earning_rates": earning_rates,
         })
 
-    srsly.write_json("partners.json", parsed_partners)
+    if output_file:
+        srsly.write_json(output_file, parsed_partners)
 
     return parsed_partners
 
