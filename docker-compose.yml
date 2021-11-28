@@ -1,11 +1,11 @@
 version: "3.9"
 
 services:
-  ac-aqd:
-    image: ac-aqd:latest
+  ac-calc:
+    image: ac-calc:latest
     build:
       context: .
-    command: ["/usr/local/bin/streamlit", "run", "apps/ac-aqd.py"]
+    command: ["/usr/local/bin/streamlit", "run", "apps/ac-calc.py"]
     environment:
       PIP_CACHE_DIR: /var/cache/pip
     networks:

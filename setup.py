@@ -8,7 +8,7 @@ from setuptools import find_packages, setup
 
 def setup_package():
     setup(
-        name="ac_aqd",
+        name="ac_calc",
         version="0.0.0",
         description="Streamlit app for ac-aqd.",
         author="King Chung Huang",

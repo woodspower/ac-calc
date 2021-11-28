@@ -1,10 +1,10 @@
 import pandas as pd
 import streamlit as st
 
-from ac_aqd.aeroplan import AEROPLAN_STATUSES, FARE_BRANDS
-from ac_aqd.airlines import AIRLINES, DEFAULT_AIRLINE_INDEX
-from ac_aqd.data import AIRPORTS, COUNTRIES, DISTANCES, DEFAULT_ORIGIN_AIRPORT_INDEX
-from ac_aqd.itinerary import Itinerary, Segment
+from ac_calc.aeroplan import AEROPLAN_STATUSES, FARE_BRANDS
+from ac_calc.airlines import AIRLINES, DEFAULT_AIRLINE_INDEX
+from ac_calc.locations import AIRPORTS, COUNTRIES, DISTANCES, DEFAULT_ORIGIN_AIRPORT_INDEX
+from ac_calc.itinerary import Itinerary, Segment
 
 
 def main():
@@ -21,7 +21,7 @@ def main():
 
 
 def calculate_miles_dollars(title):
-    st.header(title)
+    st.title(title)
 
     if "itineraries" not in st.session_state:
         st.session_state["itineraries"] = [Itinerary()]
@@ -94,7 +94,7 @@ def calculate_miles_dollars(title):
 
 
 def browse_airlines(title):
-    st.header(title)
+    st.title(title)
 
     airline = st.selectbox(
         "Airline ✈️",
@@ -104,12 +104,12 @@ def browse_airlines(title):
         help="Operating airline.",
     )
 
-    st.subheader(airline.name)
+    st.header(airline.name)
     st.markdown(airline.region)
 
 
 def browse_distances(title):
-    st.header(title)
+    st.title(title)
 
     origin = st.selectbox(
         "Origin 🛫",
