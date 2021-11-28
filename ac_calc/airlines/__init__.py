@@ -9,7 +9,7 @@ from ..aeroplan import AeroplanStatus, FareBrand
 from ..locations import Airport
 
 
-EarningResult = namedtuple("EarningResult", ("app", "app_bonus", "sqm", "sqm_bonus"))
+EarningResult = namedtuple("EarningResult", ("distance", "app", "app_bonus", "sqm", "sqm_bonus"))
 EarthRadiusMi = 3959.0
 
 
@@ -60,7 +60,7 @@ class Airline:
         distance = self._distance(origin, destination)
 
         if not earning_rate or not distance:
-            return EarningResult(0, 0, 0, 0)
+            return EarningResult(distance, 0, 0, 0, 0)
 
         sqm = max(distance * earning_rate, aeroplan_status.min_earning_value) if self.earns_sqm else 0
         sqm_bonus = min(sqm, distance) * aeroplan_status.bonus_factor
@@ -69,6 +69,7 @@ class Airline:
         app_bonus = min(app, distance) * aeroplan_status.bonus_factor
 
         return EarningResult(
+            distance,
             int(sqm),
             int(sqm_bonus),
             int(app),
