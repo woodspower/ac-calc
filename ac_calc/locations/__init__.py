@@ -26,12 +26,20 @@ def _load_aeroplan_distances():
         assert(next(reader) == ["origin", "destination", "old_distance", "distance"])
         distances = defaultdict(dict)
         for distance in map(Distance._make, reader):
-            distances[distance.origin][distance.destination] = distance
+            old_distance = int(distance.old_distance) if distance.old_distance else 0
+            new_distance = int(distance.distance) if distance.distance else 0
+
+            distances[distance.origin][distance.destination] = Distance(
+                distance.origin,
+                distance.destination,
+                old_distance,
+                new_distance,
+            )
             distances[distance.destination][distance.origin] = Distance(
                 distance.destination,
                 distance.origin,
-                distance.old_distance,
-                distance.distance,
+                old_distance,
+                new_distance,
             )
 
     return distances
