@@ -60,15 +60,20 @@ class Airline:
         distance = self._distance(origin, destination)
 
         if not earning_rate or not distance:
-            return EarningResult(0.0, 0.0, 0.0, 0.0)
+            return EarningResult(0, 0, 0, 0)
 
-        sqm = max(distance * earning_rate, aeroplan_status.min_earning_value) if self.earns_sqm else 0.0
+        sqm = max(distance * earning_rate, aeroplan_status.min_earning_value) if self.earns_sqm else 0
         sqm_bonus = min(sqm, distance) * aeroplan_status.bonus_factor
 
-        app = max(distance * earning_rate, aeroplan_status.min_earning_value) if self.earns_app else 0.0
+        app = max(distance * earning_rate, aeroplan_status.min_earning_value) if self.earns_app else 0
         app_bonus = min(app, distance) * aeroplan_status.bonus_factor
 
-        return EarningResult(sqm, sqm_bonus, app, app_bonus)
+        return EarningResult(
+            int(sqm),
+            int(sqm_bonus),
+            int(app),
+            int(app_bonus),
+        )
 
 
 class AirCanadaAirline(Airline):
