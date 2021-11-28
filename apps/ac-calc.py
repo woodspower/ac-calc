@@ -1,10 +1,10 @@
 import pandas as pd
 import streamlit as st
 
-from ac_aqd.aeroplan import AEROPLAN_STATUSES, FARE_BRANDS
-from ac_aqd.airlines import AIRLINES, DEFAULT_AIRLINE_INDEX
-from ac_aqd.locations import AIRPORTS, COUNTRIES, DISTANCES, DEFAULT_ORIGIN_AIRPORT_INDEX
-from ac_aqd.itinerary import Itinerary, Segment
+from ac_calc.aeroplan import AEROPLAN_STATUSES, FARE_BRANDS
+from ac_calc.airlines import AIRLINES, DEFAULT_AIRLINE_INDEX
+from ac_calc.locations import AIRPORTS, COUNTRIES, DISTANCES, DEFAULT_ORIGIN_AIRPORT_INDEX
+from ac_calc.itinerary import Itinerary, Segment
 
 
 def main():

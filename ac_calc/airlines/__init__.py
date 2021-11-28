@@ -42,7 +42,7 @@ class AirCanadaAirline(Airline):
 
 @cache
 def _load_airline_partners():
-    with resources.open_text("ac_aqd.airlines", "partners.json") as f:
+    with resources.open_text("ac_calc.airlines", "partners.json") as f:
         partners = json.load(f)
 
     return tuple((
