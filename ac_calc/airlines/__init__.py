@@ -60,7 +60,21 @@ AirCanada = AirCanadaAirline(
     star_alliance_member=True,
     earns_app=True,
     earns_sqm=True,
-    earning_rates={},
+    earning_rates={
+        "Basic-domestic": 0.10,
+        "Basic-transborder": 0.25,
+        "Basic-international": 0.25,
+        "Standard-domestic": 0.25,
+        "Standard-transborder": 0.50,
+        "Standard-international": 0.50,
+        "Flex": 1.0,
+        "Comfort": 1.15,
+        "Latitude": 1.25,
+        "Premium Economy (Lowest)": 1.25,
+        "Premium Economy (Flexible)": 1.25,
+        "Business (Lowest)": 1.50,
+        "Business (Flexible)": 1.50,
+    },
 )
 
 
