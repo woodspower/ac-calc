@@ -1,4 +1,8 @@
 from dataclasses import dataclass, field
+from functools import cache
+from importlib import resources
+import json
+
 
 from ..aeroplan import AeroplanStatus, FareBrand
 from ..data import Airport
@@ -11,6 +15,7 @@ class Airline:
     name: str
     region: str
     website: str
+    logo: str
     star_alliance_member: bool
     earns_app: bool
     earns_sqm: bool
@@ -35,10 +40,31 @@ class AirCanadaAirline(Airline):
     pass
 
 
-AirCanada = AirCanadaAirline("Air Canada")
+@cache
+def _load_airline_partners():
+    with resources.open_text("ac_aqd.airlines", "partners.json") as f:
+        partners = json.load(f)
+
+    return tuple((
+        Airline(**partner)
+        for partner in partners
+    ))
 
 
-AIRLINES = (AirCanada,)
+AirCanada = AirCanadaAirline(
+    id="air-canada",
+    name="Air Canada",
+    region="Canada & U.S.",
+    website="http://www.aircanda.com",
+    logo=None,
+    star_alliance_member=True,
+    earns_app=True,
+    earns_sqm=True,
+    earning_rates={},
+)
+
+
+AIRLINES = (AirCanada,) + _load_airline_partners()
 
 
 DEFAULT_AIRLINE, DEFAULT_AIRLINE_INDEX = AirCanada, 0
