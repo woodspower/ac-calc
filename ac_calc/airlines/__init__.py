@@ -1,11 +1,16 @@
+from collections import namedtuple
 from dataclasses import dataclass, field
 from functools import cache
 from importlib import resources
 import json
-
+from math import asin, cos, pow, radians, sin, sqrt
 
 from ..aeroplan import AeroplanStatus, FareBrand
 from ..locations import Airport
+
+
+EarningResult = namedtuple("EarningResult", ("app", "app_bonus", "sqm", "sqm_bonus"))
+EarthRadiusMi = 3959.0
 
 
 @dataclass
@@ -24,16 +29,46 @@ class Airline:
     def __eq__(self, other):
         return self.id == other.id
 
+    def _distance(self, origin: Airport, destination: Airport):
+        """Calculate the distance from origin to destination. If there isn't a pre-recorded
+        Aeroplan distance, calculate the haversine distance.
+        """
+
+        if distance := origin.distances.get(destination.iata_code):
+            return distance.distance or distance.old_distance
+        else:
+            d_lat = radians(destination.latitude - origin.latitude)
+            d_lon = radians(destination.longitude - origin.longitude)
+            origin_lat = radians(origin.latitude)
+            destination_lat = radians(destination.latitude)
+
+            a = pow(sin(d_lat / 2), 2) + pow(sin(d_lon / 2), 2) * cos(origin_lat) * cos(destination_lat)
+            c = 2 * asin(sqrt(a))
+
+            return EarthRadiusMi * c
+
     def calculate(
         self,
         origin: Airport,
         destination: Airport,
         fare_brand: FareBrand,
-        fare_basis: str,
+        fare_class: str,
         ticket_number: str,
         aeroplan_status: AeroplanStatus,
     ):
-        return 0.0
+        earning_rate = self.earning_rates.get(fare_class) or self.earning_rates.get(fare_brand.name)
+        distance = self._distance(origin, destination)
+
+        if not earning_rate or not distance:
+            return EarningResult(0.0, 0.0, 0.0)
+
+        sqm = max(distance * earning_rate, aeroplan_status.min_status_value) if self.earns_sqm else 0.0
+        sqm_bonus = min(sqm, distance) * aeroplan_status.bonus_factor
+
+        app = max(distance * earning_rate, aeroplan_status.min_status_value) if self.earns_app else 0.0
+        app_bonus = min(app, distance) * aeroplan_status.bonus_factor
+
+        return EarningResult(sqm, sqm_bonus, app, app_bonus)
 
 
 class AirCanadaAirline(Airline):
