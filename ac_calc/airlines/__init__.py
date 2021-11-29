@@ -9,7 +9,11 @@ from ..aeroplan import AeroplanStatus, FareBrand
 from ..locations import Airport
 
 
-SegmentCalculation = namedtuple("SegmentCalculation", ("distance", "app", "app_bonus", "sqm", "sqm_bonus"))
+SegmentCalculation = namedtuple("SegmentCalculation", (
+    "distance",
+    "app", "app_bonus_factor", "app_bonus",
+    "sqm", "sqm_bonus_factor", "sqm_bonus",
+))
 EarthRadiusMi = 3959.0
 
 
@@ -63,16 +67,20 @@ class Airline:
             return SegmentCalculation(distance, 0, 0, 0, 0)
 
         sqm = max(distance * earning_rate, aeroplan_status.min_earning_value) if self.earns_sqm else 0
-        sqm_bonus = min(sqm, distance) * aeroplan_status.bonus_factor
+        sqm_bonus_factor = aeroplan_status.bonus_factor
+        sqm_bonus = min(sqm, distance) * sqm_bonus_factor
 
         app = max(distance * earning_rate, aeroplan_status.min_earning_value) if self.earns_app else 0
-        app_bonus = min(app, distance) * aeroplan_status.bonus_factor
+        app_bonus_factor = aeroplan_status.bonus_factor
+        app_bonus = min(app, distance) * app_bonus_factor
 
         return SegmentCalculation(
             distance,
             int(sqm),
+            sqm_bonus_factor,
             int(sqm_bonus),
             int(app),
+            app_bonus_factor,
             int(app_bonus),
         )
 
