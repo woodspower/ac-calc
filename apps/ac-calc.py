@@ -77,7 +77,7 @@ def calculate_points_miles(title):
 
     with st.container():
         for index in range(st.session_state["num_segments"]):
-            airline_col, origin_col, destination_col, fare_brand_col, fare_class_col, remove_col = st.columns((24, 16, 16, 24, 8, 4))
+            airline_col, origin_col, destination_col, fare_brand_col, fare_class_col = st.columns((24, 16, 16, 24, 8))
 
             airline = airline_col.selectbox(
                 "Airline ✈️",
