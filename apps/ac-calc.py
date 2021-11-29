@@ -8,10 +8,18 @@ from ac_calc.itinerary import Itinerary, Segment
 
 
 def main():
-    st.set_page_config(page_title="AC Calculator", layout="wide")
+    st.set_page_config(
+        page_title="AC Calculator",
+        layout="wide",
+        menu_items={
+            "Get help": "https://www.flyertalk.com/forum/air-canada-aeroplan/1744575-new-improved-calculator-aqm-aeroplan-miles-aqd.html",
+            "Report a Bug": None,
+            "About": "Aeroplan points and miles calculator. Based on [github.com/scottkennedy/ac-aqd](https://github.com/scottkennedy/ac-aqd).",
+        }
+    )
 
     tools = {
-        "Calculate Miles and Dollars": calculate_miles_dollars,
+        "Calculate Points and Miles": calculate_points_miles,
         "Browse Airlines": browse_airlines,
         "Browse Distances": browse_distances,
     }
@@ -20,7 +28,7 @@ def main():
     tool(tool_title)
 
 
-def calculate_miles_dollars(title):
+def calculate_points_miles(title):
     # st.title(title)
 
     # Initialize itineraries. Although this code supports multiple itineraries, this will not be
