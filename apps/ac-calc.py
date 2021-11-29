@@ -66,7 +66,9 @@ def calculate_miles_dollars(title):
         with segments_placeholder:
             st.markdown("""
             <style>
-
+                div.streamlit-expanderContent div[data-testid="stBlock"]:not([style]):not(:first-child) label {
+                    display: none
+                }
             </style>
             """, unsafe_allow_html=True)
 
