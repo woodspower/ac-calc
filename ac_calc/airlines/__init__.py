@@ -64,12 +64,12 @@ class Airline:
         if not distance:
             return SegmentCalculation(distance, 0, 0, 0, 0, 0, 0)
 
-        app_earning_rate = self.earning_rates.get(fare_class) or self.earning_rates.get(fare_brand.name)
+        app_earning_rate = self.earning_rates.get(fare_class, None) or self.earning_rates.get(fare_brand.name, 0)
         app_bonus_factor = aeroplan_status.bonus_factor
         app = max(distance * app_earning_rate, aeroplan_status.min_earning_value) if self.earns_app else 0
         app_bonus = min(app, distance) * app_bonus_factor
 
-        sqm_earning_rate = self.earning_rates.get(fare_class) or self.earning_rates.get(fare_brand.name)
+        sqm_earning_rate = self.earning_rates.get(fare_class, None) or self.earning_rates.get(fare_brand.name, 0)
         sqm = max(distance * sqm_earning_rate, aeroplan_status.min_earning_value) if self.earns_sqm else 0
 
         return SegmentCalculation(
