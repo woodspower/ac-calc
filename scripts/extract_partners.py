@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+from collections import defaultdict
 from pathlib import Path
 from typing import Optional
 
@@ -41,22 +42,36 @@ def main(
         if earnings_text := next(filter(lambda section: section["id"] == "2", eligible_flights_tab["sections"]), {}).get("content"):
             soup = BeautifulSoup(earnings_text, "html5lib")
 
-            earning_rates = {}
-            for tr in soup.find_all("tr"):
-                if tds := tr.find_all("td"):
-                    if len(tds) >= 2:
-                        try:
-                            rate = float(tds[-1].text.rstrip("%")) / 100.0
-                        except:
-                            rate = 0.0
-                        codes = (
-                            c.strip()
-                            for c in tds[-2].text.split(",")
-                            if len(c.strip()) == 1  # Ignore special conditions
-                        )
+            header_row = soup.find("tr")
+            headers = [th.text.strip() for th in soup.find("tr").find_all("th")]
 
-                        for code in codes:
-                            earning_rates[code] = rate
+            num_headers = len(headers)
+
+            earning_rates = defaultdict(lambda: defaultdict(dict))
+            region, cos = "*", "*"
+
+            detail_rows = header_row.find_next_siblings("tr")
+            for tr in detail_rows:
+                if tds := tr.find_all(lambda t: t.name == "td" and "tablet-visible" not in t.attrs.get("class")):
+                    if len(tds) > 4 or len(tds) < 2:
+                        continue
+
+                    if len(tds) == 4:
+                        region = tds[0].text.strip()
+                    if len(tds) >= 3:
+                        cos = tds[-3].text.strip()
+
+                    try:
+                        rate = float(tds[-1].text.rstrip("%")) / 100.0
+                    except:
+                        rate = 0.0
+                    rates = {
+                        c.strip(): rate
+                        for c in tds[-2].text.split(",")
+                        if len(c.strip()) == 1  # Ignore special conditions
+                    }
+
+                    earning_rates[region][cos].update(rates)
         else:
             earning_rates = None
 
