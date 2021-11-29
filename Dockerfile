@@ -1,10 +1,10 @@
-FROM python:3.10
+FROM python:3.9
 
 WORKDIR /project
 
 ARG PIP_NO_CACHE_DIR=0
-COPY requirements.txt requirements.txt
-RUN pip install --requirement requirements.txt
+COPY requirements-dev.txt requirements-dev.txt
+RUN pip install --requirement requirements-dev.txt
 
 COPY setup.py setup.py
 COPY ac_calc ac_calc
