@@ -53,7 +53,7 @@ def calculate_points_miles(title):
             help="First three digits or full ticket number. Air Canada is 014.",
         )
 
-        st.selectbox(
+        st.radio(
             "Aeroplan Status:",
             AEROPLAN_STATUSES,
             index=AEROPLAN_STATUSES.index(DEFAULT_AEROPLAN_STATUS),
