@@ -13,12 +13,12 @@ class Segment:
     fare_brand: FareBrand = DEFAULT_FARE_BRAND
     fare_class: str = DEFAULT_FARE_CLASS
 
-    def calculate_earnings(
+    def calculate(
         self,
         ticket_number: str,
         aeroplan_status: AeroplanStatus
     ):
-        return self.airline.calculate_earnings(
+        return self.airline.calculate(
             self.origin,
             self.destination,
             self.fare_brand,
@@ -34,8 +34,8 @@ class Itinerary:
     aeroplan_status: AeroplanStatus = DEFAULT_AEROPLAN_STATUS
     segments: list[Segment] = field(default_factory=list)
 
-    def calculate_earnings(self):
+    def calculate(self):
         return [
-            segment.calculate_earnings(self.ticket_number, self.aeroplan_status)
+            segment.calculate(self.ticket_number, self.aeroplan_status)
             for segment in self.segments
         ]

@@ -118,7 +118,7 @@ def calculate_miles_dollars(title):
                         key=f"fare_class-{index}",
                     )
 
-                    segment_earnings = segment.calculate_earnings(itinerary.ticket_number, itinerary.aeroplan_status)
+                    segment_earnings = segment.calculate(itinerary.ticket_number, itinerary.aeroplan_status)
                     distance_col.markdown(f"""
                         <div class="row-widget css-pgkuvq" style="text-align: right">
                             <label class="css-qrbaxs">Distance</label>
@@ -127,7 +127,7 @@ def calculate_miles_dollars(title):
                     """, unsafe_allow_html=True)
 
         with earnings_placeholder:
-            segment_earnings = itinerary.calculate_earnings()
+            segment_earnings = itinerary.calculate()
 
             total_distance = sum((earnings.distance for earnings in segment_earnings))
             total_app = sum((earnings.app for earnings in segment_earnings))
