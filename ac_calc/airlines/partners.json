@@ -1311,7 +1311,7 @@
           "T":0.1
         }
       },
-      "Flights between Lisbon and Porto ":{
+      "Flights between Lisbon and Porto":{
         "Business":{
           "C":2.0,
           "D":2.0,
@@ -1656,7 +1656,7 @@
     "earns_app":true,
     "earns_sqm":true,
     "earning_rates":{
-      "Intra-European flights\u00a7 ":{
+      "Intra-European flights":{
         "Business":{
           "J":1.5,
           "C":1.5,
