@@ -57,21 +57,23 @@ def calculate_points_miles(title):
         earnings_placeholder = st.container()
         segments_placeholder = st.container()
 
-        if st.button("Add Segment"):
-            if itinerary.segments:
-                ref_segment = itinerary.segments[-1]
+        with st.expander("Segments", expanded=True):
+            segments_placeholder = st.container()
 
-                itinerary.segments.append(Segment(
-                    airline=ref_segment.airline,
-                    origin=ref_segment.destination,
-                    destination=ref_segment.origin,
-                    fare_class=ref_segment.fare_class,
-                    fare_brand=ref_segment.fare_brand,
-                ))
-            else:
-                itinerary.segments.append(Segment())
+            if st.button("Add Segment"):
+                if itinerary.segments:
+                    ref_segment = itinerary.segments[-1]
 
-        with segments_placeholder.expander("Segments", expanded=True):
+                    itinerary.segments.append(Segment(
+                        airline=ref_segment.airline,
+                        origin=ref_segment.destination,
+                        destination=ref_segment.origin,
+                        fare_class=ref_segment.fare_class,
+                        fare_brand=ref_segment.fare_brand,
+                    ))
+                else:
+                    itinerary.segments.append(Segment())
+
             st.markdown("""
                 <style>
                     div.streamlit-expanderContent div[data-testid="stBlock"]:not([style]):not(:first-child) label {
@@ -83,7 +85,7 @@ def calculate_points_miles(title):
             for index, segment in enumerate(itinerary.segments):
                 is_first = index == 0
 
-                airline_col, origin_col, destination_col, fare_brand_col, fare_class_col = st.columns((24, 16, 16, 24, 8))
+                airline_col, origin_col, destination_col, fare_brand_col, fare_class_col = segments_placeholder.columns((24, 16, 16, 24, 8))
 
                 segment.airline = airline_col.selectbox(
                     "Airline ✈️",
