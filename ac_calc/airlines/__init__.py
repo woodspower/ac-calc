@@ -1,11 +1,20 @@
+from collections import namedtuple
 from dataclasses import dataclass, field
 from functools import cache
 from importlib import resources
 import json
-
+from math import asin, cos, pow, radians, sin, sqrt
 
 from ..aeroplan import AeroplanStatus, FareBrand
 from ..locations import Airport
+
+
+SegmentCalculation = namedtuple("SegmentCalculation", (
+    "distance",
+    "app", "app_earning_rate", "app_bonus_factor", "app_bonus",
+    "sqm", "sqm_earning_rate",
+))
+EarthRadiusMi = 3959.0
 
 
 @dataclass
@@ -24,16 +33,54 @@ class Airline:
     def __eq__(self, other):
         return self.id == other.id
 
+    def _distance(self, origin: Airport, destination: Airport):
+        """Calculate the distance from origin to destination. If there isn't a pre-recorded
+        Aeroplan distance, calculate the haversine distance.
+        """
+
+        if distance := origin.distances.get(destination.iata_code):
+            return distance.distance or distance.old_distance
+        else:
+            d_lat = radians(destination.latitude - origin.latitude)
+            d_lon = radians(destination.longitude - origin.longitude)
+            origin_lat = radians(origin.latitude)
+            destination_lat = radians(destination.latitude)
+
+            a = pow(sin(d_lat / 2), 2) + pow(sin(d_lon / 2), 2) * cos(origin_lat) * cos(destination_lat)
+            c = 2 * asin(sqrt(a))
+
+            return EarthRadiusMi * c
+
     def calculate(
         self,
         origin: Airport,
         destination: Airport,
         fare_brand: FareBrand,
-        fare_basis: str,
+        fare_class: str,
         ticket_number: str,
         aeroplan_status: AeroplanStatus,
     ):
-        return 0.0
+        distance = self._distance(origin, destination)
+        if not distance:
+            return SegmentCalculation(distance, 0, 0, 0, 0, 0, 0)
+
+        app_earning_rate = self.earning_rates.get(fare_class, None) or self.earning_rates.get(fare_brand.name, 0)
+        app_bonus_factor = aeroplan_status.bonus_factor
+        app = max(distance * app_earning_rate, aeroplan_status.min_earning_value) if self.earns_app else 0
+        app_bonus = min(app, distance) * app_bonus_factor
+
+        sqm_earning_rate = self.earning_rates.get(fare_class, None) or self.earning_rates.get(fare_brand.name, 0)
+        sqm = max(distance * sqm_earning_rate, aeroplan_status.min_earning_value) if self.earns_sqm else 0
+
+        return SegmentCalculation(
+            distance,
+            int(app),
+            app_earning_rate,
+            app_bonus_factor,
+            int(app_bonus),
+            int(sqm),
+            sqm_earning_rate,
+        )
 
 
 class AirCanadaAirline(Airline):
@@ -60,7 +107,21 @@ AirCanada = AirCanadaAirline(
     star_alliance_member=True,
     earns_app=True,
     earns_sqm=True,
-    earning_rates={},
+    earning_rates={
+        "Basic-domestic": 0.10,
+        "Basic-transborder": 0.25,
+        "Basic-international": 0.25,
+        "Standard-domestic": 0.25,
+        "Standard-transborder": 0.50,
+        "Standard-international": 0.50,
+        "Flex": 1.0,
+        "Comfort": 1.15,
+        "Latitude": 1.25,
+        "Premium Economy (Lowest)": 1.25,
+        "Premium Economy (Flexible)": 1.25,
+        "Business (Lowest)": 1.50,
+        "Business (Flexible)": 1.50,
+    },
 )
 
 

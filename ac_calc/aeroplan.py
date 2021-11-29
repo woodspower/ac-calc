@@ -1,7 +1,7 @@
 from collections import namedtuple
 
 
-AeroplanStatus = namedtuple("AeroplanStatus", ("name,bonus_factor,min_status_value"))
+AeroplanStatus = namedtuple("AeroplanStatus", ("name,bonus_factor,min_earning_value"))
 FareBrand = namedtuple("FareBrand", ("name", "basis_codes", "fare_classes", "status_factor", "redeemable_factor"))
 
 
@@ -21,6 +21,9 @@ AEROPLAN_STATUSES = (
     Elite75K,
     SuperElite100K,
 )
+
+
+DEFAULT_AEROPLAN_STATUS = NoStatus
 
 
 NoBrand = FareBrand("None", tuple(), [c for c in "JCDZPOENYBMUHQVWGSTLAK"], 0.0, 0.0)
@@ -50,4 +53,5 @@ FARE_BRANDS = (
 
 
 DEFAULT_FARE_BRAND = Flex
+DEFAULT_FARE_BRAND_INDEX = 3
 DEFAULT_FARE_CLASS = "M"
