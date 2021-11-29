@@ -51,6 +51,70 @@ class Airline:
 
             return EarthRadiusMi * c
 
+    def _earning_rate(
+        self,
+        origin: Airport,
+        destination: Airport,
+        fare_brand: FareBrand,
+        fare_class: str,
+    ):
+        region = self._region_for_segment(origin, destination)
+        region_services = self.earning_rates.get(region, {})
+
+        for fare_classes in region_services.values():
+            if rate := fare_classes.get(fare_class) or fare_classes.get(fare_brand.name):
+                return rate
+
+        return 0
+
+    def _region_for_segment(
+        self,
+        origin: Airport,
+        destination: Airport,
+    ):
+        if self.id == "air-canada":
+            if origin.country.country == destination.country.country == "Canada":
+                return "Domestic"
+            elif (
+                (origin.country.country == "Canada" and destination.country.country == "United States")
+                or (origin.country.country == "United States" and destination.country.country == "Canada")
+            ):
+                return "Transborder"
+            else:
+                return "International"
+        elif self.id == "air-india":
+            return "Domestic" if origin.country.country == destination.country.country == "India" else "International"
+        elif self.id == "avianca":
+            return "Domestic Colombia, Peru, Ecuador, and Intra-Central America" if origin.country.continent == destination.country.continent == "South America" else "All destinations"
+        elif self.id == "eurowings-discover":
+            return "Intra-European flights" if origin.country.continent == destination.country.continent == "Europe" else "Rest of the world"
+        elif self.id == "south-african-airways":
+            return "Domestic" if origin.country.country == destination.country.country == "South Africa" else "International"
+        elif self.id == "virgin-australia":
+            return "Domestic" if origin.country.country == destination.country.country == "Australia" else "International"
+        elif self.id == "austrian-airlines":
+            return "Intra-European flights" if origin.country.continent == destination.country.continent == "Europe" else "Rest of the world"
+        elif self.id == "egyptair":
+            return "Domestic" if origin.country.country == destination.country.country == "Egypt" else "International"
+        elif self.id == "swiss":
+            return "Intra-European flights" if origin.country.continent == destination.country.continent == "Europe" else "Rest of the world"
+        elif self.id == "tap-air-portugal":
+            lisbon_porto_codes = set(("LIS", "OPO", "PXO", "FNC"))
+            return "Flights between Lisbon and Porto" if origin.iata_code in lisbon_porto_codes and destination.iata_code in lisbon_porto_codes else "All destinations"
+        elif self.id == "asiana":
+            return "Domestic South Korea" if origin.country.country == destination.country.country == "South Korea" else "International"
+        elif self.id == "air-new-zealand":
+            if origin.country.country == destination.country.country == "New Zealand":
+                return "Domestic"
+            elif origin.country.continent == destination.country.continent == "Oceania":
+                return "Tasman"
+            else:
+                return "International"
+        elif self.id == "lufthansa":
+            return "Intra-European flights" if origin.country.continent == destination.country.continent == "Europe" else "Rest of the world"
+        else:
+            return "*"
+
     def calculate(
         self,
         origin: Airport,
@@ -64,12 +128,12 @@ class Airline:
         if not distance:
             return SegmentCalculation(distance, 0, 0, 0, 0, 0, 0)
 
-        app_earning_rate = self.earning_rates.get(fare_class, None) or self.earning_rates.get(fare_brand.name, 0)
+        app_earning_rate = self._earning_rate(origin, destination, fare_brand, fare_class)
         app_bonus_factor = aeroplan_status.bonus_factor
         app = max(distance * app_earning_rate, aeroplan_status.min_earning_value) if self.earns_app else 0
         app_bonus = min(app, distance) * app_bonus_factor
 
-        sqm_earning_rate = self.earning_rates.get(fare_class, None) or self.earning_rates.get(fare_brand.name, 0)
+        sqm_earning_rate = self._earning_rate(origin, destination, fare_brand, fare_class)
         sqm = max(distance * sqm_earning_rate, aeroplan_status.min_earning_value) if self.earns_sqm else 0
 
         return SegmentCalculation(
@@ -108,19 +172,45 @@ AirCanada = AirCanadaAirline(
     earns_app=True,
     earns_sqm=True,
     earning_rates={
-        "Basic-domestic": 0.10,
-        "Basic-transborder": 0.25,
-        "Basic-international": 0.25,
-        "Standard-domestic": 0.25,
-        "Standard-transborder": 0.50,
-        "Standard-international": 0.50,
-        "Flex": 1.0,
-        "Comfort": 1.15,
-        "Latitude": 1.25,
-        "Premium Economy (Lowest)": 1.25,
-        "Premium Economy (Flexible)": 1.25,
-        "Business (Lowest)": 1.50,
-        "Business (Flexible)": 1.50,
+        "Domestic": {
+            "*": {
+                "Basic": 0.10,
+                "Standard": 0.25,
+                "Flex": 1.0,
+                "Comfort": 1.15,
+                "Latitude": 1.25,
+                "Premium Economy (Lowest)": 1.25,
+                "Premium Economy (Flexible)": 1.25,
+                "Business (Lowest)": 1.50,
+                "Business (Flexible)": 1.50,
+            },
+        },
+        "Transborder": {
+            "*": {
+                "Basic": 0.25,
+                "Standard": 0.50,
+                "Flex": 1.0,
+                "Comfort": 1.15,
+                "Latitude": 1.25,
+                "Premium Economy (Lowest)": 1.25,
+                "Premium Economy (Flexible)": 1.25,
+                "Business (Lowest)": 1.50,
+                "Business (Flexible)": 1.50,
+            },
+        },
+        "International": {
+            "*": {
+                "Basic": 0.25,
+                "Standard": 0.50,
+                "Flex": 1.0,
+                "Comfort": 1.15,
+                "Latitude": 1.25,
+                "Premium Economy (Lowest)": 1.25,
+                "Premium Economy (Flexible)": 1.25,
+                "Business (Lowest)": 1.50,
+                "Business (Flexible)": 1.50,
+            },
+        },
     },
 )
 
