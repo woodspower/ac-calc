@@ -84,48 +84,54 @@ def calculate_points_miles(title):
         </style>
         """, unsafe_allow_html=True)
 
-    for index in range(st.session_state["num_segments"]):
-        airline_col, origin_col, destination_col, fare_brand_col, fare_class_col, remove_col = st.columns((24, 16, 16, 24, 8, 4))
+    with st.container():
+        for index in range(st.session_state["num_segments"]):
+            airline_col, origin_col, destination_col, fare_brand_col, fare_class_col, remove_col = st.columns((24, 16, 16, 24, 8, 4))
 
-        airline = airline_col.selectbox(
-            "Airline ✈️",
-            AIRLINES,
-            index=DEFAULT_AIRLINE_INDEX,
-            format_func=lambda airline: airline.name,
-            help="Flight segment operating airline.",
-            key=f"airline-{index}",
-        )
-        origin_col.selectbox(
-            "Origin 🛫",
-            AIRPORTS,
-            index=DEFAULT_ORIGIN_AIRPORT_INDEX,
-            format_func=lambda airport: airport.iata_code,
-            help="Flight segment origin airport code.",
-            key=f"origin-{index}",
-        )
-        destination_col.selectbox(
-            "Destination 🛬",
-            AIRPORTS,
-            index=DEFAULT_DESTINATION_AIRPORT_INDEX,
-            format_func=lambda airport: airport.iata_code,
-            help="Flight segment destination airport code.",
-            key=f"destination-{index}",
-        )
-        if airline == AirCanada:
-            fare_brand_col.selectbox(
-                "Fare Brand",
-                FARE_BRANDS,
-                index=DEFAULT_FARE_BRAND_INDEX,
-                format_func=lambda brand: brand.name,
-                help="Air Canada fare brand.",
-                key=f"fare_brand-{index}",
+            airline = airline_col.selectbox(
+                "Airline ✈️",
+                AIRLINES,
+                index=DEFAULT_AIRLINE_INDEX,
+                format_func=lambda airline: airline.name,
+                help="Flight segment operating airline.",
+                key=f"airline-{index}",
             )
-        fare_class_col.selectbox(
-            "Fare Class",
-            list(string.ascii_uppercase),
-            index=24,
-            key=f"fare_class-{index}",
-        )
+
+            origin_col.selectbox(
+                "Origin 🛫",
+                AIRPORTS,
+                index=DEFAULT_ORIGIN_AIRPORT_INDEX,
+                format_func=lambda airport: airport.iata_code,
+                help="Flight segment origin airport code.",
+                key=f"origin-{index}",
+            )
+
+            destination_col.selectbox(
+                "Destination 🛬",
+                AIRPORTS,
+                index=DEFAULT_DESTINATION_AIRPORT_INDEX,
+                format_func=lambda airport: airport.iata_code,
+                help="Flight segment destination airport code.",
+                key=f"destination-{index}",
+            )
+
+            if airline == AirCanada:
+                fare_brand = fare_brand_col.selectbox(
+                    "Fare Brand",
+                    FARE_BRANDS,
+                    index=DEFAULT_FARE_BRAND_INDEX,
+                    format_func=lambda brand: brand.name,
+                    help="Air Canada fare brand.",
+                    key=f"fare_brand-{index}",
+                )
+            else:
+                st.session_state[f"fare_brand-{index}"] = fare_brand = NoBrand
+
+            fare_class_col.selectbox(
+                "Fare Class",
+                list(string.ascii_uppercase) if fare_brand == NoBrand else fare_brand.fare_classes,
+                key=f"fare_class-{index}",
+            )
 
     segments_and_calculations = [
         (airline, origin, destination, fare_brand, fare_class, airline.calculate(origin, destination, fare_brand, fare_class, st.session_state.ticket_number, st.session_state.aeroplan_status))
