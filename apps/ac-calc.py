@@ -1,7 +1,9 @@
 import string
 
+import pydeck as pdk
 import pandas as pd
 import streamlit as st
+from streamlit.elements.map import _get_zoom_level
 
 from ac_calc.aeroplan import NoBrand, AEROPLAN_STATUSES, DEFAULT_AEROPLAN_STATUS, DEFAULT_FARE_BRAND_INDEX, FARE_BRANDS
 from ac_calc.airlines import AirCanada, AIRLINES, DEFAULT_AIRLINE_INDEX
@@ -165,6 +167,53 @@ def calculate_points_miles(title):
     ], columns=("Airline", "Flight", "Fare (Brand)", "Distance", "SQM %", "SQM", "SQD", "Aeroplan %", "Aeroplan", "Bonus %", "Bonus", "Aeroplan Points"))
 
     st.dataframe(calculations_df)
+
+    st.markdown("##### Map")
+
+
+    routes_data = [
+        {
+            "label": f"{origin.iata_code}–{destination.iata_code}",
+            "origin_c": (origin.longitude, origin.latitude),
+            "destination_c": (destination.longitude, destination.latitude),
+        }
+        for airline, origin, destination, fare_brand, fare_class, calc in segments_and_calculations
+    ]
+
+    coordinates = [
+        item for sublist in (
+            ((origin.longitude, origin.latitude), (destination.longitude, destination.latitude))
+            for _, origin, destination, _, _, _ in segments_and_calculations
+        ) for item in sublist
+    ]
+    min_lon = min(c[0] for c in coordinates)
+    max_lon = max(c[0] for c in coordinates)
+    min_lat = min(c[1] for c in coordinates)
+    max_lat = max(c[1] for c in coordinates)
+    ctr_lon = (min_lon + max_lon) / 2.0
+    ctr_lat = (min_lat + max_lat) / 2.0
+    rng_lon = abs(max_lon - min_lon)
+    rng_lat = abs(max_lat - min_lat)
+    zoom = max(1, _get_zoom_level(max(rng_lon, rng_lat)))
+
+    # https://deck.gl/docs/api-reference/geo-layers/great-circle-layer
+    layer = pdk.Layer(
+        "GreatCircleLayer",
+        routes_data,
+        pickable=True,
+        get_width=6,
+        get_source_position="origin_c",
+        get_target_position="destination_c",
+        get_source_color=[64, 255, 0],
+        get_target_color=[0, 128, 200],
+        auto_highlight=True,
+    )
+
+    view_state = pdk.ViewState(latitude=ctr_lat, longitude=ctr_lon, zoom=zoom, bearing=0, pitch=0)
+    deck = pdk.Deck(layers=[layer], initial_view_state=view_state, tooltip={"text": "{label}"})
+    deck.picking_radius = 10
+
+    st.pydeck_chart(deck)
 
 
 def browse_airlines(title):
