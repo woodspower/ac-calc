@@ -33,14 +33,6 @@ def main():
 
 
 def calculate_points_miles(title):
-    def adjust_segments():
-        num_segments = st.session_state["num_segments"]
-
-        for i in range(num_segments, 99 + 1):
-            for key in SEGMENT_KEYS:
-                if f"{key}-{i}" in st.session_state:
-                    del st.session_state[f"{key}-{i}"]
-
     def segments():
         for i in range(st.session_state["num_segments"]):
             yield [st.session_state[f"{key}-{i}"] for key in SEGMENT_KEYS]
@@ -69,7 +61,6 @@ def calculate_points_miles(title):
             value=1,
             key="num_segments",
             help="Number of segments.",
-            on_change=adjust_segments,
         )
 
     earnings_placeholder = st.container()
