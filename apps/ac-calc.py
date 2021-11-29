@@ -29,8 +29,6 @@ def main():
 
 
 def calculate_points_miles(title):
-    # st.title(title)
-
     segments = st.session_state["segments"] if "segments" in st.session_state else [Segment()]
 
     with st.sidebar:
@@ -167,8 +165,6 @@ def calculate_points_miles(title):
 
 
 def browse_airlines(title):
-    # st.title(title)
-
     airline = st.selectbox(
         "Airline ✈️",
         AIRLINES,
@@ -182,8 +178,6 @@ def browse_airlines(title):
 
 
 def browse_distances(title):
-    # st.title(title)
-
     origin = st.selectbox(
         "Origin 🛫",
         AIRPORTS,
