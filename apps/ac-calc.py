@@ -76,7 +76,7 @@ def calculate_miles_dollars(title):
                 for index, segment in enumerate(itinerary.segments):
                     is_first = index == 0
 
-                    airline_col, origin_col, destination_col, fare_brand_col, fare_class_col, distance_col = st.columns((3, 2, 2, 3, 1, 1))
+                    airline_col, origin_col, destination_col, fare_brand_col, fare_class_col, distance_col = st.columns((24, 16, 16, 24, 8, 6))
 
                     segment.airline = airline_col.selectbox(
                         "Airline ✈️",
@@ -120,8 +120,8 @@ def calculate_miles_dollars(title):
 
                     segment_earnings = segment.calculate(itinerary.ticket_number, itinerary.aeroplan_status)
                     distance_col.markdown(f"""
-                        <div class="row-widget css-pgkuvq" style="text-align: right">
-                            <label class="css-qrbaxs">Distance</label>
+                        <div class="row-widget" style="text-align:right">
+                            <label class="css-qrbaxs" style="flex-direction:row-reverse">Distance</label>
                             <div class="st-dc st-db">{segment_earnings.distance}</div>
                         </div>
                     """, unsafe_allow_html=True)
