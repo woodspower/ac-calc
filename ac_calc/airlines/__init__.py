@@ -11,8 +11,8 @@ from ..locations import Airport
 
 SegmentCalculation = namedtuple("SegmentCalculation", (
     "distance",
-    "app", "app_bonus_factor", "app_bonus",
-    "sqm", "sqm_bonus_factor", "sqm_bonus",
+    "app", "app_earning_rate", "app_bonus_factor", "app_bonus",
+    "sqm", "sqm_earning_rate",
 ))
 EarthRadiusMi = 3959.0
 
@@ -60,28 +60,26 @@ class Airline:
         ticket_number: str,
         aeroplan_status: AeroplanStatus,
     ):
-        earning_rate = self.earning_rates.get(fare_class) or self.earning_rates.get(fare_brand.name)
         distance = self._distance(origin, destination)
+        if not distance:
+            return SegmentCalculation(distance, 0, 0, 0, 0, 0, 0)
 
-        if not earning_rate or not distance:
-            return SegmentCalculation(distance, 0, 0, 0, 0)
-
-        sqm = max(distance * earning_rate, aeroplan_status.min_earning_value) if self.earns_sqm else 0
-        sqm_bonus_factor = aeroplan_status.bonus_factor
-        sqm_bonus = min(sqm, distance) * sqm_bonus_factor
-
-        app = max(distance * earning_rate, aeroplan_status.min_earning_value) if self.earns_app else 0
+        app_earning_rate = self.earning_rates.get(fare_class) or self.earning_rates.get(fare_brand.name)
         app_bonus_factor = aeroplan_status.bonus_factor
+        app = max(distance * app_earning_rate, aeroplan_status.min_earning_value) if self.earns_app else 0
         app_bonus = min(app, distance) * app_bonus_factor
+
+        sqm_earning_rate = self.earning_rates.get(fare_class) or self.earning_rates.get(fare_brand.name)
+        sqm = max(distance * sqm_earning_rate, aeroplan_status.min_earning_value) if self.earns_sqm else 0
 
         return SegmentCalculation(
             distance,
-            int(sqm),
-            sqm_bonus_factor,
-            int(sqm_bonus),
             int(app),
+            app_earning_rate,
             app_bonus_factor,
             int(app_bonus),
+            int(sqm),
+            sqm_earning_rate,
         )
 
 
