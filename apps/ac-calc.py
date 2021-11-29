@@ -25,7 +25,7 @@ def main():
     tools = {
         "Calculate Points and Miles": calculate_points_miles,
         "Browse Airlines": browse_airlines,
-        "Browse Distances": browse_distances,
+        "Browse Airports": browse_airports,
     }
     tool_title = st.sidebar.radio("Tool:", tools.keys())
     tool = tools[tool_title]
@@ -180,7 +180,7 @@ def browse_airlines(title):
     st.markdown(airline.region)
 
 
-def browse_distances(title):
+def browse_airports(title):
     origin = st.selectbox(
         "Origin 🛫",
         AIRPORTS,
