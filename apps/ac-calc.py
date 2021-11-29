@@ -117,7 +117,7 @@ def calculate_points_miles(title):
 
             if airline == AirCanada:
                 fare_brand = fare_brand_col.selectbox(
-                    "Fare Brand",
+                    "Fare Brand 🍷",
                     FARE_BRANDS,
                     index=DEFAULT_FARE_BRAND_INDEX,
                     format_func=lambda brand: brand.name,
@@ -128,7 +128,7 @@ def calculate_points_miles(title):
                 st.session_state[f"fare_brand-{index}"] = fare_brand = NoBrand
 
             fare_class_col.selectbox(
-                "Fare Class",
+                "Fare Class 🎫",
                 list(string.ascii_uppercase) if fare_brand == NoBrand else fare_brand.fare_classes,
                 key=f"fare_class-{index}",
             )
