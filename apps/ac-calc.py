@@ -1,10 +1,10 @@
 import pandas as pd
 import streamlit as st
 
-from ac_calc.aeroplan import NoBrand, AEROPLAN_STATUSES, FARE_BRANDS
+from ac_calc.aeroplan import NoBrand, AEROPLAN_STATUSES, DEFAULT_AEROPLAN_STATUS, FARE_BRANDS
 from ac_calc.airlines import AirCanada, AIRLINES, DEFAULT_AIRLINE_INDEX
 from ac_calc.locations import AIRPORTS, COUNTRIES, DISTANCES, DEFAULT_ORIGIN_AIRPORT_INDEX
-from ac_calc.itinerary import Itinerary, Segment
+from ac_calc.itinerary import Segment
 
 
 def main():
@@ -31,141 +31,139 @@ def main():
 def calculate_points_miles(title):
     # st.title(title)
 
-    # Initialize itineraries. Although this code supports multiple itineraries, this will not be
-    # presented at this time.
-    if "itineraries" not in st.session_state:
-        st.session_state["itineraries"] = [Itinerary(segments=[
-            Segment(),
-        ])]
+    segments = st.session_state["segments"] if "segments" in st.session_state else [Segment()]
 
-    for itinerary in st.session_state["itineraries"]:
-        with st.sidebar:
-            itinerary.ticket_number = st.text_input(
-                "Ticket Number:",
-                value=itinerary.ticket_number,
-                help="First three digits or full ticket number. Air Canada is 014.",
+    with st.sidebar:
+        st.text_input(
+            "Ticket Number:",
+            value="014",
+            help="First three digits or full ticket number. Air Canada is 014.",
+            key="ticket_number",
+        )
+
+        st.selectbox(
+            "Aeroplan Status:",
+            AEROPLAN_STATUSES,
+            index=AEROPLAN_STATUSES.index(DEFAULT_AEROPLAN_STATUS),
+            format_func=lambda status: status.name,
+            key="aeroplan_status",
+            help="Air Canada Aeroplan elite status."
+        )
+
+    earnings_placeholder = st.container()
+    segments_placeholder = st.container()
+
+    st.markdown("##### Segments")
+
+    segments_placeholder = st.container()
+
+    if st.button("Add Segment"):
+        if segments:
+            ref_segment = segments[-1]
+
+            segments.append(Segment(
+                airline=ref_segment.airline,
+                origin=ref_segment.destination,
+                destination=ref_segment.origin,
+                fare_class=ref_segment.fare_class,
+                fare_brand=ref_segment.fare_brand,
+            ))
+        else:
+            segments.append(Segment())
+
+    st.markdown("""
+        <style>
+            div[data-testid="stBlock"] div[data-testid="stBlock"]:not([style]):not(:first-child) label {
+                display: none
+            }
+        </style>
+        """, unsafe_allow_html=True)
+
+    for index, segment in enumerate(segments):
+        is_first = index == 0
+
+        airline_col, origin_col, destination_col, fare_brand_col, fare_class_col, remove_col = segments_placeholder.columns((24, 16, 16, 24, 8, 4))
+
+        segment.airline = airline_col.selectbox(
+            "Airline ✈️",
+            AIRLINES,
+            index=AIRLINES.index(segment.airline),
+            format_func=lambda airline: airline.name,
+            help="Flight segment operating airline.",
+            key=f"airline-{index}",
+        )
+        segment.origin = origin_col.selectbox(
+            "Origin 🛫",
+            AIRPORTS,
+            index=AIRPORTS.index(segment.origin),
+            format_func=lambda airport: airport.iata_code,
+            help="Flight segment origin airport code.",
+            key=f"origin-{index}",
+        )
+        segment.destination = destination_col.selectbox(
+            "Destination 🛬",
+            AIRPORTS,
+            index=AIRPORTS.index(segment.destination),
+            format_func=lambda airport: airport.iata_code,
+            help="Flight segment destination airport code.",
+            key=f"destination-{index}",
+        )
+        if segment.airline == AirCanada:
+            segment.fare_brand = fare_brand_col.selectbox(
+                "Fare Brand",
+                FARE_BRANDS,
+                index=FARE_BRANDS.index(segment.fare_brand),
+                format_func=lambda brand: brand.name,
+                help="Air Canada fare brand. Select “None” for non-Air Canada fares.",
+                key=f"fare_brand-{index}",
             )
+        segment.fare_class = fare_class_col.selectbox(
+            "Fare Class",
+            segment.fare_brand.fare_classes,
+            index=segment.fare_brand.fare_classes.index(segment.fare_class) if segment.fare_class in segment.fare_brand.fare_classes else 0,
+            key=f"fare_class-{index}",
+        )
 
-            itinerary.aeroplan_status = st.selectbox(
-                "Aeroplan Status:",
-                AEROPLAN_STATUSES,
-                index=AEROPLAN_STATUSES.index(itinerary.aeroplan_status),
-                format_func=lambda status: status.name,
-                help="Air Canada Aeroplan elite status.",
-            )
+    st.session_state["segments"] = segments
 
-        earnings_placeholder = st.container()
-        segments_placeholder = st.container()
+    segment_calculations = [segment.calculate(st.session_state.ticket_number, st.session_state.aeroplan_status) for segment in segments]
 
-        st.markdown("##### Segments")
+    total_distance = sum((calc.distance for calc in segment_calculations))
+    total_app = sum((calc.app for calc in segment_calculations))
+    total_app_bonus = sum((calc.app_bonus for calc in segment_calculations))
+    total_sqm = sum((calc.sqm for calc in segment_calculations))
 
-        segments_placeholder = st.container()
+    # with earnings_placeholder.expander("Earnings", expanded=True):
+    with earnings_placeholder:
+        distance_col, app_col, app_total_col, sqm_col, sqd_col = st.columns(5)
 
-        if st.button("Add Segment"):
-            if itinerary.segments:
-                ref_segment = itinerary.segments[-1]
+        distance_col.metric("Distance", f"{total_distance} miles")
+        app_col.metric("Aeroplan Points", total_app)
+        app_total_col.metric("Aeroplan Points + Status Bonus", total_app + total_app_bonus, delta=total_app_bonus or None)
+        sqm_col.metric("Status Qualifying Miles", f"{total_sqm} SQM")
+        sqd_col.metric("Status Qualifying Dollars", f"0 SQD")
 
-                itinerary.segments.append(Segment(
-                    airline=ref_segment.airline,
-                    origin=ref_segment.destination,
-                    destination=ref_segment.origin,
-                    fare_class=ref_segment.fare_class,
-                    fare_brand=ref_segment.fare_brand,
-                ))
-            else:
-                itinerary.segments.append(Segment())
+    st.markdown("##### Calculation Details")
 
-        st.markdown("""
-            <style>
-                div[data-testid="stBlock"] div[data-testid="stBlock"]:not([style]):not(:first-child) label {
-                    display: none
-                }
-            </style>
-            """, unsafe_allow_html=True)
+    calculations_df = pd.DataFrame([
+        (
+            segment.airline.name,
+            f"{segment.origin.iata_code}–{segment.destination.iata_code}",
+            f"{segment.fare_class} ({segment.fare_brand.name})" if segment.fare_brand != NoBrand else segment.fare_class,
+            calc.distance,
+            round(calc.sqm_earning_rate * 100),
+            calc.sqm,
+            0.00,
+            round(calc.app_earning_rate * 100),
+            calc.app,
+            round(calc.app_bonus_factor * 100),
+            calc.app_bonus,
+            calc.app + calc.app_bonus,
+        )
+        for segment, calc in zip(segments, segment_calculations)
+    ], columns=("Airline", "Flight", "Fare (Brand)", "Distance", "SQM %", "SQM", "SQD", "Aeroplan %", "Aeroplan", "Bonus %", "Bonus", "Aeroplan Points"))
 
-        for index, segment in enumerate(itinerary.segments):
-            is_first = index == 0
-
-            airline_col, origin_col, destination_col, fare_brand_col, fare_class_col, remove_col = segments_placeholder.columns((24, 16, 16, 24, 8, 4))
-
-            segment.airline = airline_col.selectbox(
-                "Airline ✈️",
-                AIRLINES,
-                index=AIRLINES.index(segment.airline),
-                format_func=lambda airline: airline.name,
-                help="Flight segment operating airline.",
-                key=f"airline-{index}",
-            )
-            segment.origin = origin_col.selectbox(
-                "Origin 🛫",
-                AIRPORTS,
-                index=AIRPORTS.index(segment.origin),
-                format_func=lambda airport: airport.iata_code,
-                help="Flight segment origin airport code.",
-                key=f"origin-{index}",
-            )
-            segment.destination = destination_col.selectbox(
-                "Destination 🛬",
-                AIRPORTS,
-                index=AIRPORTS.index(segment.destination),
-                format_func=lambda airport: airport.iata_code,
-                help="Flight segment destination airport code.",
-                key=f"destination-{index}",
-            )
-            if segment.airline == AirCanada:
-                segment.fare_brand = fare_brand_col.selectbox(
-                    "Fare Brand",
-                    FARE_BRANDS,
-                    index=FARE_BRANDS.index(segment.fare_brand),
-                    format_func=lambda brand: brand.name,
-                    help="Air Canada fare brand. Select “None” for non-Air Canada fares.",
-                    key=f"fare_brand-{index}",
-                )
-            segment.fare_class = fare_class_col.selectbox(
-                "Fare Class",
-                segment.fare_brand.fare_classes,
-                index=segment.fare_brand.fare_classes.index(segment.fare_class) if segment.fare_class in segment.fare_brand.fare_classes else 0,
-                key=f"fare_class-{index}",
-            )
-
-        segment_calculations = itinerary.calculate()
-
-        total_distance = sum((calc.distance for calc in segment_calculations))
-        total_app = sum((calc.app for calc in segment_calculations))
-        total_app_bonus = sum((calc.app_bonus for calc in segment_calculations))
-        total_sqm = sum((calc.sqm for calc in segment_calculations))
-
-        # with earnings_placeholder.expander("Earnings", expanded=True):
-        with earnings_placeholder:
-            distance_col, app_col, app_total_col, sqm_col, sqd_col = st.columns(5)
-
-            distance_col.metric("Distance", f"{total_distance} miles")
-            app_col.metric("Aeroplan Points", total_app)
-            app_total_col.metric("Aeroplan Points + Status Bonus", total_app + total_app_bonus, delta=total_app_bonus or None)
-            sqm_col.metric("Status Qualifying Miles", f"{total_sqm} SQM")
-            sqd_col.metric("Status Qualifying Dollars", f"0 SQD")
-
-        st.markdown("##### Calculation Details")
-
-        calculations_df = pd.DataFrame([
-            (
-                segment.airline.name,
-                f"{segment.origin.iata_code}–{segment.destination.iata_code}",
-                f"{segment.fare_class} ({segment.fare_brand.name})" if segment.fare_brand != NoBrand else segment.fare_class,
-                calc.distance,
-                round(calc.sqm_earning_rate * 100),
-                calc.sqm,
-                0.00,
-                round(calc.app_earning_rate * 100),
-                calc.app,
-                round(calc.app_bonus_factor * 100),
-                calc.app_bonus,
-                calc.app + calc.app_bonus,
-            )
-            for segment, calc in zip(itinerary.segments, segment_calculations)
-        ], columns=("Airline", "Flight", "Fare (Brand)", "Distance", "SQM %", "SQM", "SQD", "Aeroplan %", "Aeroplan", "Bonus %", "Bonus", "Aeroplan Points"))
-
-        st.dataframe(calculations_df)
+    st.dataframe(calculations_df)
 
 
 def browse_airlines(title):

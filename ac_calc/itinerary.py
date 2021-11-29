@@ -26,16 +26,3 @@ class Segment:
             ticket_number,
             aeroplan_status,
         )
-
-
-@dataclass
-class Itinerary:
-    ticket_number: str = "014"
-    aeroplan_status: AeroplanStatus = DEFAULT_AEROPLAN_STATUS
-    segments: list[Segment] = field(default_factory=list)
-
-    def calculate(self):
-        return [
-            segment.calculate(self.ticket_number, self.aeroplan_status)
-            for segment in self.segments
-        ]
