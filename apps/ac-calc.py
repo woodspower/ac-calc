@@ -208,10 +208,11 @@ def browse_distances(title):
         new_distances.append(distance.distance)
 
     distances_df = pd.DataFrame({
-        "destination": destinations,
-        "old": old_distances,
-        "new": new_distances,
+        "Destination": destinations,
+        "Distance (Old)": old_distances,
+        "Distance (New)": new_distances,
     })
+    distances_df.set_index("Destination")
 
     st.table(distances_df)
 
