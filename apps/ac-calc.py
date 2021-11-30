@@ -270,21 +270,22 @@ def browse_airports(title):
 
 
 def _render_map(routes, ctr_lon=None, ctr_lat=None, zoom=None, get_width=6):
-    positions = [
-        pos for route_positions in (
-            (route["source_position"], route["target_position"])
-            for route in routes
-        ) for pos in route_positions
-    ]
-    min_lon = min(c[0] for c in positions)
-    max_lon = max(c[0] for c in positions)
-    min_lat = min(c[1] for c in positions)
-    max_lat = max(c[1] for c in positions)
-    ctr_lon = ctr_lon or ((min_lon + max_lon) / 2.0)
-    ctr_lat = ctr_lat or ((min_lat + max_lat) / 2.0)
-    rng_lon = abs(max_lon - min_lon)
-    rng_lat = abs(max_lat - min_lat)
-    zoom = zoom or (min(5, max(1, _get_zoom_level(max(rng_lon, rng_lat)))))
+    if not ctr_lon or not ctr_lat:
+        positions = [
+            pos for route_positions in (
+                (route["source_position"], route["target_position"])
+                for route in routes
+            ) for pos in route_positions
+        ]
+        min_lon = min(c[0] for c in positions)
+        max_lon = max(c[0] for c in positions)
+        min_lat = min(c[1] for c in positions)
+        max_lat = max(c[1] for c in positions)
+        ctr_lon = ctr_lon or ((min_lon + max_lon) / 2.0)
+        ctr_lat = ctr_lat or ((min_lat + max_lat) / 2.0)
+        rng_lon = abs(max_lon - min_lon)
+        rng_lat = abs(max_lat - min_lat)
+        zoom = zoom or (min(5, max(1, _get_zoom_level(max(rng_lon, rng_lat)))))
 
     # https://deck.gl/docs/api-reference/geo-layers/great-circle-layer
     layer = pdk.Layer(
