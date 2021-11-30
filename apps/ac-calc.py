@@ -192,7 +192,8 @@ def calculate_points_miles(title):
             "source_pos": (origin.longitude, origin.latitude),
             "target_pos": (destination.longitude, destination.latitude),
             "distance": calc.distance,
-            "colour": ImageColor.getrgb(colour)
+            "source_colour": ImageColor.getrgb(colour),
+            "target_colour": [c * .85 for c in ImageColor.getrgb(colour)],
         }
         for airline, origin, destination, fare_brand, fare_class, colour, calc in segments_and_calculations
     ]
@@ -223,8 +224,8 @@ def calculate_points_miles(title):
         get_height=0,
         get_source_position="source_pos",
         get_target_position="target_pos",
-        get_source_color="colour",
-        get_target_color="colour",
+        get_source_color="source_colour",
+        get_target_color="target_colour",
         auto_highlight=True,
     )
     deck = pdk.Deck(
