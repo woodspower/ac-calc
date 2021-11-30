@@ -13,13 +13,13 @@ from ac_calc.locations import airports, airports_by_code
 
 SEGMENT_KEYS = ("airline", "origin", "destination", "fare_brand", "fare_class", "colour")
 SEGMENT_COLOURS = (
-    "#1984a3",
-    "#f5c767",
-    "#6e4f7b",
-    "#9fd66c",
-    "#ffffe7",
-    "#fda05d",
-    "#90ddd0",
+    "#c50014",
+    "#8dd15a",
+    "#ffc133",
+    "#732d9d",
+    "#00afed",
+    "#fc9650",
+    "#808080",
 )
 MARKET_COLOURS = {
     "DOM": (202, 42, 54),
@@ -81,10 +81,6 @@ def calculate_points_miles(title):
             help="Number of segments.",
         )
 
-    earnings_placeholder = st.container()
-
-    st.markdown("##### Segments")
-
     st.markdown("""
         <style>
             div[data-testid="stBlock"] div[data-testid="stBlock"]:not([style]):not(:first-child) label {
@@ -93,15 +89,19 @@ def calculate_points_miles(title):
         </style>
         """, unsafe_allow_html=True)
 
-    with st.container():
-        DEFAULT_AIRLINE, DEFAULT_AIRLINE_INDEX = AirCanada, 0
-        DEFAULT_ORIGIN_AIRPORT_INDEX, DEFAULT_ORIGIN_AIRPORT = next(
-            filter(lambda e: e[1].airport_code == "YYC", enumerate(airports()))
-        )
-        DEFAULT_DESTINATION_AIRPORT_INDEX, DEFAULT_DESTINATION_AIRPORT = next(
-            filter(lambda e: e[1].airport_code == "YYZ", enumerate(airports()))
-        )
+    calc1_col, calc2_col, map_col = st.columns([6, 6, 18])
 
+    # Render segment inputs, first.
+    DEFAULT_AIRLINE, DEFAULT_AIRLINE_INDEX = AirCanada, 0
+    DEFAULT_ORIGIN_AIRPORT_INDEX, DEFAULT_ORIGIN_AIRPORT = next(
+        filter(lambda e: e[1].airport_code == "YYC", enumerate(airports()))
+    )
+    DEFAULT_DESTINATION_AIRPORT_INDEX, DEFAULT_DESTINATION_AIRPORT = next(
+        filter(lambda e: e[1].airport_code == "YYZ", enumerate(airports()))
+    )
+
+    # with st.container():
+    with st.expander("Segments", expanded=True):
         for index in range(st.session_state["num_segments"]):
             airline_col, origin_col, destination_col, fare_brand_col, fare_class_col, color_col = st.columns((24, 16, 16, 24, 12, 4))
 
@@ -156,6 +156,7 @@ def calculate_points_miles(title):
                 key=f"colour-{index}",
             )
 
+    # Perform calculations for the segments.
     segments_and_calculations = [
         (airline, origin, destination, fare_brand, fare_class, colour, airline.calculate(origin, destination, fare_brand, fare_class, st.session_state.ticket_number, st.session_state.aeroplan_status))
         for airline, origin, destination, fare_brand, fare_class, colour in segments()
@@ -166,53 +167,54 @@ def calculate_points_miles(title):
     total_app_bonus = sum((calc.app_bonus for _, _, _, _, _, _, calc in segments_and_calculations))
     total_sqm = sum((calc.sqm for _, _, _, _, _, _, calc in segments_and_calculations))
 
-    # with earnings_placeholder.expander("Earnings", expanded=True):
-    with earnings_placeholder:
-        distance_col, app_col, app_total_col, sqm_col, sqd_col = st.columns(5)
+    # Show the itinerary/segments stats.
+    with calc1_col:
+        st.metric("Distance", f"{total_distance} miles")
+        st.metric("Aeroplan Points", total_app)
+        st.metric("Aeroplan Points + Status Bonus", total_app + total_app_bonus, delta=total_app_bonus or None)
 
-        distance_col.metric("Distance", f"{total_distance} miles")
-        app_col.metric("Aeroplan Points", total_app)
-        app_total_col.metric("Aeroplan Points + Status Bonus", total_app + total_app_bonus, delta=total_app_bonus or None)
-        sqm_col.metric("Status Qualifying Miles", f"{total_sqm} SQM")
-        sqd_col.metric("Status Qualifying Dollars", f"0 SQD")
+    # Show the overall calculation.
+    with calc2_col:
+        st.metric("Status Qualifying Miles", f"{total_sqm} SQM")
+        st.metric("Status Qualifying Dollars", f"0 SQD")
 
-    st.markdown("##### Calculation Details")
+    # Show the map.
+    with map_col:
+        map_data = [
+            {
+                "label": f"{origin.airport_code}–{destination.airport_code}",
+                "distance": calc.distance,
+                "source_position": (origin.longitude, origin.latitude),
+                "target_position": (destination.longitude, destination.latitude),
+                "source_colour": ImageColor.getrgb(colour),
+                "target_colour": [c * .85 for c in ImageColor.getrgb(colour)],
+            }
+            for airline, origin, destination, fare_brand, fare_class, colour, calc in segments_and_calculations
+        ]
 
-    calculations_df = pd.DataFrame([
-        (
-            airline.name,
-            f"{origin.airport_code}–{destination.airport_code}",
-            f"{fare_class} ({fare_brand.name})" if fare_brand != NoBrand else fare_class,
-            calc.distance,
-            round(calc.sqm_earning_rate * 100),
-            calc.sqm,
-            0.00,
-            round(calc.app_earning_rate * 100),
-            calc.app,
-            round(calc.app_bonus_factor * 100),
-            calc.app_bonus,
-            calc.app + calc.app_bonus,
-        )
-        for airline, origin, destination, fare_brand, fare_class, colour, calc in segments_and_calculations
-    ], columns=("Airline", "Flight", "Fare (Brand)", "Distance", "SQM %", "SQM", "SQD", "Aeroplan %", "Aeroplan", "Bonus %", "Bonus", "Aeroplan Points"))
+        _render_map(map_data)
 
-    st.dataframe(calculations_df)
+    # Show the calculation details.
+    with st.expander("Calculation Details", expanded=True):
+        calculations_df = pd.DataFrame([
+            (
+                airline.name,
+                f"{origin.airport_code}–{destination.airport_code}",
+                f"{fare_class} ({fare_brand.name})" if fare_brand != NoBrand else fare_class,
+                calc.distance,
+                round(calc.sqm_earning_rate * 100),
+                calc.sqm,
+                0.00,
+                round(calc.app_earning_rate * 100),
+                calc.app,
+                round(calc.app_bonus_factor * 100),
+                calc.app_bonus,
+                calc.app + calc.app_bonus,
+            )
+            for airline, origin, destination, fare_brand, fare_class, colour, calc in segments_and_calculations
+        ], columns=("Airline", "Flight", "Fare (Brand)", "Distance", "SQM %", "SQM", "SQD", "Aeroplan %", "Aeroplan", "Bonus %", "Bonus", "Aeroplan Points"))
 
-    st.markdown("##### Map")
-
-    map_data = [
-        {
-            "label": f"{origin.airport_code}–{destination.airport_code}",
-            "distance": calc.distance,
-            "source_position": (origin.longitude, origin.latitude),
-            "target_position": (destination.longitude, destination.latitude),
-            "source_colour": ImageColor.getrgb(colour),
-            "target_colour": [c * .85 for c in ImageColor.getrgb(colour)],
-        }
-        for airline, origin, destination, fare_brand, fare_class, colour, calc in segments_and_calculations
-    ]
-
-    _render_map(map_data)
+        st.dataframe(calculations_df)
 
 
 def browse_airlines(title):
@@ -323,6 +325,7 @@ def _render_map(routes, ctr_lon=None, ctr_lat=None, zoom=None, get_width=6):
             zoom=zoom,
             bearing=0,
             pitch=0,
+            height=320,
         ),
         map_style="road",
         layers=[layer],

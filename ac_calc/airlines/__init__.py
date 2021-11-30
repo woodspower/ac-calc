@@ -16,6 +16,9 @@ SegmentCalculation = namedtuple("SegmentCalculation", (
 ))
 EarthRadiusMi = 3959.0
 
+FULL_BONUS_AIRLINES = {"air-canada", "copa-airlines", "united"}
+FIXED25_BONUS_AIRLINES = {"austrian-airlines", "brussels-airlines", "lufthansa", "swiss"}
+
 
 @dataclass
 class Airline:
@@ -129,10 +132,10 @@ class Airline:
             return SegmentCalculation(distance, 0, 0, 0, 0, 0, 0)
 
         app_earning_rate = self._earning_rate(origin, destination, fare_brand, fare_class)
-        if self.id == "air-canada":
+        if self.id in FULL_BONUS_AIRLINES:
             app_bonus_factor = aeroplan_status.bonus_factor
-        elif self.star_alliance_member:
-            app_bonus_factor = max(aeroplan_status.bonus_factor, 0.25)
+        elif self.id in FIXED25_BONUS_AIRLINES:
+            app_bonus_factor = max(0, min(aeroplan_status.bonus_factor, 0.25))
         else:
             app_bonus_factor = 0
         app = max(distance * app_earning_rate, aeroplan_status.min_earning_value) if self.earns_app else 0
