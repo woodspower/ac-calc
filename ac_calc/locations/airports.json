@@ -183,7 +183,7 @@
     "continent":"South America",
     "country":"Argentina",
     "country_code":"AR",
-    "city":"C\\u00F3rdoba",
+    "city":"C\u00f3rdoba",
     "city_code":"COR",
     "group":"MEXSA",
     "market":"INT",
@@ -208,7 +208,7 @@
     ]
   },
   {
-    "airport":"Rosario \\u2013 Islas Malvinas Int. Airport",
+    "airport":"Rosario \u2013 Islas Malvinas Int. Airport",
     "airport_code":"ROS",
     "latitude":-32.9036,
     "longitude":-60.785,
@@ -599,7 +599,7 @@
     "continent":"South America",
     "country":"Brazil",
     "country_code":"BR",
-    "city":"Cuiab\\u00E1",
+    "city":"Cuiab\u00e1",
     "city_code":"CGB",
     "group":"MEXSA",
     "market":"INT",
@@ -624,14 +624,14 @@
     ]
   },
   {
-    "airport":"Florian\\u00F3polis Int.",
+    "airport":"Florian\u00f3polis Int.",
     "airport_code":"FLN",
     "latitude":-27.67027855,
     "longitude":-48.55250168,
     "continent":"South America",
     "country":"Brazil",
     "country_code":"BR",
-    "city":"Florian\\u00F3polis",
+    "city":"Florian\u00f3polis",
     "city_code":"FLN",
     "group":"MEXSA",
     "market":"INT",
@@ -663,7 +663,7 @@
     "continent":"South America",
     "country":"Brazil",
     "country_code":"BR",
-    "city":"Foz do Igua\\u00E7u",
+    "city":"Foz do Igua\u00e7u",
     "city_code":"IGU",
     "group":"MEXSA",
     "market":"INT",
@@ -679,7 +679,7 @@
     "continent":"South America",
     "country":"Brazil",
     "country_code":"BR",
-    "city":"Goi\\u00E2nia",
+    "city":"Goi\u00e2nia",
     "city_code":"GYN",
     "group":"MEXSA",
     "market":"INT",
@@ -695,7 +695,7 @@
     "continent":"South America",
     "country":"Brazil",
     "country_code":"BR",
-    "city":"Jo\\u00E3o Pessoa",
+    "city":"Jo\u00e3o Pessoa",
     "city_code":"JPA",
     "group":"MEXSA",
     "market":"INT",
@@ -759,7 +759,7 @@
     "continent":"South America",
     "country":"Brazil",
     "country_code":"BR",
-    "city":"Macei\\u00F3",
+    "city":"Macei\u00f3",
     "city_code":"MCZ",
     "group":"MEXSA",
     "market":"INT",
@@ -864,7 +864,7 @@
     ]
   },
   {
-    "airport":"Gale\\u00E3o - Ant\\u00F4nio Carlos Jobim Int.",
+    "airport":"Gale\u00e3o - Ant\u00f4nio Carlos Jobim Int.",
     "airport_code":"GIG",
     "latitude":-22.80999947,
     "longitude":-43.25055695,
@@ -896,14 +896,14 @@
     ]
   },
   {
-    "airport":"Congonhas - S\\u00E3o Paulo",
+    "airport":"Congonhas - S\u00e3o Paulo",
     "airport_code":"CGH",
     "latitude":-23.62611008,
     "longitude":-46.65638733,
     "continent":"South America",
     "country":"Brazil",
     "country_code":"BR",
-    "city":"S\\u00E3o Paulo",
+    "city":"S\u00e3o Paulo",
     "city_code":"SAO",
     "group":"MEXSA",
     "market":"INT",
@@ -919,7 +919,7 @@
     "continent":"South America",
     "country":"Brazil",
     "country_code":"BR",
-    "city":"S\\u00E3o Paulo",
+    "city":"S\u00e3o Paulo",
     "city_code":"SAO",
     "group":"MEXSA",
     "market":"INT",
@@ -928,7 +928,7 @@
     ]
   },
   {
-    "airport":"Deputado Lu\\u00EDs Eduardo Magalh\\u00E3es",
+    "airport":"Deputado Lu\u00eds Eduardo Magalh\u00e3es",
     "airport_code":"SSA",
     "latitude":-12.9086113,
     "longitude":-38.32249832,
@@ -951,7 +951,7 @@
     "continent":"South America",
     "country":"Brazil",
     "country_code":"BR",
-    "city":"S\\u00E3o Paulo - Campina",
+    "city":"S\u00e3o Paulo - Campina",
     "city_code":"VCP",
     "group":"MEXSA",
     "market":"INT",
@@ -960,14 +960,14 @@
     ]
   },
   {
-    "airport":"Vit\\u00F3ria - Eurico de Aguiar Salles",
+    "airport":"Vit\u00f3ria - Eurico de Aguiar Salles",
     "airport_code":"VIX",
     "latitude":-20.258057,
     "longitude":-40.286388,
     "continent":"South America",
     "country":"Brazil",
     "country_code":"BR",
-    "city":"Vit\\u00F3ria",
+    "city":"Vit\u00f3ria",
     "city_code":"VIX",
     "group":"MEXSA",
     "market":"INT",
@@ -1283,7 +1283,7 @@
     ]
   },
   {
-    "airport":"N\\u0027Djili Int.",
+    "airport":"N'Djili Int.",
     "airport_code":"FIH",
     "latitude":-4.38575,
     "longitude":15.4446,
@@ -1331,7 +1331,7 @@
     ]
   },
   {
-    "airport":"Maya\\u2013Maya Int. Airport",
+    "airport":"Maya\u2013Maya Int. Airport",
     "airport_code":"BZV",
     "latitude":-4.251699924,
     "longitude":15.25300026,
@@ -1475,7 +1475,7 @@
     ]
   },
   {
-    "airport":"F\\u00E9lix Houphouet-Boigny",
+    "airport":"F\u00e9lix Houphouet-Boigny",
     "airport_code":"ABJ",
     "latitude":5.261390209,
     "longitude":-3.926290035,
@@ -1507,7 +1507,7 @@
     ]
   },
   {
-    "airport":"Arturo Merino Ben\\u00EDtez",
+    "airport":"Arturo Merino Ben\u00edtez",
     "airport_code":"SCL",
     "latitude":-33.39300156,
     "longitude":-70.78579712,
@@ -1539,7 +1539,7 @@
     ]
   },
   {
-    "airport":"Yaound\\u00E9-Nsimalen Int.",
+    "airport":"Yaound\u00e9-Nsimalen Int.",
     "airport_code":"NSI",
     "latitude":3.722559929,
     "longitude":11.5532999,
@@ -2195,7 +2195,7 @@
     ]
   },
   {
-    "airport":"Shenzhen Bao\\u0027an Int.",
+    "airport":"Shenzhen Bao'an Int.",
     "airport_code":"SZX",
     "latitude":22.63929939,
     "longitude":113.810997,
@@ -2259,14 +2259,14 @@
     ]
   },
   {
-    "airport":"\\u00DCr\\u00FCmqi Int.",
+    "airport":"\u00dcr\u00fcmqi Int.",
     "airport_code":"URC",
     "latitude":43.90710068,
     "longitude":87.47419739,
     "continent":"Asia",
     "country":"China",
     "country_code":"CN",
-    "city":"\\u00DCr\\u00FCmqi",
+    "city":"\u00dcr\u00fcmqi",
     "city_code":"URC",
     "group":"ASIA",
     "market":"INT",
@@ -2323,7 +2323,7 @@
     ]
   },
   {
-    "airport":"Xi\\u0027an Xianyang Int.",
+    "airport":"Xi'an Xianyang Int.",
     "airport_code":"XIY",
     "latitude":34.447102,
     "longitude":108.751999,
@@ -2954,7 +2954,7 @@
     "continent":"Asia",
     "country":"China",
     "country_code":"CN",
-    "city":"Ji\\u0027an",
+    "city":"Ji'an",
     "city_code":"JGS",
     "group":"ASIA",
     "market":"INT",
@@ -3267,7 +3267,7 @@
     ]
   },
   {
-    "airport":"Bao\\u0027anying Airport",
+    "airport":"Bao'anying Airport",
     "airport_code":"PZI",
     "latitude":26.54,
     "longitude":101.79852,
@@ -3834,7 +3834,7 @@
     "continent":"South America",
     "country":"Colombia",
     "country_code":"CO",
-    "city":"Bogot\\u00E1",
+    "city":"Bogot\u00e1",
     "city_code":"BOG",
     "group":"MEXSA",
     "market":"INT",
@@ -3859,7 +3859,7 @@
     ]
   },
   {
-    "airport":"Alfonso B. Arag\\u00F3n",
+    "airport":"Alfonso B. Arag\u00f3n",
     "airport_code":"CLO",
     "latitude":3.54322,
     "longitude":-76.3816,
@@ -3875,7 +3875,7 @@
     ]
   },
   {
-    "airport":"Rafael Nu\\u00F1ez",
+    "airport":"Rafael Nu\u00f1ez",
     "airport_code":"CTG",
     "latitude":10.4424,
     "longitude":-75.513,
@@ -3891,14 +3891,14 @@
     ]
   },
   {
-    "airport":"Jos\\u00E9 Mar\\u00EDa C\\u00F3rdova Int.",
+    "airport":"Jos\u00e9 Mar\u00eda C\u00f3rdova Int.",
     "airport_code":"MDE",
     "latitude":6.16454,
     "longitude":-75.4231,
     "continent":"South America",
     "country":"Colombia",
     "country_code":"CO",
-    "city":"Medell\\u00EDn",
+    "city":"Medell\u00edn",
     "city_code":"MDE",
     "group":"MEXSA",
     "market":"INT",
@@ -3907,7 +3907,7 @@
     ]
   },
   {
-    "airport":"Mateca\\u00F1a Int.",
+    "airport":"Mateca\u00f1a Int.",
     "airport_code":"PEI",
     "latitude":4.81267,
     "longitude":-75.7395,
@@ -3987,7 +3987,7 @@
     ]
   },
   {
-    "airport":"El Alcarav\\u00E1n Airport",
+    "airport":"El Alcarav\u00e1n Airport",
     "airport_code":"EYP",
     "latitude":5.31911,
     "longitude":-72.384,
@@ -4035,7 +4035,7 @@
     ]
   },
   {
-    "airport":"Alfredo V\\u00E1squez Cobo Int. Airport",
+    "airport":"Alfredo V\u00e1squez Cobo Int. Airport",
     "airport_code":"LET",
     "latitude":-4.19355,
     "longitude":-69.9432,
@@ -4099,7 +4099,7 @@
     ]
   },
   {
-    "airport":"Guillermo Le\\u00F3n Valencia Airport",
+    "airport":"Guillermo Le\u00f3n Valencia Airport",
     "airport_code":"PPN",
     "latitude":2.4544,
     "longitude":-76.6093,
@@ -4115,7 +4115,7 @@
     ]
   },
   {
-    "airport":"Antonio Nari\\u00F1o",
+    "airport":"Antonio Nari\u00f1o",
     "airport_code":"PSO",
     "latitude":1.39625,
     "longitude":-77.2915,
@@ -4147,7 +4147,7 @@
     ]
   },
   {
-    "airport":"Sim\\u00F3n Bol\\u00EDvar Int.",
+    "airport":"Sim\u00f3n Bol\u00edvar Int.",
     "airport_code":"SMR",
     "latitude":11.1196,
     "longitude":-74.2306,
@@ -4179,7 +4179,7 @@
     ]
   },
   {
-    "airport":"Alfonso L\\u00F3pez Pumarejo Airport",
+    "airport":"Alfonso L\u00f3pez Pumarejo Airport",
     "airport_code":"VUP",
     "latitude":10.435,
     "longitude":-73.2495,
@@ -4243,7 +4243,7 @@
     ]
   },
   {
-    "airport":"Jos\\u00E9 Mart\\u00ED Int.",
+    "airport":"Jos\u00e9 Mart\u00ed Int.",
     "airport_code":"HAV",
     "latitude":22.98920059,
     "longitude":-82.40910339,
@@ -4267,7 +4267,7 @@
     "continent":"North America",
     "country":"Cuba",
     "country_code":"CU",
-    "city":"Holgu\\u00EDn",
+    "city":"Holgu\u00edn",
     "city_code":"HOG",
     "group":"MEXSA",
     "market":"SUN",
@@ -4294,7 +4294,7 @@
     ]
   },
   {
-    "airport":"Juan Gualberto G\\u00F3mez",
+    "airport":"Juan Gualberto G\u00f3mez",
     "airport_code":"VRA",
     "latitude":23.03440094,
     "longitude":-81.43530273,
@@ -4316,9 +4316,9 @@
     "latitude":12.1889,
     "longitude":-68.959801,
     "continent":"North America",
-    "country":"Cura\\u00E7ao",
+    "country":"Cura\u00e7ao",
     "country_code":"CW",
-    "city":"Cura\\u00E7ao",
+    "city":"Cura\u00e7ao",
     "city_code":"CUR",
     "group":null,
     "market":"SUN",
@@ -4391,7 +4391,7 @@
     ]
   },
   {
-    "airport":"V\\u00E1clav Havel",
+    "airport":"V\u00e1clav Havel",
     "airport_code":"PRG",
     "latitude":50.1008,
     "longitude":14.26,
@@ -4551,14 +4551,14 @@
     ]
   },
   {
-    "airport":"D\\u00FCsseldorf",
+    "airport":"D\u00fcsseldorf",
     "airport_code":"DUS",
     "latitude":51.289501,
     "longitude":6.76678,
     "continent":"Europe",
     "country":"Germany",
     "country_code":"DE",
-    "city":"D\\u00FCsseldorf",
+    "city":"D\u00fcsseldorf",
     "city_code":"DUS",
     "group":"EUROPE",
     "market":"INT",
@@ -4574,7 +4574,7 @@
     "continent":"Europe",
     "country":"Germany",
     "country_code":"DE",
-    "city":"D\\u00FCsseldorf",
+    "city":"D\u00fcsseldorf",
     "city_code":"DUS",
     "group":"EUROPE",
     "market":"INT",
@@ -4695,7 +4695,7 @@
     ]
   },
   {
-    "airport":"M\\u00FCnster Osnabr\\u00FCck",
+    "airport":"M\u00fcnster Osnabr\u00fcck",
     "airport_code":"FMO",
     "latitude":52.13460159,
     "longitude":7.684830189,
@@ -5111,7 +5111,7 @@
     ]
   },
   {
-    "airport":"Douglas\\u2013Charles Airport",
+    "airport":"Douglas\u2013Charles Airport",
     "airport_code":"DOM",
     "latitude":15.547,
     "longitude":-61.299999,
@@ -5143,7 +5143,7 @@
     ]
   },
   {
-    "airport":"Gregorio Luper\\u00F3n Int.",
+    "airport":"Gregorio Luper\u00f3n Int.",
     "airport_code":"POP",
     "latitude":19.75790024,
     "longitude":-70.56999969,
@@ -5175,7 +5175,7 @@
     ]
   },
   {
-    "airport":"Saman\\u00E1 El Catey Int.",
+    "airport":"Saman\u00e1 El Catey Int.",
     "airport_code":"AZS",
     "latitude":19.2670002,
     "longitude":-69.74199677,
@@ -5192,7 +5192,7 @@
     ]
   },
   {
-    "airport":"Las Am\\u00E9ricas Int.",
+    "airport":"Las Am\u00e9ricas Int.",
     "airport_code":"SDQ",
     "latitude":18.42970085,
     "longitude":-69.66889954,
@@ -5240,7 +5240,7 @@
     ]
   },
   {
-    "airport":"Soummam \\u2013 Abane Ramdane Airport",
+    "airport":"Soummam \u2013 Abane Ramdane Airport",
     "airport_code":"BJA",
     "latitude":36.7120018,
     "longitude":5.069920063,
@@ -5311,7 +5311,7 @@
     "continent":"Africa",
     "country":"Algeria",
     "country_code":"DZ",
-    "city":"B\\u00E9char",
+    "city":"B\u00e9char",
     "city_code":"CBH",
     "group":"EUROPE",
     "market":"INT",
@@ -5352,14 +5352,14 @@
     ]
   },
   {
-    "airport":"Noum\\u00E9rat \\u2013 Moufdi Zakaria Airport",
+    "airport":"Noum\u00e9rat \u2013 Moufdi Zakaria Airport",
     "airport_code":"GHA",
     "latitude":32.38410187,
     "longitude":3.79411006,
     "continent":"Africa",
     "country":"Algeria",
     "country_code":"DZ",
-    "city":"Gharda\\u00EFa",
+    "city":"Gharda\u00efa",
     "city_code":"GHA",
     "group":"EUROPE",
     "market":"INT",
@@ -5384,7 +5384,7 @@
     ]
   },
   {
-    "airport":"Oued Irara\\u2013Krim Belkacem Airport",
+    "airport":"Oued Irara\u2013Krim Belkacem Airport",
     "airport_code":"HME",
     "latitude":31.67300034,
     "longitude":6.140439987,
@@ -5432,14 +5432,14 @@
     ]
   },
   {
-    "airport":"Cheikh Larbi T\\u00E9bessi Airport",
+    "airport":"Cheikh Larbi T\u00e9bessi Airport",
     "airport_code":"TEE",
     "latitude":35.43159866,
     "longitude":8.12071991,
     "continent":"Africa",
     "country":"Algeria",
     "country_code":"DZ",
-    "city":"T\\u00E9bessa",
+    "city":"T\u00e9bessa",
     "city_code":"TEE",
     "group":"EUROPE",
     "market":"INT",
@@ -5480,7 +5480,7 @@
     ]
   },
   {
-    "airport":"Aguenar \\u2013 Hadj Bey Akhamok Airport",
+    "airport":"Aguenar \u2013 Hadj Bey Akhamok Airport",
     "airport_code":"TMR",
     "latitude":22.81150055,
     "longitude":5.451079845,
@@ -5976,14 +5976,14 @@
     ]
   },
   {
-    "airport":"M\\u00E1laga",
+    "airport":"M\u00e1laga",
     "airport_code":"AGP",
     "latitude":36.67490005,
     "longitude":-4.499110222,
     "continent":"Europe",
     "country":"Spain",
     "country_code":"ES",
-    "city":"M\\u00E1laga",
+    "city":"M\u00e1laga",
     "city_code":"AGP",
     "group":"EUROPE",
     "market":"INT",
@@ -6495,7 +6495,7 @@
     "continent":"Africa",
     "country":"Ethiopia",
     "country_code":"ET",
-    "city":"Mek\\u0027ele",
+    "city":"Mek'ele",
     "city_code":"MQX",
     "group":null,
     "market":"INT",
@@ -6600,7 +6600,7 @@
     ]
   },
   {
-    "airport":"Tampere\\u2013Pirkkala Airport",
+    "airport":"Tampere\u2013Pirkkala Airport",
     "airport_code":"TMP",
     "latitude":61.41410065,
     "longitude":23.60440063,
@@ -6648,7 +6648,7 @@
     ]
   },
   {
-    "airport":"Bordeaux-M\\u00E9rignac",
+    "airport":"Bordeaux-M\u00e9rignac",
     "airport_code":"BOD",
     "latitude":44.82830048,
     "longitude":-0.7155560255,
@@ -6712,7 +6712,7 @@
     ]
   },
   {
-    "airport":"Saint-Exup\\u00E9ry",
+    "airport":"Saint-Exup\u00e9ry",
     "airport_code":"LYS",
     "latitude":45.725556,
     "longitude":5.081111,
@@ -6744,14 +6744,14 @@
     ]
   },
   {
-    "airport":"Montpellier-M\\u00E9diterran\\u00E9e",
+    "airport":"Montpellier-M\u00e9diterran\u00e9e",
     "airport_code":"MPL",
     "latitude":43.57619858,
     "longitude":3.963010073,
     "continent":"Europe",
     "country":"France",
     "country_code":"FR",
-    "city":"Montpellier-M\\u00E9diterran\\u00E9e",
+    "city":"Montpellier-M\u00e9diterran\u00e9e",
     "city_code":"MPL",
     "group":"EUROPE",
     "market":"INT",
@@ -6776,7 +6776,7 @@
     ]
   },
   {
-    "airport":"C\\u00F4te d\\u0027Azur",
+    "airport":"C\u00f4te d'Azur",
     "airport_code":"NCE",
     "latitude":43.65840149,
     "longitude":7.215869904,
@@ -6824,7 +6824,7 @@
     ]
   },
   {
-    "airport":"Pau-Pyr\\u00E9n\\u00E9es Int. Airport",
+    "airport":"Pau-Pyr\u00e9n\u00e9es Int. Airport",
     "airport_code":"PUF",
     "latitude":43.38000107,
     "longitude":-0.41861099,
@@ -6936,7 +6936,7 @@
     ]
   },
   {
-    "airport":"Calvi \\u2013 Sainte-Catherine Airport",
+    "airport":"Calvi \u2013 Sainte-Catherine Airport",
     "airport_code":"CLY",
     "latitude":42.5244444,
     "longitude":8.7930556,
@@ -6952,7 +6952,7 @@
     ]
   },
   {
-    "airport":"Deauville \\u2013 Normandie Airport",
+    "airport":"Deauville \u2013 Normandie Airport",
     "airport_code":"DOL",
     "latitude":49.36529922,
     "longitude":0.1543059945,
@@ -7400,14 +7400,14 @@
     ]
   },
   {
-    "airport":"P\\u00F4le Cara\\u00EFbes",
+    "airport":"P\u00f4le Cara\u00efbes",
     "airport_code":"PTP",
     "latitude":16.265301,
     "longitude":-61.531799,
     "continent":"North America",
     "country":"Guadeloupe",
     "country_code":"GP",
-    "city":"Pointe-\\u00E0-Pitre",
+    "city":"Pointe-\u00e0-Pitre",
     "city_code":"PTP",
     "group":"MEXSA",
     "market":"SUN",
@@ -7800,7 +7800,7 @@
     ]
   },
   {
-    "airport":"Ram\\u00F3n Villeda Morales",
+    "airport":"Ram\u00f3n Villeda Morales",
     "airport_code":"SAP",
     "latitude":15.4526,
     "longitude":-87.923599,
@@ -7816,7 +7816,7 @@
     ]
   },
   {
-    "airport":"Toncont\\u00EDn Int.",
+    "airport":"Toncont\u00edn Int.",
     "airport_code":"TGU",
     "latitude":14.06089973,
     "longitude":-87.21720123,
@@ -7832,7 +7832,7 @@
     ]
   },
   {
-    "airport":"Juan Manuel G\\u00E1lvez Int. Airport",
+    "airport":"Juan Manuel G\u00e1lvez Int. Airport",
     "airport_code":"RTB",
     "latitude":16.316799,
     "longitude":-86.523003,
@@ -7912,14 +7912,14 @@
     ]
   },
   {
-    "airport":"Bra\\u010D",
+    "airport":"Bra\u010d",
     "airport_code":"BWK",
     "latitude":43.28570175,
     "longitude":16.67970085,
     "continent":"Europe",
     "country":"Croatia",
     "country_code":"HR",
-    "city":"Bra\\u010D",
+    "city":"Bra\u010d",
     "city_code":"BWK",
     "group":null,
     "market":"INT",
@@ -9183,7 +9183,7 @@
     "continent":"Europe",
     "country":"Iceland",
     "country_code":"IS",
-    "city":"Reykjav\\u00EDk",
+    "city":"Reykjav\u00edk",
     "city_code":"REK",
     "group":null,
     "market":"INT",
@@ -9304,14 +9304,14 @@
     ]
   },
   {
-    "airport":"Forl\\u00EC Airport",
+    "airport":"Forl\u00ec Airport",
     "airport_code":"FRL",
     "latitude":44.194801,
     "longitude":12.0701,
     "continent":"Europe",
     "country":"Italy",
     "country_code":"IT",
-    "city":"Forl\\u00EC",
+    "city":"Forl\u00ec",
     "city_code":"FRL",
     "group":"EUROPE",
     "market":"INT",
@@ -10151,7 +10151,7 @@
     ]
   },
   {
-    "airport":"Rom\\u00E9o LeBlanc Int. Airport",
+    "airport":"Rom\u00e9o LeBlanc Int. Airport",
     "airport_code":"YQM",
     "latitude":46.11220169,
     "longitude":-64.6785965,
@@ -10249,7 +10249,7 @@
     ]
   },
   {
-    "airport":"St. John\\u0027s, Newfoundland",
+    "airport":"St. John's, Newfoundland",
     "airport_code":"YYT",
     "latitude":47.61859894,
     "longitude":-52.75189972,
@@ -10258,7 +10258,7 @@
     "country_code":"CA",
     "state":"Newfoundland and Labrador",
     "state_code":"NL",
-    "city":"St. John\\u0027s, Newfoundland",
+    "city":"St. John's, Newfoundland",
     "city_code":"YYT",
     "group":null,
     "market":"DOM",
@@ -11126,7 +11126,7 @@
     ]
   },
   {
-    "airport":"Gasp\\u00E9",
+    "airport":"Gasp\u00e9",
     "airport_code":"YGP",
     "latitude":48.77529907,
     "longitude":-64.47859955,
@@ -11135,7 +11135,7 @@
     "country_code":"CA",
     "state":"Quebec",
     "state_code":"QC",
-    "city":"Gasp\\u00E9",
+    "city":"Gasp\u00e9",
     "city_code":"YGP",
     "group":null,
     "market":"DOM",
@@ -11144,7 +11144,7 @@
     ]
   },
   {
-    "airport":"\\u00CEles-de-la-Madeleine",
+    "airport":"\u00celes-de-la-Madeleine",
     "airport_code":"YGR",
     "latitude":47.42470169,
     "longitude":-61.77809906,
@@ -11153,7 +11153,7 @@
     "country_code":"CA",
     "state":"Quebec",
     "state_code":"QC",
-    "city":"\\u00CEles-de-la-Madeleine",
+    "city":"\u00celes-de-la-Madeleine",
     "city_code":"YGR",
     "group":null,
     "market":"DOM",
@@ -11221,7 +11221,7 @@
     ]
   },
   {
-    "airport":"Montr\\u00E9al-Trudeau Int.",
+    "airport":"Montr\u00e9al-Trudeau Int.",
     "airport_code":"YUL",
     "latitude":45.47060013,
     "longitude":-73.74079895,
@@ -11230,7 +11230,7 @@
     "country_code":"CA",
     "state":"Quebec",
     "state_code":"QC",
-    "city":"Montr\\u00E9al",
+    "city":"Montr\u00e9al",
     "city_code":"YMQ",
     "group":null,
     "market":"DOM",
@@ -11279,7 +11279,7 @@
     ]
   },
   {
-    "airport":"Sept-\\u00CEles",
+    "airport":"Sept-\u00celes",
     "airport_code":"YZV",
     "latitude":50.22330093,
     "longitude":-66.26560211,
@@ -11288,7 +11288,7 @@
     "country_code":"CA",
     "state":"Quebec",
     "state_code":"QC",
-    "city":"Sept-\\u00CEles",
+    "city":"Sept-\u00celes",
     "city_code":"YZV",
     "group":null,
     "market":"DOM",
@@ -11297,7 +11297,7 @@
     ]
   },
   {
-    "airport":"Val D\\u0027Or",
+    "airport":"Val D'Or",
     "airport_code":"YVO",
     "latitude":48.05329895,
     "longitude":-77.78279877,
@@ -11306,7 +11306,7 @@
     "country_code":"CA",
     "state":"Quebec",
     "state_code":"QC",
-    "city":"Val d\\u0027Or",
+    "city":"Val d'Or",
     "city_code":"YVO",
     "group":null,
     "market":"DOM",
@@ -13517,7 +13517,7 @@
     ]
   },
   {
-    "airport":"Marrakesh M\\u00E9nara Airport",
+    "airport":"Marrakesh M\u00e9nara Airport",
     "airport_code":"RAK",
     "latitude":31.60689926,
     "longitude":-8.036299706,
@@ -13645,14 +13645,14 @@
     ]
   },
   {
-    "airport":"Chi\\u0219in\\u0103u Int. Airport",
+    "airport":"Chi\u0219in\u0103u Int. Airport",
     "airport_code":"KIV",
     "latitude":46.92770004,
     "longitude":28.93099976,
     "continent":"Europe",
     "country":"Moldova",
     "country_code":"MD",
-    "city":"Chi\\u0219in\\u0103u",
+    "city":"Chi\u0219in\u0103u",
     "city_code":"KIV",
     "group":"EUROPE",
     "market":"INT",
@@ -13661,7 +13661,7 @@
     ]
   },
   {
-    "airport":"Martinique Aim\\u00E9 C\\u00E9saire",
+    "airport":"Martinique Aim\u00e9 C\u00e9saire",
     "airport_code":"FDF",
     "latitude":14.5909996,
     "longitude":-61.00320053,
@@ -13732,7 +13732,7 @@
     "continent":"Asia",
     "country":"Maldives",
     "country_code":"MV",
-    "city":"Mal\\u00E9",
+    "city":"Mal\u00e9",
     "city_code":"MLE",
     "group":"ASIA",
     "market":"INT",
@@ -13876,7 +13876,7 @@
     "continent":"Oceania",
     "country":"New Caledonia",
     "country_code":"NC",
-    "city":"Noum\\u00E9a",
+    "city":"Noum\u00e9a",
     "city_code":"NOU",
     "group":null,
     "market":"INT",
@@ -14125,14 +14125,14 @@
     ]
   },
   {
-    "airport":"Troms\\u00F8 Airport",
+    "airport":"Troms\u00f8 Airport",
     "airport_code":"TOS",
     "latitude":69.6832962,
     "longitude":18.91889954,
     "continent":"Europe",
     "country":"Norway",
     "country_code":"NO",
-    "city":"Troms\\u00F8",
+    "city":"Troms\u00f8",
     "city_code":"TOS",
     "group":"EUROPE",
     "market":"INT",
@@ -14493,7 +14493,7 @@
     ]
   },
   {
-    "airport":"Hawke\\u0027s Bay",
+    "airport":"Hawke's Bay",
     "airport_code":"NPE",
     "latitude":-39.465801,
     "longitude":176.869995,
@@ -14717,7 +14717,7 @@
     ]
   },
   {
-    "airport":"Rodr\\u00EDguez Ball\\u00F3n Int. Airport",
+    "airport":"Rodr\u00edguez Ball\u00f3n Int. Airport",
     "airport_code":"AQP",
     "latitude":-16.34110069,
     "longitude":-71.58309937,
@@ -14749,7 +14749,7 @@
     ]
   },
   {
-    "airport":"Inca Manco C\\u00E1pac Int. Airport",
+    "airport":"Inca Manco C\u00e1pac Int. Airport",
     "airport_code":"JUL",
     "latitude":-15.46710014,
     "longitude":-70.15820313,
@@ -14765,7 +14765,7 @@
     ]
   },
   {
-    "airport":"Jorge Ch\\u00E1vez Int.",
+    "airport":"Jorge Ch\u00e1vez Int.",
     "airport_code":"LIM",
     "latitude":-12.0219,
     "longitude":-77.114305,
@@ -14781,7 +14781,7 @@
     ]
   },
   {
-    "airport":"Capit\\u00E1n FAP Guillermo Concha Iberico Int. Airport",
+    "airport":"Capit\u00e1n FAP Guillermo Concha Iberico Int. Airport",
     "airport_code":"PIU",
     "latitude":-5.205749989,
     "longitude":-80.61640167,
@@ -15037,7 +15037,7 @@
     ]
   },
   {
-    "airport":"Gda\\u0144sk Lech Wa\\u0142\\u0119sa",
+    "airport":"Gda\u0144sk Lech Wa\u0142\u0119sa",
     "airport_code":"GDN",
     "latitude":54.37760162,
     "longitude":18.46619987,
@@ -15069,7 +15069,7 @@
     ]
   },
   {
-    "airport":"J. Paul II Int. Krak\\u00F3w-Balice",
+    "airport":"J. Paul II Int. Krak\u00f3w-Balice",
     "airport_code":"KRK",
     "latitude":50.077702,
     "longitude":19.7848,
@@ -15101,14 +15101,14 @@
     ]
   },
   {
-    "airport":"L\\u00F3dz Airport",
+    "airport":"L\u00f3dz Airport",
     "airport_code":"LCJ",
     "latitude":51.72190094,
     "longitude":19.3980999,
     "continent":"Europe",
     "country":"Poland",
     "country_code":"PL",
-    "city":"L\\u00F3dz\\/Lublineck",
+    "city":"L\u00f3dz\\/Lublineck",
     "city_code":"LCJ",
     "group":"EUROPE",
     "market":"INT",
@@ -15133,14 +15133,14 @@
     ]
   },
   {
-    "airport":"Rzesz\\u00F3w Int.",
+    "airport":"Rzesz\u00f3w Int.",
     "airport_code":"RZE",
     "latitude":50.11000061,
     "longitude":22.0189991,
     "continent":"Europe",
     "country":"Poland",
     "country_code":"PL",
-    "city":"Rzesz\\u00F3w",
+    "city":"Rzesz\u00f3w",
     "city_code":"RZE",
     "group":"EUROPE",
     "market":"INT",
@@ -15245,7 +15245,7 @@
     ]
   },
   {
-    "airport":"Rafael Hern\\u00E1ndez",
+    "airport":"Rafael Hern\u00e1ndez",
     "airport_code":"BQN",
     "latitude":18.49489975,
     "longitude":-67.12940216,
@@ -15261,7 +15261,7 @@
     ]
   },
   {
-    "airport":"Luis Mu\\u00F1oz Mar\\u00EDn",
+    "airport":"Luis Mu\u00f1oz Mar\u00edn",
     "airport_code":"SJU",
     "latitude":18.43939972,
     "longitude":-66.00180054,
@@ -15396,7 +15396,7 @@
     "continent":"South America",
     "country":"Paraguay",
     "country_code":"PY",
-    "city":"Asunci\\u00F3n",
+    "city":"Asunci\u00f3n",
     "city_code":"ASU",
     "group":null,
     "market":"INT",
@@ -15421,7 +15421,7 @@
     ]
   },
   {
-    "airport":"Henri Coand\\u0103 Int.",
+    "airport":"Henri Coand\u0103 Int.",
     "airport_code":"OTP",
     "latitude":44.5711111,
     "longitude":26.085,
@@ -15469,14 +15469,14 @@
     ]
   },
   {
-    "airport":"Timi\\u015Foara Traian Vuia",
+    "airport":"Timi\u015foara Traian Vuia",
     "airport_code":"TSR",
     "latitude":45.80989838,
     "longitude":21.33790016,
     "continent":"Europe",
     "country":"Romania",
     "country_code":"RO",
-    "city":"Timi\\u015Foara",
+    "city":"Timi\u015foara",
     "city_code":"TSR",
     "group":"EUROPE",
     "market":"INT",
@@ -15485,7 +15485,7 @@
     ]
   },
   {
-    "airport":"Mihail Kog\\u0103lniceanu Int. Airport",
+    "airport":"Mihail Kog\u0103lniceanu Int. Airport",
     "airport_code":"CND",
     "latitude":44.36220169,
     "longitude":28.48830032,
@@ -15540,7 +15540,7 @@
     "continent":"Europe",
     "country":"Serbia",
     "country_code":"RS",
-    "city":"Ni\\u0161",
+    "city":"Ni\u0161",
     "city_code":"INI",
     "group":null,
     "market":"INT",
@@ -16077,14 +16077,14 @@
     ]
   },
   {
-    "airport":"J\\u00F6nk\\u00F6ping Airport",
+    "airport":"J\u00f6nk\u00f6ping Airport",
     "airport_code":"JKG",
     "latitude":57.75759888,
     "longitude":14.06869984,
     "continent":"Europe",
     "country":"Sweden",
     "country_code":"SE",
-    "city":"J\\u00F6nk\\u00F6ping",
+    "city":"J\u00f6nk\u00f6ping",
     "city_code":"JKG",
     "group":null,
     "market":"INT",
@@ -16109,14 +16109,14 @@
     ]
   },
   {
-    "airport":"Norrk\\u00F6ping Airport",
+    "airport":"Norrk\u00f6ping Airport",
     "airport_code":"NRK",
     "latitude":58.5862999,
     "longitude":16.25060081,
     "continent":"Europe",
     "country":"Sweden",
     "country_code":"SE",
-    "city":"Norrk\\u00F6ping",
+    "city":"Norrk\u00f6ping",
     "city_code":"NRK",
     "group":null,
     "market":"INT",
@@ -16125,14 +16125,14 @@
     ]
   },
   {
-    "airport":"\\u00C4ngelholm Helsingborg Airport",
+    "airport":"\u00c4ngelholm Helsingborg Airport",
     "airport_code":"AGH",
     "latitude":56.29610062,
     "longitude":12.84710026,
     "continent":"Europe",
     "country":"Sweden",
     "country_code":"SE",
-    "city":"\\u00C4ngelholm",
+    "city":"\u00c4ngelholm",
     "city_code":"AGH",
     "group":null,
     "market":"INT",
@@ -16221,7 +16221,7 @@
     ]
   },
   {
-    "airport":"\\u00C5re \\u00D6stersund",
+    "airport":"\u00c5re \u00d6stersund",
     "airport_code":"OSD",
     "latitude":63.19440079,
     "longitude":14.50030041,
@@ -16253,14 +16253,14 @@
     ]
   },
   {
-    "airport":"Sundsvall-Timr\\u00E5",
+    "airport":"Sundsvall-Timr\u00e5",
     "airport_code":"SDL",
     "latitude":62.52809906,
     "longitude":17.44389915,
     "continent":"Europe",
     "country":"Sweden",
     "country_code":"SE",
-    "city":"Timr\\u00E5",
+    "city":"Timr\u00e5",
     "city_code":"SDL",
     "group":null,
     "market":"INT",
@@ -16365,7 +16365,7 @@
     ]
   },
   {
-    "airport":"L. S\\u00E9dar Senghor Int.",
+    "airport":"L. S\u00e9dar Senghor Int.",
     "airport_code":"DKR",
     "latitude":14.73970032,
     "longitude":-17.49020004,
@@ -16445,7 +16445,7 @@
     ]
   },
   {
-    "airport":"Jo\\u017Ee Pu\\u010Dnik Airport",
+    "airport":"Jo\u017ee Pu\u010dnik Airport",
     "airport_code":"LJU",
     "latitude":46.223701,
     "longitude":14.4576,
@@ -16461,14 +16461,14 @@
     ]
   },
   {
-    "airport":"Ko\\u0161ice Int. Airport",
+    "airport":"Ko\u0161ice Int. Airport",
     "airport_code":"KSC",
     "latitude":48.6631012,
     "longitude":21.24110031,
     "continent":"Europe",
     "country":"Slovakia",
     "country_code":"SK",
-    "city":"Ko\\u0161ice",
+    "city":"Ko\u0161ice",
     "city_code":"KSC",
     "group":"EUROPE",
     "market":"INT",
@@ -16509,14 +16509,14 @@
     ]
   },
   {
-    "airport":"N\\u0027Djamena Int. Airport",
+    "airport":"N'Djamena Int. Airport",
     "airport_code":"NDJ",
     "latitude":12.1337,
     "longitude":15.034,
     "continent":"Africa",
     "country":"Chad",
     "country_code":"TD",
-    "city":"N\\u0027Djamena",
+    "city":"N'Djamena",
     "city_code":"NDJ",
     "group":null,
     "market":"INT",
@@ -16525,7 +16525,7 @@
     ]
   },
   {
-    "airport":"Lom\\u00E9\\u2013Tokoin",
+    "airport":"Lom\u00e9\u2013Tokoin",
     "airport_code":"LFW",
     "latitude":6.165609837,
     "longitude":1.254510045,
@@ -16637,14 +16637,14 @@
     ]
   },
   {
-    "airport":"Fua\\u02BBamotu Int. Airport",
+    "airport":"Fua\u02bbamotu Int. Airport",
     "airport_code":"TBU",
     "latitude":-21.24119949,
     "longitude":-175.1499939,
     "continent":"Oceania",
     "country":"Tonga",
     "country_code":"TO",
-    "city":"Nuku\\u2019alofa",
+    "city":"Nuku\u2019alofa",
     "city_code":"TBU",
     "group":"ASIA",
     "market":"INT",
@@ -16893,14 +16893,14 @@
     ]
   },
   {
-    "airport":"A\\u011Fr\\u0131 Airport",
+    "airport":"A\u011fr\u0131 Airport",
     "airport_code":"AJI",
     "latitude":39.65454102,
     "longitude":43.02597809,
     "continent":"Europe",
     "country":"Turkey",
     "country_code":"TR",
-    "city":"A\\u011Fr\\u0131",
+    "city":"A\u011fr\u0131",
     "city_code":"AJI",
     "group":null,
     "market":"INT",
@@ -16941,14 +16941,14 @@
     ]
   },
   {
-    "airport":"Denizli \\u00C7ardak Airport",
+    "airport":"Denizli \u00c7ardak Airport",
     "airport_code":"DNZ",
     "latitude":37.78559875,
     "longitude":29.70129967,
     "continent":"Europe",
     "country":"Turkey",
     "country_code":"TR",
-    "city":"Denizli \\u00C7ardak",
+    "city":"Denizli \u00c7ardak",
     "city_code":"DNZ",
     "group":null,
     "market":"INT",
@@ -16989,14 +16989,14 @@
     ]
   },
   {
-    "airport":"Elaz\\u0131\\u011F Airport",
+    "airport":"Elaz\u0131\u011f Airport",
     "airport_code":"EZS",
     "latitude":38.60689926,
     "longitude":39.29140091,
     "continent":"Europe",
     "country":"Turkey",
     "country_code":"TR",
-    "city":"Elaz\\u0131\\u011F",
+    "city":"Elaz\u0131\u011f",
     "city_code":"EZS",
     "group":null,
     "market":"INT",
@@ -17005,14 +17005,14 @@
     ]
   },
   {
-    "airport":"\\u015Eanl\\u0131urfa Airport",
+    "airport":"\u015eanl\u0131urfa Airport",
     "airport_code":"GNY",
     "latitude":37.445663,
     "longitude":38.895592,
     "continent":"Europe",
     "country":"Turkey",
     "country_code":"TR",
-    "city":"\\u015Eanl\\u0131urfa",
+    "city":"\u015eanl\u0131urfa",
     "city_code":"SFQ",
     "group":null,
     "market":"INT",
@@ -17053,14 +17053,14 @@
     ]
   },
   {
-    "airport":"I\\u011Fdir Airport",
+    "airport":"I\u011fdir Airport",
     "airport_code":"IGD",
     "latitude":39.97662735,
     "longitude":43.87664795,
     "continent":"Europe",
     "country":"Turkey",
     "country_code":"TR",
-    "city":"I\\u011Fdir",
+    "city":"I\u011fdir",
     "city_code":"IGD",
     "group":null,
     "market":"INT",
@@ -17069,7 +17069,7 @@
     ]
   },
   {
-    "airport":"Isparta S\\u00FCleyman Demirel Airport",
+    "airport":"Isparta S\u00fcleyman Demirel Airport",
     "airport_code":"ISE",
     "latitude":37.85540009,
     "longitude":30.36840057,
@@ -17085,7 +17085,7 @@
     ]
   },
   {
-    "airport":"K.mara\\u015F Airport",
+    "airport":"K.mara\u015f Airport",
     "airport_code":"KCM",
     "latitude":37.53882599,
     "longitude":36.95352173,
@@ -17149,7 +17149,7 @@
     ]
   },
   {
-    "airport":"Malatya Erha\\u00E7 Airport",
+    "airport":"Malatya Erha\u00e7 Airport",
     "airport_code":"MLX",
     "latitude":38.43529892,
     "longitude":38.0909996,
@@ -17181,14 +17181,14 @@
     ]
   },
   {
-    "airport":"Mu\\u015F Airport",
+    "airport":"Mu\u015f Airport",
     "airport_code":"MSR",
     "latitude":38.74779892,
     "longitude":41.66120148,
     "continent":"Europe",
     "country":"Turkey",
     "country_code":"TR",
-    "city":"Mu\\u015F",
+    "city":"Mu\u015f",
     "city_code":"MSR",
     "group":null,
     "market":"INT",
@@ -17197,14 +17197,14 @@
     ]
   },
   {
-    "airport":"Nev\\u015Fehir Kapadokya Airport",
+    "airport":"Nev\u015fehir Kapadokya Airport",
     "airport_code":"NAV",
     "latitude":38.7719,
     "longitude":34.5345,
     "continent":"Europe",
     "country":"Turkey",
     "country_code":"TR",
-    "city":"Nev\\u015Fehir",
+    "city":"Nev\u015fehir",
     "city_code":"NAV",
     "group":null,
     "market":"INT",
@@ -17213,14 +17213,14 @@
     ]
   },
   {
-    "airport":"\\u015Eirnak Airport",
+    "airport":"\u015eirnak Airport",
     "airport_code":"NKT",
     "latitude":37.3647,
     "longitude":42.0582,
     "continent":"Europe",
     "country":"Turkey",
     "country_code":"TR",
-    "city":"\\u015Eirnak",
+    "city":"\u015eirnak",
     "city_code":"NKT",
     "group":null,
     "market":"INT",
@@ -17261,7 +17261,7 @@
     ]
   },
   {
-    "airport":"Sivas Nuri Demira\\u011F Airport",
+    "airport":"Sivas Nuri Demira\u011f Airport",
     "airport_code":"VAS",
     "latitude":39.813801,
     "longitude":36.9035,
@@ -17293,7 +17293,7 @@
     ]
   },
   {
-    "airport":"\\u00C7anakkale",
+    "airport":"\u00c7anakkale",
     "airport_code":"CKZ",
     "latitude":40.13769913,
     "longitude":26.42679977,
@@ -17373,7 +17373,7 @@
     ]
   },
   {
-    "airport":"Samsun \\u00C7ar\\u015Famba",
+    "airport":"Samsun \u00c7ar\u015famba",
     "airport_code":"SZF",
     "latitude":41.254501,
     "longitude":36.567101,
@@ -17389,7 +17389,7 @@
     ]
   },
   {
-    "airport":"Tekirda\\u011F \\u00C7orlu Airport",
+    "airport":"Tekirda\u011f \u00c7orlu Airport",
     "airport_code":"TEQ",
     "latitude":41.13819885,
     "longitude":27.91909981,
@@ -17405,7 +17405,7 @@
     ]
   },
   {
-    "airport":"Yeni\\u015Fehir Airport",
+    "airport":"Yeni\u015fehir Airport",
     "airport_code":"YEI",
     "latitude":40.25519943,
     "longitude":29.56259918,
@@ -17741,7 +17741,7 @@
     ]
   },
   {
-    "airport":"Sim\\u00F3n Bol\\u00EDvar",
+    "airport":"Sim\u00f3n Bol\u00edvar",
     "airport_code":"CCS",
     "latitude":10.601194,
     "longitude":-66.991222,
@@ -17821,7 +17821,7 @@
     ]
   },
   {
-    "airport":"T\\u00E2n S\\u01A1n Nh\\u1EA5t Int.",
+    "airport":"T\u00e2n S\u01a1n Nh\u1ea5t Int.",
     "airport_code":"SGN",
     "latitude":10.81879997,
     "longitude":106.6520004,
@@ -18418,7 +18418,7 @@
     "continent":"North America",
     "country":"United States",
     "country_code":"US",
-    "state":"Arizona ",
+    "state":"Arizona",
     "state_code":"AZ",
     "city":"Phoenix",
     "city_code":"PHX",
@@ -18436,7 +18436,7 @@
     "continent":"North America",
     "country":"United States",
     "country_code":"US",
-    "state":"Arizona ",
+    "state":"Arizona",
     "state_code":"AZ",
     "city":"Tucson",
     "city_code":"TUS",
@@ -18653,7 +18653,7 @@
     ]
   },
   {
-    "airport":"San Jos\\u00E9 Int.",
+    "airport":"San Jos\u00e9 Int.",
     "airport_code":"SJC",
     "latitude":37.362598,
     "longitude":-121.929001,
@@ -18761,7 +18761,7 @@
     ]
   },
   {
-    "airport":"Charles M. Schulz \\u2013 Sonoma County Airport",
+    "airport":"Charles M. Schulz \u2013 Sonoma County Airport",
     "airport_code":"STS",
     "latitude":38.50899887,
     "longitude":-122.8130035,
@@ -18905,7 +18905,7 @@
     ]
   },
   {
-    "airport":"Gunnison\\u2013Crested Butte Regional Airport",
+    "airport":"Gunnison\u2013Crested Butte Regional Airport",
     "airport_code":"GUC",
     "latitude":38.53390121,
     "longitude":-106.9329987,
@@ -19561,7 +19561,7 @@
     ]
   },
   {
-    "airport":"O\\u0027Hare Int.",
+    "airport":"O'Hare Int.",
     "airport_code":"ORD",
     "latitude":41.9786,
     "longitude":-87.9048,
@@ -21143,7 +21143,7 @@
     ]
   },
   {
-    "airport":"Rogue Valley Int. \\u2013 Medford",
+    "airport":"Rogue Valley Int. \u2013 Medford",
     "airport_code":"MFR",
     "latitude":42.37419891,
     "longitude":-122.8730011,
@@ -22434,7 +22434,7 @@
     ]
   },
   {
-    "airport":"Gillette\\u2013Campbell County Airport",
+    "airport":"Gillette\u2013Campbell County Airport",
     "airport_code":"GCC",
     "latitude":44.34889984,
     "longitude":-105.5390015,
@@ -22686,7 +22686,7 @@
     ]
   },
   {
-    "airport":"\\u00C1lvarez Int.",
+    "airport":"\u00c1lvarez Int.",
     "airport_code":"ACA",
     "latitude":16.75709915,
     "longitude":-99.7539978,
@@ -22718,14 +22718,14 @@
     ]
   },
   {
-    "airport":"Canc\\u00FAn",
+    "airport":"Canc\u00fan",
     "airport_code":"CUN",
     "latitude":21.03650093,
     "longitude":-86.87709808,
     "continent":"North America",
     "country":"Mexico",
     "country_code":"MX",
-    "city":"Canc\\u00FAn",
+    "city":"Canc\u00fan",
     "city_code":"CUN",
     "group":"MEXSA",
     "market":"SUN",
@@ -22782,7 +22782,7 @@
     ]
   },
   {
-    "airport":"Bah\\u00EDas de Huatulco Int.",
+    "airport":"Bah\u00edas de Huatulco Int.",
     "airport_code":"HUX",
     "latitude":15.7753,
     "longitude":-96.262604,
@@ -22814,7 +22814,7 @@
     ]
   },
   {
-    "airport":"Guanajuato del Baj\\u00EDo",
+    "airport":"Guanajuato del Baj\u00edo",
     "airport_code":"BJX",
     "latitude":20.9935,
     "longitude":-101.481003,
@@ -22853,7 +22853,7 @@
     "continent":"North America",
     "country":"Mexico",
     "country_code":"MX",
-    "city":"Mazatl\\u00E1n",
+    "city":"Mazatl\u00e1n",
     "city_code":"MZT",
     "group":"MEXSA",
     "market":"SUN",
@@ -22862,7 +22862,7 @@
     ]
   },
   {
-    "airport":"Rej\\u00F3n Int.",
+    "airport":"Rej\u00f3n Int.",
     "airport_code":"MID",
     "latitude":20.93700027,
     "longitude":-89.65769959,
@@ -22878,7 +22878,7 @@
     ]
   },
   {
-    "airport":"Benito Ju\\u00E1rez Int.",
+    "airport":"Benito Ju\u00e1rez Int.",
     "airport_code":"MEX",
     "latitude":19.4363,
     "longitude":-99.072098,
@@ -22974,7 +22974,7 @@
     ]
   },
   {
-    "airport":"Quer\\u00E9taro",
+    "airport":"Quer\u00e9taro",
     "airport_code":"QRO",
     "latitude":20.6173,
     "longitude":-100.185997,
@@ -23013,7 +23013,7 @@
     "continent":"North America",
     "country":"Mexico",
     "country_code":"MX",
-    "city":"San Jos\\u00E9 del Cabo",
+    "city":"San Jos\u00e9 del Cabo",
     "city_code":"SJD",
     "group":"MEXSA",
     "market":"SUN",
@@ -23093,7 +23093,7 @@
     "continent":"North America",
     "country":"Mexico",
     "country_code":"MX",
-    "city":"Torre\\u00F3n",
+    "city":"Torre\u00f3n",
     "city_code":"TRC",
     "group":"MEXSA",
     "market":"SUN",
@@ -23102,14 +23102,14 @@
     ]
   },
   {
-    "airport":"San Luis Potos\\u00ED  Int. Airport",
+    "airport":"San Luis Potos\u00ed  Int. Airport",
     "airport_code":"SLP",
     "latitude":22.25429916,
     "longitude":-100.9309998,
     "continent":"North America",
     "country":"Mexico",
     "country_code":"MX",
-    "city":"San Luis Potos\\u00ED",
+    "city":"San Luis Potos\u00ed",
     "city_code":"SLP",
     "group":"MEXSA",
     "market":"SUN",
@@ -23118,7 +23118,7 @@
     ]
   },
   {
-    "airport":"Carlos Rovirosa P\\u00E9rez Int.",
+    "airport":"Carlos Rovirosa P\u00e9rez Int.",
     "airport_code":"VSA",
     "latitude":17.99699974,
     "longitude":-92.81739807,
@@ -23150,14 +23150,14 @@
     ]
   },
   {
-    "airport":"Juan Santamar\\u00EDa Int.",
+    "airport":"Juan Santamar\u00eda Int.",
     "airport_code":"SJO",
     "latitude":9.993860245,
     "longitude":-84.20880127,
     "continent":"North America",
     "country":"Costa Rica",
     "country_code":"CR",
-    "city":"San Jos\\u00E9",
+    "city":"San Jos\u00e9",
     "city_code":"SJO",
     "group":"MEXSA",
     "market":"SUN",
@@ -23502,7 +23502,7 @@
     ]
   },
   {
-    "airport":"Am\\u00EDlcar Cabral Int. Airport",
+    "airport":"Am\u00edlcar Cabral Int. Airport",
     "airport_code":"SID",
     "latitude":16.7414,
     "longitude":-22.9494,
@@ -23518,7 +23518,7 @@
     ]
   },
   {
-    "airport":"Ces\\u00E1ria \\u00C9vora Airport",
+    "airport":"Ces\u00e1ria \u00c9vora Airport",
     "airport_code":"VXE",
     "latitude":16.83320045,
     "longitude":-25.05529976,
@@ -23534,7 +23534,7 @@
     ]
   },
   {
-    "airport":"Djibouti\\u2013Ambouli Int.",
+    "airport":"Djibouti\u2013Ambouli Int.",
     "airport_code":"JIB",
     "latitude":11.54730034,
     "longitude":43.15950012,
@@ -23838,7 +23838,7 @@
     ]
   },
   {
-    "airport":"Tahiti - Fa\\u0027a\\u0027\\u0101 Int. Airport",
+    "airport":"Tahiti - Fa'a'\u0101 Int. Airport",
     "airport_code":"PPT",
     "latitude":-17.553699,
     "longitude":-149.606995,

@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import codecs
 from collections import defaultdict
 import csv
 from pathlib import Path
@@ -65,18 +66,18 @@ def main(
                         print(f"Differing countries for {airport['code']}: {airport_data[0]} | {country['name']}")
 
                     airports.append({
-                        "airport": airport["name"].strip(),
+                        "airport": codecs.decode(airport["name"], "unicode-escape").strip(),
                         "airport_code": airport["code"],
                         "latitude": airport_data[1],
                         "longitude": airport_data[2],
                         "continent": country_continents_data.get(country["name"].strip()) or country_continents_data.get(airport_data[0]),
-                        "country": country["name"].strip(),
+                        "country": codecs.decode(country["name"], "unicode-escape").strip(),
                         "country_code": country["code"],
                         **({
-                            "state": state["name"],
+                            "state": codecs.decode(state["name"], "unicode-escape").strip(),
                             "state_code": state["code"],
                         } if state is not country else {}),
-                        "city": city["name"].strip(),
+                        "city": codecs.decode(city["name"], "unicode-escape").strip(),
                         "city_code": city["code"],
                         "group": groups_by_country.get(country["code"], None),
                         "market": markets_by_country.get(country["code"], "INT"),
