@@ -132,7 +132,7 @@ class Airline:
         if self.id == "air-canada":
             app_bonus_factor = aeroplan_status.bonus_factor
         elif self.star_alliance_member:
-            app_bonus_factor = max(aeroplan_status.bonus_factor, 0.25)
+            app_bonus_factor = max(0, min(aeroplan_status.bonus_factor, 0.25))
         else:
             app_bonus_factor = 0
         app = max(distance * app_earning_rate, aeroplan_status.min_earning_value) if self.earns_app else 0
