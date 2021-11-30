@@ -325,7 +325,7 @@ def _render_map(routes, ctr_lon=None, ctr_lat=None, zoom=None, get_width=6):
             zoom=zoom,
             bearing=0,
             pitch=0,
-            height=360,
+            height=320,
         ),
         map_style="road",
         layers=[layer],
