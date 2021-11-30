@@ -239,6 +239,7 @@ def browse_airports(title):
 
     destination_airports = []
     destinations = []
+    countries = []
     old_distances = []
     new_distances = []
 
@@ -247,11 +248,13 @@ def browse_airports(title):
         destination_airports.append(destination_airport)
 
         destinations.append(f"{destination_airport.airport} ({destination_airport.airport_code})")
+        countries.append(destination_airport.country)
         old_distances.append(distance.old_distance)
         new_distances.append(distance.distance)
 
     distances_df = pd.DataFrame({
         "Destination": destinations,
+        "Country": countries,
         "Distance (Old)": old_distances,
         "Distance (New)": new_distances,
     })
