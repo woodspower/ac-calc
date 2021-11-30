@@ -129,7 +129,7 @@ class Airline:
             return SegmentCalculation(distance, 0, 0, 0, 0, 0, 0)
 
         app_earning_rate = self._earning_rate(origin, destination, fare_brand, fare_class)
-        if self.airline.id == "air-canada":
+        if self.id == "air-canada":
             app_bonus_factor = aeroplan_status.bonus_factor
         elif self.star_alliance_member:
             app_bonus_factor = max(aeroplan_status.bonus_factor, 0.25)
