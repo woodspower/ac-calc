@@ -1,26 +1,36 @@
 from collections import defaultdict, namedtuple
 import csv
+import json
 from functools import cache
 from importlib import resources
 
+import streamlit as st
 
-Airport = namedtuple("Airport", ("iata_code,country,latitude,longitude,distances"))
-Country = namedtuple("Country", ("country", "continent"))
+
+Airport = namedtuple("Airport", (
+    "airport",
+    "airport_code",
+    "latitude",
+    "longitude",
+    "continent",
+    "country",
+    "country_code",
+    "state",
+    "state_code",
+    "city",
+    "city_code",
+    "group",
+    "market",
+    "nearby",
+    "distances",
+), defaults=(None,) * 15)
+
+
 Distance = namedtuple("Distance", ("origin,destination,old_distance,distance"))
 
 
-@cache
-def _load_country_continents():
-    with resources.open_text("ac_calc.locations", "country_continents.csv") as f:
-        reader = csv.reader(f)
-        assert(next(reader) == ["country", "continent"])
-        countries = tuple(map(Country._make, reader))
-
-    return {country.country: country for country in countries}
-
-
-@cache
-def _load_aeroplan_distances():
+@st.experimental_singleton
+def aeroplan_distances():
     with resources.open_text("ac_calc.locations", "aeroplan_distances.csv") as f:
         reader = csv.reader(f)
         assert(next(reader) == ["origin", "destination", "old_distance", "distance"])
@@ -45,38 +55,24 @@ def _load_aeroplan_distances():
     return distances
 
 
-@cache
-def _load_airports():
-    _countries = _load_country_continents()
-    _distances = _load_aeroplan_distances()
+@st.experimental_singleton
+def airports():
+    _distances = aeroplan_distances()
 
-    # Load and return list of airports, resolving the countries to
-    # Country tuples and including distances to other airports.
-    with resources.open_text("ac_calc.locations", "airports.csv") as f:
-        reader = csv.reader(f)
-        assert(next(reader) == ["iata_code", "country", "latitude", "longitude"])
+    # Load and return list of airports, including distances to other airports.
+    with resources.open_text("ac_calc.locations", "airports.json") as f:
+        airports_data = json.load(f)
         airports = [
-            Airport(
-                row[0],
-                _countries[row[1]],
-                float(row[2]),
-                float(row[3]),
-                _distances.get(row[0], {})
-            )
-            for row in reader
+            Airport(**airport_data, distances=_distances.get(airport_data["airport_code"], {}))
+            for airport_data in airports_data
         ]
 
     return airports
 
 
-AIRPORTS = _load_airports()
-COUNTRIES = _load_country_continents()
-DISTANCES = _load_aeroplan_distances()
-
-
-DEFAULT_ORIGIN_AIRPORT_INDEX, DEFAULT_ORIGIN_AIRPORT = next(
-    filter(lambda e: e[1].iata_code == "YYC", enumerate(AIRPORTS))
-)
-DEFAULT_DESTINATION_AIRPORT_INDEX, DEFAULT_DESTINATION_AIRPORT = next(
-    filter(lambda e: e[1].iata_code == "YYZ", enumerate(AIRPORTS))
-)
+@st.experimental_singleton
+def airports_by_code():
+    return {
+        airport.airport_code: airport
+        for airport in airports()
+    }

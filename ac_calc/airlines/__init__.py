@@ -38,7 +38,7 @@ class Airline:
         Aeroplan distance, calculate the haversine distance.
         """
 
-        if distance := origin.distances.get(destination.iata_code):
+        if distance := origin.distances.get(destination.airport_code):
             return distance.distance or distance.old_distance
         else:
             d_lat = radians(destination.latitude - origin.latitude)
@@ -73,45 +73,45 @@ class Airline:
         destination: Airport,
     ):
         if self.id == "air-canada":
-            if origin.country.country == destination.country.country == "Canada":
+            if origin.country == destination.country == "Canada":
                 return "Domestic"
             elif (
-                (origin.country.country == "Canada" and destination.country.country == "United States")
-                or (origin.country.country == "United States" and destination.country.country == "Canada")
+                (origin.country == "Canada" and destination.country == "United States")
+                or (origin.country == "United States" and destination.country == "Canada")
             ):
                 return "Transborder"
             else:
                 return "International"
         elif self.id == "air-india":
-            return "Domestic" if origin.country.country == destination.country.country == "India" else "International"
+            return "Domestic" if origin.country == destination.country == "India" else "International"
         elif self.id == "avianca":
-            return "Domestic Colombia, Peru, Ecuador, and Intra-Central America" if origin.country.continent == destination.country.continent == "South America" else "All destinations"
+            return "Domestic Colombia, Peru, Ecuador, and Intra-Central America" if origin.continent == destination.continent == "South America" else "All destinations"
         elif self.id == "eurowings-discover":
-            return "Intra-European flights" if origin.country.continent == destination.country.continent == "Europe" else "Rest of the world"
+            return "Intra-European flights" if origin.continent == destination.continent == "Europe" else "Rest of the world"
         elif self.id == "south-african-airways":
-            return "Domestic" if origin.country.country == destination.country.country == "South Africa" else "International"
+            return "Domestic" if origin.country == destination.country == "South Africa" else "International"
         elif self.id == "virgin-australia":
-            return "Domestic" if origin.country.country == destination.country.country == "Australia" else "International"
+            return "Domestic" if origin.country == destination.country == "Australia" else "International"
         elif self.id == "austrian-airlines":
-            return "Intra-European flights" if origin.country.continent == destination.country.continent == "Europe" else "Rest of the world"
+            return "Intra-European flights" if origin.continent == destination.continent == "Europe" else "Rest of the world"
         elif self.id == "egyptair":
-            return "Domestic" if origin.country.country == destination.country.country == "Egypt" else "International"
+            return "Domestic" if origin.country == destination.country == "Egypt" else "International"
         elif self.id == "swiss":
-            return "Intra-European flights" if origin.country.continent == destination.country.continent == "Europe" else "Rest of the world"
+            return "Intra-European flights" if origin.continent == destination.continent == "Europe" else "Rest of the world"
         elif self.id == "tap-air-portugal":
             lisbon_porto_codes = set(("LIS", "OPO", "PXO", "FNC"))
-            return "Flights between Lisbon and Porto" if origin.iata_code in lisbon_porto_codes and destination.iata_code in lisbon_porto_codes else "All destinations"
+            return "Flights between Lisbon and Porto" if origin.airport_code in lisbon_porto_codes and destination.airport_code in lisbon_porto_codes else "All destinations"
         elif self.id == "asiana":
-            return "Domestic South Korea" if origin.country.country == destination.country.country == "South Korea" else "International"
+            return "Domestic South Korea" if origin.country == destination.country == "South Korea" else "International"
         elif self.id == "air-new-zealand":
-            if origin.country.country == destination.country.country == "New Zealand":
+            if origin.country == destination.country == "New Zealand":
                 return "Domestic"
-            elif origin.country.continent == destination.country.continent == "Oceania":
+            elif origin.continent == destination.continent == "Oceania":
                 return "Tasman"
             else:
                 return "International"
         elif self.id == "lufthansa":
-            return "Intra-European flights" if origin.country.continent == destination.country.continent == "Europe" else "Rest of the world"
+            return "Intra-European flights" if origin.continent == destination.continent == "Europe" else "Rest of the world"
         else:
             return "*"
 
@@ -216,6 +216,3 @@ AirCanada = AirCanadaAirline(
 
 
 AIRLINES = (AirCanada,) + _load_airline_partners()
-
-
-DEFAULT_AIRLINE, DEFAULT_AIRLINE_INDEX = AirCanada, 0

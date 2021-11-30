@@ -7,12 +7,12 @@ import streamlit as st
 from streamlit.elements.map import _get_zoom_level
 
 from ac_calc.aeroplan import NoBrand, AEROPLAN_STATUSES, DEFAULT_AEROPLAN_STATUS, DEFAULT_FARE_BRAND_INDEX, FARE_BRANDS
-from ac_calc.airlines import AirCanada, AIRLINES, DEFAULT_AIRLINE_INDEX
-from ac_calc.locations import AIRPORTS, COUNTRIES, DISTANCES, DEFAULT_ORIGIN_AIRPORT_INDEX, DEFAULT_DESTINATION_AIRPORT_INDEX
+from ac_calc.airlines import AirCanada, AIRLINES
+from ac_calc.locations import airports, airports_by_code
 
 
 SEGMENT_KEYS = ("airline", "origin", "destination", "fare_brand", "fare_class", "colour")
-DEFAULT_COLORS = (
+SEGMENT_COLOURS = (
     "#1984a3",
     "#f5c767",
     "#6e4f7b",
@@ -21,6 +21,12 @@ DEFAULT_COLORS = (
     "#fda05d",
     "#90ddd0",
 )
+MARKET_COLOURS = {
+    "DOM": (202, 42, 54),
+    "TNB": (34, 132, 161),
+    "SUN": (233, 171, 154),
+    "INT": (100, 100, 100),
+}
 
 
 def main():
@@ -88,6 +94,14 @@ def calculate_points_miles(title):
         """, unsafe_allow_html=True)
 
     with st.container():
+        DEFAULT_AIRLINE, DEFAULT_AIRLINE_INDEX = AirCanada, 0
+        DEFAULT_ORIGIN_AIRPORT_INDEX, DEFAULT_ORIGIN_AIRPORT = next(
+            filter(lambda e: e[1].airport_code == "YYC", enumerate(airports()))
+        )
+        DEFAULT_DESTINATION_AIRPORT_INDEX, DEFAULT_DESTINATION_AIRPORT = next(
+            filter(lambda e: e[1].airport_code == "YYZ", enumerate(airports()))
+        )
+
         for index in range(st.session_state["num_segments"]):
             airline_col, origin_col, destination_col, fare_brand_col, fare_class_col, color_col = st.columns((24, 16, 16, 24, 12, 4))
 
@@ -102,18 +116,18 @@ def calculate_points_miles(title):
 
             origin_col.selectbox(
                 "Origin 🛫",
-                AIRPORTS,
+                airports(),
                 index=DEFAULT_ORIGIN_AIRPORT_INDEX,
-                format_func=lambda airport: airport.iata_code,
+                format_func=lambda airport: f"{airport.city} {airport.airport_code}" if airport.city else airport.airport_code,
                 help="Flight segment origin airport code.",
                 key=f"origin-{index}",
             )
 
             destination_col.selectbox(
                 "Destination 🛬",
-                AIRPORTS,
+                airports(),
                 index=DEFAULT_DESTINATION_AIRPORT_INDEX,
-                format_func=lambda airport: airport.iata_code,
+                format_func=lambda airport: f"{airport.city} {airport.airport_code}" if airport.city else airport.airport_code,
                 help="Flight segment destination airport code.",
                 key=f"destination-{index}",
             )
@@ -138,7 +152,7 @@ def calculate_points_miles(title):
 
             color_col.color_picker(
                 "🎨",
-                value=DEFAULT_COLORS[index % len(DEFAULT_COLORS)],
+                value=SEGMENT_COLOURS[index % len(SEGMENT_COLOURS)],
                 key=f"colour-{index}",
             )
 
@@ -167,7 +181,7 @@ def calculate_points_miles(title):
     calculations_df = pd.DataFrame([
         (
             airline.name,
-            f"{origin.iata_code}–{destination.iata_code}",
+            f"{origin.airport_code}–{destination.airport_code}",
             f"{fare_class} ({fare_brand.name})" if fare_brand != NoBrand else fare_class,
             calc.distance,
             round(calc.sqm_earning_rate * 100),
@@ -188,7 +202,7 @@ def calculate_points_miles(title):
 
     map_data = [
         {
-            "label": f"{origin.iata_code}–{destination.iata_code}",
+            "label": f"{origin.airport_code}–{destination.airport_code}",
             "distance": calc.distance,
             "source_position": (origin.longitude, origin.latitude),
             "target_position": (destination.longitude, destination.latitude),
@@ -205,7 +219,7 @@ def browse_airlines(title):
     airline = st.selectbox(
         "Airline ✈️",
         AIRLINES,
-        index=DEFAULT_AIRLINE_INDEX,
+        index=0,
         format_func=lambda airline: airline.name,
         help="Operating airline.",
     )
@@ -215,40 +229,53 @@ def browse_airlines(title):
 
 
 def browse_airports(title):
+    DEFAULT_ORIGIN_AIRPORT_INDEX, _ = next(
+        filter(lambda e: e[1].airport_code == "YYC", enumerate(airports()))
+    )
+
     origin = st.selectbox(
         "Origin 🛫",
-        AIRPORTS,
+        airports(),
         index=DEFAULT_ORIGIN_AIRPORT_INDEX,
-        format_func=lambda airport: airport.iata_code,
+        format_func=lambda airport: f"{airport.city} {airport.airport_code}" if airport.city else airport.airport_code,
         help="Flight origin airport code.",
     )
 
-    destinations = []
+    st.markdown(f"<div style='font-size:1.666rem'>{origin.airport}</div>\n\n**{origin.city}**, " + (f"{origin.state}, " if origin.state else "") + origin.country, unsafe_allow_html=True)
+
     destination_airports = []
+    destination_names = []
+    destination_codes = []
+    countries = []
     old_distances = []
     new_distances = []
 
     for _, distance in origin.distances.items():
-        destinations.append(distance.destination)
-        destination_airports.append(next(filter(lambda e: e.iata_code == distance.destination, AIRPORTS)))
+        destination_airport = airports_by_code()[distance.destination]
+        destination_airports.append(destination_airport)
+
+        destination_names.append(destination_airport.airport)
+        destination_codes.append(destination_airport.airport_code)
+        countries.append(destination_airport.country)
         old_distances.append(distance.old_distance)
         new_distances.append(distance.distance)
 
     distances_df = pd.DataFrame({
-        "Destination": destinations,
+        "Destination Name": destination_names,
+        "Destination Code": destination_codes,
+        "Country": countries,
         "Distance (Old)": old_distances,
         "Distance (New)": new_distances,
     })
-    distances_df.set_index("Destination")
 
     map_data = [
         {
-            "label": destination.iata_code,
+            "label": destination.airport_code,
             "distance": new_distance or old_distance,
             "source_position": (origin.longitude, origin.latitude),
             "target_position": (destination.longitude, destination.latitude),
-            "source_colour": ImageColor.getrgb(DEFAULT_COLORS[0]),
-            "target_colour": ImageColor.getrgb(DEFAULT_COLORS[0]),
+            "source_colour": MARKET_COLOURS.get(destination.market, (180, 180, 180)),
+            "target_colour": MARKET_COLOURS.get(destination.market, (180, 180, 180)),
         }
         for destination, old_distance, new_distance in zip(destination_airports, old_distances, new_distances)
     ]
@@ -258,21 +285,22 @@ def browse_airports(title):
 
 
 def _render_map(routes, ctr_lon=None, ctr_lat=None, zoom=None, get_width=6):
-    positions = [
-        pos for route_positions in (
-            (route["source_position"], route["target_position"])
-            for route in routes
-        ) for pos in route_positions
-    ]
-    min_lon = min(c[0] for c in positions)
-    max_lon = max(c[0] for c in positions)
-    min_lat = min(c[1] for c in positions)
-    max_lat = max(c[1] for c in positions)
-    ctr_lon = ctr_lon or ((min_lon + max_lon) / 2.0)
-    ctr_lat = ctr_lat or ((min_lat + max_lat) / 2.0)
-    rng_lon = abs(max_lon - min_lon)
-    rng_lat = abs(max_lat - min_lat)
-    zoom = zoom or (min(5, max(1, _get_zoom_level(max(rng_lon, rng_lat)))))
+    if not ctr_lon or not ctr_lat:
+        positions = [
+            pos for route_positions in (
+                (route["source_position"], route["target_position"])
+                for route in routes
+            ) for pos in route_positions
+        ]
+        min_lon = min(c[0] for c in positions)
+        max_lon = max(c[0] for c in positions)
+        min_lat = min(c[1] for c in positions)
+        max_lat = max(c[1] for c in positions)
+        ctr_lon = ctr_lon or ((min_lon + max_lon) / 2.0)
+        ctr_lat = ctr_lat or ((min_lat + max_lat) / 2.0)
+        rng_lon = abs(max_lon - min_lon)
+        rng_lat = abs(max_lat - min_lat)
+        zoom = zoom or (min(5, max(1, _get_zoom_level(max(rng_lon, rng_lat)))))
 
     # https://deck.gl/docs/api-reference/geo-layers/great-circle-layer
     layer = pdk.Layer(
