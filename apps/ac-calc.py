@@ -8,7 +8,7 @@ from streamlit.elements.map import _get_zoom_level
 
 from ac_calc.aeroplan import NoBrand, AEROPLAN_STATUSES, DEFAULT_AEROPLAN_STATUS, DEFAULT_FARE_BRAND_INDEX, FARE_BRANDS
 from ac_calc.airlines import AirCanada, AIRLINES, DEFAULT_AIRLINE_INDEX
-from ac_calc.locations import AIRPORTS, COUNTRIES, DISTANCES, DEFAULT_ORIGIN_AIRPORT_INDEX, DEFAULT_DESTINATION_AIRPORT_INDEX
+from ac_calc.locations import AIRPORTS, DEFAULT_ORIGIN_AIRPORT_INDEX, DEFAULT_DESTINATION_AIRPORT_INDEX
 
 
 SEGMENT_KEYS = ("airline", "origin", "destination", "fare_brand", "fare_class", "colour")
@@ -104,7 +104,7 @@ def calculate_points_miles(title):
                 "Origin 🛫",
                 AIRPORTS,
                 index=DEFAULT_ORIGIN_AIRPORT_INDEX,
-                format_func=lambda airport: airport.iata_code,
+                format_func=lambda airport: airport.airport_code,
                 help="Flight segment origin airport code.",
                 key=f"origin-{index}",
             )
@@ -113,7 +113,7 @@ def calculate_points_miles(title):
                 "Destination 🛬",
                 AIRPORTS,
                 index=DEFAULT_DESTINATION_AIRPORT_INDEX,
-                format_func=lambda airport: airport.iata_code,
+                format_func=lambda airport: airport.airport_code,
                 help="Flight segment destination airport code.",
                 key=f"destination-{index}",
             )
@@ -167,7 +167,7 @@ def calculate_points_miles(title):
     calculations_df = pd.DataFrame([
         (
             airline.name,
-            f"{origin.iata_code}–{destination.iata_code}",
+            f"{origin.airport_code}–{destination.airport_code}",
             f"{fare_class} ({fare_brand.name})" if fare_brand != NoBrand else fare_class,
             calc.distance,
             round(calc.sqm_earning_rate * 100),
@@ -188,7 +188,7 @@ def calculate_points_miles(title):
 
     map_data = [
         {
-            "label": f"{origin.iata_code}–{destination.iata_code}",
+            "label": f"{origin.airport_code}–{destination.airport_code}",
             "distance": calc.distance,
             "source_position": (origin.longitude, origin.latitude),
             "target_position": (destination.longitude, destination.latitude),
@@ -219,7 +219,7 @@ def browse_airports(title):
         "Origin 🛫",
         AIRPORTS,
         index=DEFAULT_ORIGIN_AIRPORT_INDEX,
-        format_func=lambda airport: airport.iata_code,
+        format_func=lambda airport: airport.airport_code,
         help="Flight origin airport code.",
     )
 
@@ -230,7 +230,7 @@ def browse_airports(title):
 
     for _, distance in origin.distances.items():
         destinations.append(distance.destination)
-        destination_airports.append(next(filter(lambda e: e.iata_code == distance.destination, AIRPORTS)))
+        destination_airports.append(next(filter(lambda e: e.airport_code == distance.destination, AIRPORTS)))
         old_distances.append(distance.old_distance)
         new_distances.append(distance.distance)
 
@@ -243,7 +243,7 @@ def browse_airports(title):
 
     map_data = [
         {
-            "label": destination.iata_code,
+            "label": destination.airport_code,
             "distance": new_distance or old_distance,
             "source_position": (origin.longitude, origin.latitude),
             "target_position": (destination.longitude, destination.latitude),

@@ -24,7 +24,7 @@ def main(
 
     with open(airports_file) as f:
         reader = csv.reader(f)
-        assert(next(reader) == ["iata_code", "country", "latitude", "longitude"])
+        assert(next(reader) == ["airport_code", "country", "latitude", "longitude"])
         airports_data = {
             row[0]: (row[1], float(row[2]), float(row[3]))
             for row in reader

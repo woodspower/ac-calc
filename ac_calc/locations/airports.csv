@@ -1,4 +1,4 @@
-iata_code,country,latitude,longitude
+airport_code,country,latitude,longitude
 04G,United States,41.1304722,-80.6195833
 06A,United States,32.4605722,-85.6800278
 06C,United States,41.9893408,-88.1012428
