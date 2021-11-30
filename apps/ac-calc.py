@@ -13,13 +13,13 @@ from ac_calc.locations import airports, airports_by_code
 
 SEGMENT_KEYS = ("airline", "origin", "destination", "fare_brand", "fare_class", "colour")
 SEGMENT_COLOURS = (
-    "#1984a3",
-    "#f5c767",
-    "#6e4f7b",
-    "#9fd66c",
-    "#ffffe7",
-    "#fda05d",
-    "#90ddd0",
+    "#c50014",
+    "#ffc133",
+    "#8dd15a",
+    "#732d9d",
+    "#808080",
+    "#fc9650",
+    "#00afed",
 )
 MARKET_COLOURS = {
     "DOM": (202, 42, 54),
