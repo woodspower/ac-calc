@@ -1,3 +1,4 @@
+from PIL import ImageColor
 import string
 
 import pydeck as pdk
@@ -10,7 +11,16 @@ from ac_calc.airlines import AirCanada, AIRLINES, DEFAULT_AIRLINE_INDEX
 from ac_calc.locations import AIRPORTS, COUNTRIES, DISTANCES, DEFAULT_ORIGIN_AIRPORT_INDEX, DEFAULT_DESTINATION_AIRPORT_INDEX
 
 
-SEGMENT_KEYS = ("airline", "origin", "destination", "fare_brand", "fare_class")
+SEGMENT_KEYS = ("airline", "origin", "destination", "fare_brand", "fare_class", "colour")
+DEFAULT_COLORS = (
+    "#1984a3",
+    "#f5c767",
+    "#6e4f7b",
+    "#9fd66c",
+    "#ffffe7",
+    "#fda05d",
+    "#90ddd0",
+)
 
 
 def main():
@@ -79,7 +89,7 @@ def calculate_points_miles(title):
 
     with st.container():
         for index in range(st.session_state["num_segments"]):
-            airline_col, origin_col, destination_col, fare_brand_col, fare_class_col = st.columns((24, 16, 16, 24, 8))
+            airline_col, origin_col, destination_col, fare_brand_col, fare_class_col, color_col = st.columns((24, 16, 16, 24, 12, 4))
 
             airline = airline_col.selectbox(
                 "Airline ✈️",
@@ -126,15 +136,21 @@ def calculate_points_miles(title):
                 key=f"fare_class-{index}",
             )
 
+            color_col.color_picker(
+                "🎨",
+                value=DEFAULT_COLORS[index % len(DEFAULT_COLORS)],
+                key=f"colour-{index}",
+            )
+
     segments_and_calculations = [
-        (airline, origin, destination, fare_brand, fare_class, airline.calculate(origin, destination, fare_brand, fare_class, st.session_state.ticket_number, st.session_state.aeroplan_status))
-        for airline, origin, destination, fare_brand, fare_class in segments()
+        (airline, origin, destination, fare_brand, fare_class, colour, airline.calculate(origin, destination, fare_brand, fare_class, st.session_state.ticket_number, st.session_state.aeroplan_status))
+        for airline, origin, destination, fare_brand, fare_class, colour in segments()
     ]
 
-    total_distance = sum((calc.distance for _, _, _, _, _, calc in segments_and_calculations))
-    total_app = sum((calc.app for _, _, _, _, _, calc in segments_and_calculations))
-    total_app_bonus = sum((calc.app_bonus for _, _, _, _, _, calc in segments_and_calculations))
-    total_sqm = sum((calc.sqm for _, _, _, _, _, calc in segments_and_calculations))
+    total_distance = sum((calc.distance for _, _, _, _, _, _, calc in segments_and_calculations))
+    total_app = sum((calc.app for _, _, _, _, _, _, calc in segments_and_calculations))
+    total_app_bonus = sum((calc.app_bonus for _, _, _, _, _, _, calc in segments_and_calculations))
+    total_sqm = sum((calc.sqm for _, _, _, _, _, _, calc in segments_and_calculations))
 
     # with earnings_placeholder.expander("Earnings", expanded=True):
     with earnings_placeholder:
@@ -163,27 +179,27 @@ def calculate_points_miles(title):
             calc.app_bonus,
             calc.app + calc.app_bonus,
         )
-        for airline, origin, destination, fare_brand, fare_class, calc in segments_and_calculations
+        for airline, origin, destination, fare_brand, fare_class, colour, calc in segments_and_calculations
     ], columns=("Airline", "Flight", "Fare (Brand)", "Distance", "SQM %", "SQM", "SQD", "Aeroplan %", "Aeroplan", "Bonus %", "Bonus", "Aeroplan Points"))
 
     st.dataframe(calculations_df)
 
     st.markdown("##### Map")
 
-
     routes_data = [
         {
             "label": f"{origin.iata_code}–{destination.iata_code}",
-            "origin_c": (origin.longitude, origin.latitude),
-            "destination_c": (destination.longitude, destination.latitude),
+            "source_pos": (origin.longitude, origin.latitude),
+            "target_pos": (destination.longitude, destination.latitude),
+            "colour": ImageColor.getrgb(colour)
         }
-        for airline, origin, destination, fare_brand, fare_class, calc in segments_and_calculations
+        for airline, origin, destination, fare_brand, fare_class, colour, calc in segments_and_calculations
     ]
 
     coordinates = [
         item for sublist in (
             ((origin.longitude, origin.latitude), (destination.longitude, destination.latitude))
-            for _, origin, destination, _, _, _ in segments_and_calculations
+            for _, origin, destination, _, _, _, _ in segments_and_calculations
         ) for item in sublist
     ]
     min_lon = min(c[0] for c in coordinates)
@@ -194,23 +210,34 @@ def calculate_points_miles(title):
     ctr_lat = (min_lat + max_lat) / 2.0
     rng_lon = abs(max_lon - min_lon)
     rng_lat = abs(max_lat - min_lat)
-    zoom = max(1, _get_zoom_level(max(rng_lon, rng_lat)))
+    zoom = min(5, max(1, _get_zoom_level(max(rng_lon, rng_lat))))
 
     # https://deck.gl/docs/api-reference/geo-layers/great-circle-layer
     layer = pdk.Layer(
-        "GreatCircleLayer",
+        "ArcLayer",
         routes_data,
         pickable=True,
-        get_width=6,
-        get_source_position="origin_c",
-        get_target_position="destination_c",
-        get_source_color=[64, 255, 0],
-        get_target_color=[0, 128, 200],
+        greatCircle=True,
+        get_width=4,
+        get_height=0,
+        get_source_position="source_pos",
+        get_target_position="target_pos",
+        get_source_color="colour",
+        get_target_color="colour",
         auto_highlight=True,
     )
-
-    view_state = pdk.ViewState(latitude=ctr_lat, longitude=ctr_lon, zoom=zoom, bearing=0, pitch=0)
-    deck = pdk.Deck(layers=[layer], initial_view_state=view_state, tooltip={"text": "{label}"})
+    deck = pdk.Deck(
+        initial_view_state=pdk.ViewState(
+            latitude=ctr_lat,
+            longitude=ctr_lon,
+            zoom=zoom,
+            bearing=0,
+            pitch=0,
+        ),
+        map_style="road",
+        layers=[layer],
+        tooltip={"text": "{label}"}
+    )
     deck.picking_radius = 10
 
     st.pydeck_chart(deck)
