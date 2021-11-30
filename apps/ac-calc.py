@@ -224,11 +224,13 @@ def browse_airports(title):
     )
 
     destinations = []
+    destination_airports = []
     old_distances = []
     new_distances = []
 
     for _, distance in origin.distances.items():
         destinations.append(distance.destination)
+        destination_airports.append(next(filter(lambda e: e.iata_code == distance.destination, AIRPORTS)))
         old_distances.append(distance.old_distance)
         new_distances.append(distance.distance)
 
@@ -239,10 +241,23 @@ def browse_airports(title):
     })
     distances_df.set_index("Destination")
 
+    map_data = [
+        {
+            "label": destination.iata_code,
+            "distance": new_distance or old_distance,
+            "source_position": (origin.longitude, origin.latitude),
+            "target_position": (destination.longitude, destination.latitude),
+            "source_colour": ImageColor.getrgb(DEFAULT_COLORS[0]),
+            "target_colour": ImageColor.getrgb(DEFAULT_COLORS[0]),
+        }
+        for destination, old_distance, new_distance in zip(destination_airports, old_distances, new_distances)
+    ]
+
+    _render_map(map_data, ctr_lon=origin.longitude, ctr_lat=origin.latitude, zoom=4, get_width=2)
     st.table(distances_df)
 
 
-def _render_map(routes):
+def _render_map(routes, ctr_lon=None, ctr_lat=None, zoom=None, get_width=6):
     positions = [
         pos for route_positions in (
             (route["source_position"], route["target_position"])
@@ -253,11 +268,11 @@ def _render_map(routes):
     max_lon = max(c[0] for c in positions)
     min_lat = min(c[1] for c in positions)
     max_lat = max(c[1] for c in positions)
-    ctr_lon = (min_lon + max_lon) / 2.0
-    ctr_lat = (min_lat + max_lat) / 2.0
+    ctr_lon = ctr_lon or ((min_lon + max_lon) / 2.0)
+    ctr_lat = ctr_lat or ((min_lat + max_lat) / 2.0)
     rng_lon = abs(max_lon - min_lon)
     rng_lat = abs(max_lat - min_lat)
-    zoom = min(5, max(1, _get_zoom_level(max(rng_lon, rng_lat))))
+    zoom = zoom or (min(5, max(1, _get_zoom_level(max(rng_lon, rng_lat)))))
 
     # https://deck.gl/docs/api-reference/geo-layers/great-circle-layer
     layer = pdk.Layer(
@@ -265,7 +280,7 @@ def _render_map(routes):
         routes,
         pickable=True,
         greatCircle=True,
-        get_width=6,
+        get_width=get_width,
         get_height=0,
         get_source_position="source_position",
         get_target_position="target_position",
