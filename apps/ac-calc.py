@@ -89,7 +89,7 @@ def calculate_points_miles(title):
         </style>
         """, unsafe_allow_html=True)
 
-    calc_stats_col, map_col = st.columns([6, 24])
+    calc1_col, calc2_col, map_col = st.columns([6, 6, 18])
 
     # Render segment inputs, first.
     DEFAULT_AIRLINE, DEFAULT_AIRLINE_INDEX = AirCanada, 0
@@ -100,7 +100,8 @@ def calculate_points_miles(title):
         filter(lambda e: e[1].airport_code == "YYZ", enumerate(airports()))
     )
 
-    with st.container():
+    # with st.container():
+    with st.expander("Segments", expanded=True):
         for index in range(st.session_state["num_segments"]):
             airline_col, origin_col, destination_col, fare_brand_col, fare_class_col, color_col = st.columns((24, 16, 16, 24, 12, 4))
 
@@ -166,13 +167,14 @@ def calculate_points_miles(title):
     total_app_bonus = sum((calc.app_bonus for _, _, _, _, _, _, calc in segments_and_calculations))
     total_sqm = sum((calc.sqm for _, _, _, _, _, _, calc in segments_and_calculations))
 
-    # Show the overall calculation.
-    with calc_stats_col:
-        # distance_col, app_col, app_total_col, sqm_col, sqd_col = st.columns(5)
-
+    # Show the itinerary/segments stats.
+    with calc1_col:
         st.metric("Distance", f"{total_distance} miles")
         st.metric("Aeroplan Points", total_app)
         st.metric("Aeroplan Points + Status Bonus", total_app + total_app_bonus, delta=total_app_bonus or None)
+
+    # Show the overall calculation.
+    with calc2_col:
         st.metric("Status Qualifying Miles", f"{total_sqm} SQM")
         st.metric("Status Qualifying Dollars", f"0 SQD")
 
@@ -193,7 +195,7 @@ def calculate_points_miles(title):
         _render_map(map_data)
 
     # Show the calculation details.
-    with st.expander("Calculation Details", expanded=False):
+    with st.expander("Calculation Details", expanded=True):
         calculations_df = pd.DataFrame([
             (
                 airline.name,
@@ -323,6 +325,7 @@ def _render_map(routes, ctr_lon=None, ctr_lat=None, zoom=None, get_width=6):
             zoom=zoom,
             bearing=0,
             pitch=0,
+            height=360,
         ),
         map_style="road",
         layers=[layer],
