@@ -8,7 +8,7 @@ from streamlit.elements.map import _get_zoom_level
 
 from ac_calc.aeroplan import NoBrand, AEROPLAN_STATUSES, DEFAULT_AEROPLAN_STATUS, DEFAULT_FARE_BRAND_INDEX, FARE_BRANDS
 from ac_calc.airlines import AirCanada, AIRLINES
-from ac_calc.locations import airports
+from ac_calc.locations import airports, airports_by_code
 
 
 SEGMENT_KEYS = ("airline", "origin", "destination", "fare_brand", "fare_class", "colour")
@@ -235,14 +235,18 @@ def browse_airports(title):
         help="Flight origin airport code.",
     )
 
-    destinations = []
+    st.markdown(f"<div style='font-size:1.666rem'>{origin.airport}</div>\n\n**{origin.city}**, " + (f"{origin.state}, " if origin.state else "") + origin.country, unsafe_allow_html=True)
+
     destination_airports = []
+    destinations = []
     old_distances = []
     new_distances = []
 
     for _, distance in origin.distances.items():
-        destinations.append(distance.destination)
-        destination_airports.append(next(filter(lambda e: e.airport_code == distance.destination, airports())))
+        destination_airport = airports_by_code()[distance.destination]
+        destination_airports.append(destination_airport)
+
+        destinations.append(f"{destination_airport.airport} ({destination_airport.airport_code})")
         old_distances.append(distance.old_distance)
         new_distances.append(distance.distance)
 
