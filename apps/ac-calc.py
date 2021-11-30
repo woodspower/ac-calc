@@ -191,6 +191,7 @@ def calculate_points_miles(title):
             "label": f"{origin.iata_code}–{destination.iata_code}",
             "source_pos": (origin.longitude, origin.latitude),
             "target_pos": (destination.longitude, destination.latitude),
+            "distance": calc.distance,
             "colour": ImageColor.getrgb(colour)
         }
         for airline, origin, destination, fare_brand, fare_class, colour, calc in segments_and_calculations
@@ -218,7 +219,7 @@ def calculate_points_miles(title):
         routes_data,
         pickable=True,
         greatCircle=True,
-        get_width=4,
+        get_width=6,
         get_height=0,
         get_source_position="source_pos",
         get_target_position="target_pos",
@@ -236,7 +237,7 @@ def calculate_points_miles(title):
         ),
         map_style="road",
         layers=[layer],
-        tooltip={"text": "{label}"}
+        tooltip={"html": "<strong>{label}</strong><br/>{distance} miles"}
     )
     deck.picking_radius = 10
 
