@@ -112,7 +112,7 @@ def calculate_points_miles(title):
                 "Origin 🛫",
                 airports(),
                 index=DEFAULT_ORIGIN_AIRPORT_INDEX,
-                format_func=lambda airport: f"{airport.city} {airport.airport_code}",
+                format_func=lambda airport: f"{airport.city} {airport.airport_code}" if airport.city else airport.airport_code,
                 help="Flight segment origin airport code.",
                 key=f"origin-{index}",
             )
@@ -121,7 +121,7 @@ def calculate_points_miles(title):
                 "Destination 🛬",
                 airports(),
                 index=DEFAULT_DESTINATION_AIRPORT_INDEX,
-                format_func=lambda airport: f"{airport.city} {airport.airport_code}",
+                format_func=lambda airport: f"{airport.city} {airport.airport_code}" if airport.city else airport.airport_code,
                 help="Flight segment destination airport code.",
                 key=f"destination-{index}",
             )
@@ -231,14 +231,15 @@ def browse_airports(title):
         "Origin 🛫",
         airports(),
         index=DEFAULT_ORIGIN_AIRPORT_INDEX,
-        format_func=lambda airport: f"{airport.city} {airport.airport_code}",
+        format_func=lambda airport: f"{airport.city} {airport.airport_code}" if airport.city else airport.airport_code,
         help="Flight origin airport code.",
     )
 
     st.markdown(f"<div style='font-size:1.666rem'>{origin.airport}</div>\n\n**{origin.city}**, " + (f"{origin.state}, " if origin.state else "") + origin.country, unsafe_allow_html=True)
 
     destination_airports = []
-    destinations = []
+    destination_names = []
+    destination_codes = []
     countries = []
     old_distances = []
     new_distances = []
@@ -247,18 +248,19 @@ def browse_airports(title):
         destination_airport = airports_by_code()[distance.destination]
         destination_airports.append(destination_airport)
 
-        destinations.append(f"{destination_airport.airport} ({destination_airport.airport_code})")
+        destination_names.append(destination_airport.airport)
+        destination_codes.append(destination_airport.airport_code)
         countries.append(destination_airport.country)
         old_distances.append(distance.old_distance)
         new_distances.append(distance.distance)
 
     distances_df = pd.DataFrame({
-        "Destination": destinations,
+        "Destination Name": destination_names,
+        "Destination Code": destination_codes,
         "Country": countries,
         "Distance (Old)": old_distances,
         "Distance (New)": new_distances,
     })
-    distances_df.set_index("Destination")
 
     map_data = [
         {
