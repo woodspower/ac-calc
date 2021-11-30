@@ -7,8 +7,8 @@ import streamlit as st
 from streamlit.elements.map import _get_zoom_level
 
 from ac_calc.aeroplan import NoBrand, AEROPLAN_STATUSES, DEFAULT_AEROPLAN_STATUS, DEFAULT_FARE_BRAND_INDEX, FARE_BRANDS
-from ac_calc.airlines import AirCanada, AIRLINES, DEFAULT_AIRLINE_INDEX
-from ac_calc.locations import AIRPORTS, DEFAULT_ORIGIN_AIRPORT_INDEX, DEFAULT_DESTINATION_AIRPORT_INDEX
+from ac_calc.airlines import AirCanada, AIRLINES
+from ac_calc.locations import airports
 
 
 SEGMENT_KEYS = ("airline", "origin", "destination", "fare_brand", "fare_class", "colour")
@@ -88,6 +88,14 @@ def calculate_points_miles(title):
         """, unsafe_allow_html=True)
 
     with st.container():
+        DEFAULT_AIRLINE, DEFAULT_AIRLINE_INDEX = AirCanada, 0
+        DEFAULT_ORIGIN_AIRPORT_INDEX, DEFAULT_ORIGIN_AIRPORT = next(
+            filter(lambda e: e[1].airport_code == "YYC", enumerate(airports()))
+        )
+        DEFAULT_DESTINATION_AIRPORT_INDEX, DEFAULT_DESTINATION_AIRPORT = next(
+            filter(lambda e: e[1].airport_code == "YYZ", enumerate(airports()))
+        )
+
         for index in range(st.session_state["num_segments"]):
             airline_col, origin_col, destination_col, fare_brand_col, fare_class_col, color_col = st.columns((24, 16, 16, 24, 12, 4))
 
@@ -102,7 +110,7 @@ def calculate_points_miles(title):
 
             origin_col.selectbox(
                 "Origin 🛫",
-                AIRPORTS,
+                airports(),
                 index=DEFAULT_ORIGIN_AIRPORT_INDEX,
                 format_func=lambda airport: airport.airport_code,
                 help="Flight segment origin airport code.",
@@ -111,7 +119,7 @@ def calculate_points_miles(title):
 
             destination_col.selectbox(
                 "Destination 🛬",
-                AIRPORTS,
+                airports(),
                 index=DEFAULT_DESTINATION_AIRPORT_INDEX,
                 format_func=lambda airport: airport.airport_code,
                 help="Flight segment destination airport code.",
@@ -205,7 +213,7 @@ def browse_airlines(title):
     airline = st.selectbox(
         "Airline ✈️",
         AIRLINES,
-        index=DEFAULT_AIRLINE_INDEX,
+        index=0,
         format_func=lambda airline: airline.name,
         help="Operating airline.",
     )
@@ -215,9 +223,13 @@ def browse_airlines(title):
 
 
 def browse_airports(title):
+    DEFAULT_ORIGIN_AIRPORT_INDEX, _ = next(
+        filter(lambda e: e[1].airport_code == "YYC", enumerate(airports()))
+    )
+
     origin = st.selectbox(
         "Origin 🛫",
-        AIRPORTS,
+        airports(),
         index=DEFAULT_ORIGIN_AIRPORT_INDEX,
         format_func=lambda airport: airport.airport_code,
         help="Flight origin airport code.",
@@ -230,7 +242,7 @@ def browse_airports(title):
 
     for _, distance in origin.distances.items():
         destinations.append(distance.destination)
-        destination_airports.append(next(filter(lambda e: e.airport_code == distance.destination, AIRPORTS)))
+        destination_airports.append(next(filter(lambda e: e.airport_code == distance.destination, airports())))
         old_distances.append(distance.old_distance)
         new_distances.append(distance.distance)
 

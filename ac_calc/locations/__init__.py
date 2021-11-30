@@ -4,6 +4,8 @@ import json
 from functools import cache
 from importlib import resources
 
+import streamlit as st
+
 
 Airport = namedtuple("Airport", (
     "airport",
@@ -27,8 +29,8 @@ Airport = namedtuple("Airport", (
 Distance = namedtuple("Distance", ("origin,destination,old_distance,distance"))
 
 
-@cache
-def _load_aeroplan_distances():
+@st.experimental_singleton
+def aeroplan_distances():
     with resources.open_text("ac_calc.locations", "aeroplan_distances.csv") as f:
         reader = csv.reader(f)
         assert(next(reader) == ["origin", "destination", "old_distance", "distance"])
@@ -53,9 +55,9 @@ def _load_aeroplan_distances():
     return distances
 
 
-@cache
-def _load_airports():
-    _distances = _load_aeroplan_distances()
+@st.experimental_singleton
+def airports():
+    _distances = aeroplan_distances()
 
     # Load and return list of airports, including distances to other airports.
     with resources.open_text("ac_calc.locations", "airports.json") as f:
@@ -66,14 +68,3 @@ def _load_airports():
         ]
 
     return airports
-
-
-AIRPORTS = _load_airports()
-
-
-DEFAULT_ORIGIN_AIRPORT_INDEX, DEFAULT_ORIGIN_AIRPORT = next(
-    filter(lambda e: e[1].airport_code == "YYC", enumerate(AIRPORTS))
-)
-DEFAULT_DESTINATION_AIRPORT_INDEX, DEFAULT_DESTINATION_AIRPORT = next(
-    filter(lambda e: e[1].airport_code == "YYZ", enumerate(AIRPORTS))
-)

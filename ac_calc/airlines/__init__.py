@@ -216,6 +216,3 @@ AirCanada = AirCanadaAirline(
 
 
 AIRLINES = (AirCanada,) + _load_airline_partners()
-
-
-DEFAULT_AIRLINE, DEFAULT_AIRLINE_INDEX = AirCanada, 0
