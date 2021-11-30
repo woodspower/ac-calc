@@ -12,7 +12,7 @@ from ac_calc.locations import airports, airports_by_code
 
 
 SEGMENT_KEYS = ("airline", "origin", "destination", "fare_brand", "fare_class", "colour")
-DEFAULT_COLORS = (
+SEGMENT_COLOURS = (
     "#1984a3",
     "#f5c767",
     "#6e4f7b",
@@ -21,6 +21,12 @@ DEFAULT_COLORS = (
     "#fda05d",
     "#90ddd0",
 )
+MARKET_COLOURS = {
+    "DOM": (202, 42, 54),
+    "TNB": (34, 132, 161),
+    "SUN": (233, 171, 154),
+    "INT": (100, 100, 100),
+}
 
 
 def main():
@@ -146,7 +152,7 @@ def calculate_points_miles(title):
 
             color_col.color_picker(
                 "🎨",
-                value=DEFAULT_COLORS[index % len(DEFAULT_COLORS)],
+                value=SEGMENT_COLOURS[index % len(SEGMENT_COLOURS)],
                 key=f"colour-{index}",
             )
 
@@ -268,8 +274,8 @@ def browse_airports(title):
             "distance": new_distance or old_distance,
             "source_position": (origin.longitude, origin.latitude),
             "target_position": (destination.longitude, destination.latitude),
-            "source_colour": ImageColor.getrgb(DEFAULT_COLORS[0]),
-            "target_colour": ImageColor.getrgb(DEFAULT_COLORS[0]),
+            "source_colour": MARKET_COLOURS.get(destination.market, (180, 180, 180)),
+            "target_colour": MARKET_COLOURS.get(destination.market, (180, 180, 180)),
         }
         for destination, old_distance, new_distance in zip(destination_airports, old_distances, new_distances)
     ]
