@@ -186,63 +186,19 @@ def calculate_points_miles(title):
 
     st.markdown("##### Map")
 
-    routes_data = [
+    map_data = [
         {
             "label": f"{origin.iata_code}–{destination.iata_code}",
-            "source_pos": (origin.longitude, origin.latitude),
-            "target_pos": (destination.longitude, destination.latitude),
             "distance": calc.distance,
+            "source_position": (origin.longitude, origin.latitude),
+            "target_position": (destination.longitude, destination.latitude),
             "source_colour": ImageColor.getrgb(colour),
             "target_colour": [c * .85 for c in ImageColor.getrgb(colour)],
         }
         for airline, origin, destination, fare_brand, fare_class, colour, calc in segments_and_calculations
     ]
 
-    coordinates = [
-        item for sublist in (
-            ((origin.longitude, origin.latitude), (destination.longitude, destination.latitude))
-            for _, origin, destination, _, _, _, _ in segments_and_calculations
-        ) for item in sublist
-    ]
-    min_lon = min(c[0] for c in coordinates)
-    max_lon = max(c[0] for c in coordinates)
-    min_lat = min(c[1] for c in coordinates)
-    max_lat = max(c[1] for c in coordinates)
-    ctr_lon = (min_lon + max_lon) / 2.0
-    ctr_lat = (min_lat + max_lat) / 2.0
-    rng_lon = abs(max_lon - min_lon)
-    rng_lat = abs(max_lat - min_lat)
-    zoom = min(5, max(1, _get_zoom_level(max(rng_lon, rng_lat))))
-
-    # https://deck.gl/docs/api-reference/geo-layers/great-circle-layer
-    layer = pdk.Layer(
-        "ArcLayer",
-        routes_data,
-        pickable=True,
-        greatCircle=True,
-        get_width=6,
-        get_height=0,
-        get_source_position="source_pos",
-        get_target_position="target_pos",
-        get_source_color="source_colour",
-        get_target_color="target_colour",
-        auto_highlight=True,
-    )
-    deck = pdk.Deck(
-        initial_view_state=pdk.ViewState(
-            latitude=ctr_lat,
-            longitude=ctr_lon,
-            zoom=zoom,
-            bearing=0,
-            pitch=0,
-        ),
-        map_style="road",
-        layers=[layer],
-        tooltip={"html": "<strong>{label}</strong><br/>{distance} miles"}
-    )
-    deck.picking_radius = 10
-
-    st.pydeck_chart(deck)
+    _render_map(map_data)
 
 
 def browse_airlines(title):
@@ -284,6 +240,54 @@ def browse_airports(title):
     distances_df.set_index("Destination")
 
     st.table(distances_df)
+
+
+def _render_map(routes):
+    positions = [
+        pos for route_positions in (
+            (route["source_position"], route["target_position"])
+            for route in routes
+        ) for pos in route_positions
+    ]
+    min_lon = min(c[0] for c in positions)
+    max_lon = max(c[0] for c in positions)
+    min_lat = min(c[1] for c in positions)
+    max_lat = max(c[1] for c in positions)
+    ctr_lon = (min_lon + max_lon) / 2.0
+    ctr_lat = (min_lat + max_lat) / 2.0
+    rng_lon = abs(max_lon - min_lon)
+    rng_lat = abs(max_lat - min_lat)
+    zoom = min(5, max(1, _get_zoom_level(max(rng_lon, rng_lat))))
+
+    # https://deck.gl/docs/api-reference/geo-layers/great-circle-layer
+    layer = pdk.Layer(
+        "ArcLayer",
+        routes,
+        pickable=True,
+        greatCircle=True,
+        get_width=6,
+        get_height=0,
+        get_source_position="source_position",
+        get_target_position="target_position",
+        get_source_color="source_colour",
+        get_target_color="target_colour",
+        auto_highlight=True,
+    )
+    deck = pdk.Deck(
+        initial_view_state=pdk.ViewState(
+            latitude=ctr_lat,
+            longitude=ctr_lon,
+            zoom=zoom,
+            bearing=0,
+            pitch=0,
+        ),
+        map_style="road",
+        layers=[layer],
+        tooltip={"html": "<strong>{label}</strong><br/>{distance} miles"}
+    )
+    deck.picking_radius = 20
+
+    st.pydeck_chart(deck)
 
 
 if __name__ == "__main__":
