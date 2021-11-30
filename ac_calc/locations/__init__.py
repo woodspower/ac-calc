@@ -68,3 +68,11 @@ def airports():
         ]
 
     return airports
+
+
+@st.experimental_singleton
+def airports_by_code():
+    return {
+        airport.airport_code: airport
+        for airport in airports
+    }
