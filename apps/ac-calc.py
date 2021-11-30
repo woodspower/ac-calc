@@ -112,7 +112,7 @@ def calculate_points_miles(title):
                 "Origin 🛫",
                 airports(),
                 index=DEFAULT_ORIGIN_AIRPORT_INDEX,
-                format_func=lambda airport: airport.airport_code,
+                format_func=lambda airport: f"{airport.city} {airport.airport_code}",
                 help="Flight segment origin airport code.",
                 key=f"origin-{index}",
             )
@@ -121,7 +121,7 @@ def calculate_points_miles(title):
                 "Destination 🛬",
                 airports(),
                 index=DEFAULT_DESTINATION_AIRPORT_INDEX,
-                format_func=lambda airport: airport.airport_code,
+                format_func=lambda airport: f"{airport.city} {airport.airport_code}",
                 help="Flight segment destination airport code.",
                 key=f"destination-{index}",
             )
@@ -231,7 +231,7 @@ def browse_airports(title):
         "Origin 🛫",
         airports(),
         index=DEFAULT_ORIGIN_AIRPORT_INDEX,
-        format_func=lambda airport: airport.airport_code,
+        format_func=lambda airport: f"{airport.city} {airport.airport_code}",
         help="Flight origin airport code.",
     )
 
