@@ -1,14 +1,26 @@
+from PIL import ImageColor
 import string
 
+import pydeck as pdk
 import pandas as pd
 import streamlit as st
+from streamlit.elements.map import _get_zoom_level
 
 from ac_calc.aeroplan import NoBrand, AEROPLAN_STATUSES, DEFAULT_AEROPLAN_STATUS, DEFAULT_FARE_BRAND_INDEX, FARE_BRANDS
 from ac_calc.airlines import AirCanada, AIRLINES, DEFAULT_AIRLINE_INDEX
 from ac_calc.locations import AIRPORTS, COUNTRIES, DISTANCES, DEFAULT_ORIGIN_AIRPORT_INDEX, DEFAULT_DESTINATION_AIRPORT_INDEX
 
 
-SEGMENT_KEYS = ("airline", "origin", "destination", "fare_brand", "fare_class")
+SEGMENT_KEYS = ("airline", "origin", "destination", "fare_brand", "fare_class", "colour")
+DEFAULT_COLORS = (
+    "#1984a3",
+    "#f5c767",
+    "#6e4f7b",
+    "#9fd66c",
+    "#ffffe7",
+    "#fda05d",
+    "#90ddd0",
+)
 
 
 def main():
@@ -77,7 +89,7 @@ def calculate_points_miles(title):
 
     with st.container():
         for index in range(st.session_state["num_segments"]):
-            airline_col, origin_col, destination_col, fare_brand_col, fare_class_col = st.columns((24, 16, 16, 24, 8))
+            airline_col, origin_col, destination_col, fare_brand_col, fare_class_col, color_col = st.columns((24, 16, 16, 24, 12, 4))
 
             airline = airline_col.selectbox(
                 "Airline ✈️",
@@ -124,15 +136,21 @@ def calculate_points_miles(title):
                 key=f"fare_class-{index}",
             )
 
+            color_col.color_picker(
+                "🎨",
+                value=DEFAULT_COLORS[index % len(DEFAULT_COLORS)],
+                key=f"colour-{index}",
+            )
+
     segments_and_calculations = [
-        (airline, origin, destination, fare_brand, fare_class, airline.calculate(origin, destination, fare_brand, fare_class, st.session_state.ticket_number, st.session_state.aeroplan_status))
-        for airline, origin, destination, fare_brand, fare_class in segments()
+        (airline, origin, destination, fare_brand, fare_class, colour, airline.calculate(origin, destination, fare_brand, fare_class, st.session_state.ticket_number, st.session_state.aeroplan_status))
+        for airline, origin, destination, fare_brand, fare_class, colour in segments()
     ]
 
-    total_distance = sum((calc.distance for _, _, _, _, _, calc in segments_and_calculations))
-    total_app = sum((calc.app for _, _, _, _, _, calc in segments_and_calculations))
-    total_app_bonus = sum((calc.app_bonus for _, _, _, _, _, calc in segments_and_calculations))
-    total_sqm = sum((calc.sqm for _, _, _, _, _, calc in segments_and_calculations))
+    total_distance = sum((calc.distance for _, _, _, _, _, _, calc in segments_and_calculations))
+    total_app = sum((calc.app for _, _, _, _, _, _, calc in segments_and_calculations))
+    total_app_bonus = sum((calc.app_bonus for _, _, _, _, _, _, calc in segments_and_calculations))
+    total_sqm = sum((calc.sqm for _, _, _, _, _, _, calc in segments_and_calculations))
 
     # with earnings_placeholder.expander("Earnings", expanded=True):
     with earnings_placeholder:
@@ -161,10 +179,26 @@ def calculate_points_miles(title):
             calc.app_bonus,
             calc.app + calc.app_bonus,
         )
-        for airline, origin, destination, fare_brand, fare_class, calc in segments_and_calculations
+        for airline, origin, destination, fare_brand, fare_class, colour, calc in segments_and_calculations
     ], columns=("Airline", "Flight", "Fare (Brand)", "Distance", "SQM %", "SQM", "SQD", "Aeroplan %", "Aeroplan", "Bonus %", "Bonus", "Aeroplan Points"))
 
     st.dataframe(calculations_df)
+
+    st.markdown("##### Map")
+
+    map_data = [
+        {
+            "label": f"{origin.iata_code}–{destination.iata_code}",
+            "distance": calc.distance,
+            "source_position": (origin.longitude, origin.latitude),
+            "target_position": (destination.longitude, destination.latitude),
+            "source_colour": ImageColor.getrgb(colour),
+            "target_colour": [c * .85 for c in ImageColor.getrgb(colour)],
+        }
+        for airline, origin, destination, fare_brand, fare_class, colour, calc in segments_and_calculations
+    ]
+
+    _render_map(map_data)
 
 
 def browse_airlines(title):
@@ -190,11 +224,13 @@ def browse_airports(title):
     )
 
     destinations = []
+    destination_airports = []
     old_distances = []
     new_distances = []
 
     for _, distance in origin.distances.items():
         destinations.append(distance.destination)
+        destination_airports.append(next(filter(lambda e: e.iata_code == distance.destination, AIRPORTS)))
         old_distances.append(distance.old_distance)
         new_distances.append(distance.distance)
 
@@ -205,7 +241,68 @@ def browse_airports(title):
     })
     distances_df.set_index("Destination")
 
+    map_data = [
+        {
+            "label": destination.iata_code,
+            "distance": new_distance or old_distance,
+            "source_position": (origin.longitude, origin.latitude),
+            "target_position": (destination.longitude, destination.latitude),
+            "source_colour": ImageColor.getrgb(DEFAULT_COLORS[0]),
+            "target_colour": ImageColor.getrgb(DEFAULT_COLORS[0]),
+        }
+        for destination, old_distance, new_distance in zip(destination_airports, old_distances, new_distances)
+    ]
+
+    _render_map(map_data, ctr_lon=origin.longitude, ctr_lat=origin.latitude, zoom=4, get_width=2)
     st.table(distances_df)
+
+
+def _render_map(routes, ctr_lon=None, ctr_lat=None, zoom=None, get_width=6):
+    positions = [
+        pos for route_positions in (
+            (route["source_position"], route["target_position"])
+            for route in routes
+        ) for pos in route_positions
+    ]
+    min_lon = min(c[0] for c in positions)
+    max_lon = max(c[0] for c in positions)
+    min_lat = min(c[1] for c in positions)
+    max_lat = max(c[1] for c in positions)
+    ctr_lon = ctr_lon or ((min_lon + max_lon) / 2.0)
+    ctr_lat = ctr_lat or ((min_lat + max_lat) / 2.0)
+    rng_lon = abs(max_lon - min_lon)
+    rng_lat = abs(max_lat - min_lat)
+    zoom = zoom or (min(5, max(1, _get_zoom_level(max(rng_lon, rng_lat)))))
+
+    # https://deck.gl/docs/api-reference/geo-layers/great-circle-layer
+    layer = pdk.Layer(
+        "ArcLayer",
+        routes,
+        pickable=True,
+        greatCircle=True,
+        get_width=get_width,
+        get_height=0,
+        get_source_position="source_position",
+        get_target_position="target_position",
+        get_source_color="source_colour",
+        get_target_color="target_colour",
+        auto_highlight=True,
+    )
+    deck = pdk.Deck(
+        initial_view_state=pdk.ViewState(
+            latitude=ctr_lat,
+            longitude=ctr_lon,
+            zoom=zoom,
+            bearing=0,
+            pitch=0,
+        ),
+        map_style="road",
+        layers=[layer],
+        tooltip={"html": "<strong>{label}</strong><br/>{distance} miles"}
+    )
+    deck.picking_radius = 20
+
+    st.pydeck_chart(deck)
 
 
 if __name__ == "__main__":

@@ -59,8 +59,8 @@ def _load_airports():
             Airport(
                 row[0],
                 _countries[row[1]],
-                row[2],
-                row[3],
+                float(row[2]),
+                float(row[3]),
                 _distances.get(row[0], {})
             )
             for row in reader
