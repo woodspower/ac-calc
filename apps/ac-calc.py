@@ -105,7 +105,7 @@ def calculate_points_miles(title):
     # with st.container():
     with st.expander("Segments", expanded=True):
         for index in range(st.session_state["num_segments"]):
-            airline_col, origin_col, destination_col, fare_brand_col, fare_class_col, color_col = st.columns((24, 16, 16, 24, 12, 4))
+            airline_col, origin_col, destination_col, fare_brand_col, fare_class_col, color_col, remove_col = st.columns((24, 16, 16, 24, 12, 4, 4))
 
             airline = airline_col.selectbox(
                 "Airline ✈️",
@@ -173,7 +173,7 @@ def calculate_points_miles(title):
             st.session_state["num_segments"] = next_segment + 1
 
             st.experimental_rerun()
-        if st.session_state["num_segments"] > 1 and fare_class_col.button("Remove Segment"):
+        if st.session_state["num_segments"] > 1 and remove_col.button("🗑"):
             st.session_state["num_segments"] -= 1
             st.experimental_rerun()
 
