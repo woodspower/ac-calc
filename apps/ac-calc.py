@@ -318,11 +318,11 @@ def browse_airports(title):
         for destination, old_distance, new_distance in zip(destination_airports, old_distances, new_distances)
     ]
 
-    _render_map(map_data, ctr_lon=origin.longitude, ctr_lat=origin.latitude, zoom=4, get_width=2)
+    _render_map(map_data, ctr_lon=origin.longitude, ctr_lat=origin.latitude, zoom=4, get_width=2, height=540)
     st.table(distances_df)
 
 
-def _render_map(routes, ctr_lon=None, ctr_lat=None, zoom=None, get_width=6):
+def _render_map(routes, ctr_lon=None, ctr_lat=None, zoom=None, get_width=6, height=320):
     if not ctr_lon or not ctr_lat:
         positions = [
             pos for route_positions in (
@@ -361,7 +361,7 @@ def _render_map(routes, ctr_lon=None, ctr_lat=None, zoom=None, get_width=6):
             zoom=zoom,
             bearing=0,
             pitch=0,
-            height=320,
+            height=height,
         ),
         map_style="road",
         layers=[layer],
