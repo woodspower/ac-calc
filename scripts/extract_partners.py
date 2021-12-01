@@ -57,12 +57,12 @@ def main(
                         continue
 
                     if len(tds) == 4:
-                        region = tds[0].text.rstrip("§* \n")
+                        region = tds[0].text.strip("§*¥ \n")
                     if len(tds) >= 3:
-                        cos = tds[-3].text.strip()
+                        cos = tds[-3].text.strip("§*¥ \n")
 
                     try:
-                        rate = float(tds[-1].text.rstrip("% \n")) / 100.0
+                        rate = float(tds[-1].text.strip("% \n")) / 100.0
                     except:
                         rate = 0.0
                     rates = {
