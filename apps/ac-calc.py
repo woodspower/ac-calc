@@ -46,17 +46,10 @@ def main():
         "Browse Airlines": browse_airlines,
         "Browse Airports": browse_airports,
     }
-    tool_title = st.sidebar.radio("Tool:", tools.keys())
-    tool = tools[tool_title]
-    tool(tool_title)
-
-
-def calculate_points_miles(title):
-    def segments():
-        for i in range(st.session_state["num_segments"]):
-            yield [st.session_state[f"{key}-{i}"] for key in SEGMENT_KEYS]
 
     with st.sidebar:
+        tool_title = st.sidebar.radio("Tool:", tools.keys())
+
         st.text_input(
             "Ticket Number:",
             value="014",
@@ -73,6 +66,16 @@ def calculate_points_miles(title):
             help="Air Canada Aeroplan elite status.",
         )
 
+    tool = tools[tool_title]
+    tool(tool_title)
+
+
+def calculate_points_miles(title):
+    def segments():
+        for i in range(st.session_state["num_segments"]):
+            yield [st.session_state[f"{key}-{i}"] for key in SEGMENT_KEYS]
+
+    with st.sidebar:
         st.number_input(
             "Number of Segments:",
             min_value=1,
