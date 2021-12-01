@@ -13,6 +13,7 @@ SegmentCalculation = namedtuple("SegmentCalculation", (
     "distance",
     "app", "app_earning_rate", "app_bonus_factor", "app_bonus",
     "sqm", "sqm_earning_rate",
+    "region", "service",
 ))
 EarthRadiusMi = 3959.0
 
@@ -65,11 +66,11 @@ class Airline:
         region = self._region_for_segment(origin, destination)
         region_services = self.earning_rates.get(region, {})
 
-        for fare_classes in region_services.values():
+        for service, fare_classes in region_services.items():
             if rate := fare_classes.get(fare_class) or fare_classes.get(fare_brand.name):
-                return rate
+                return region, service, rate
 
-        return 0
+        return None, None, 0
 
     def _region_for_segment(
         self,
@@ -132,7 +133,7 @@ class Airline:
         if not distance:
             return SegmentCalculation(distance, 0, 0, 0, 0, 0, 0)
 
-        app_earning_rate = self._earning_rate(origin, destination, fare_brand, fare_class)
+        region, service, app_earning_rate = self._earning_rate(origin, destination, fare_brand, fare_class)
         if self.id in FULL_BONUS_AIRLINES:
             app_bonus_factor = aeroplan_status.bonus_factor
         elif self.id in FIXED25_BONUS_AIRLINES:
@@ -142,7 +143,7 @@ class Airline:
         app = max(distance * app_earning_rate, aeroplan_status.min_earning_value) if self.earns_app else 0
         app_bonus = min(app, distance) * app_bonus_factor
 
-        sqm_earning_rate = self._earning_rate(origin, destination, fare_brand, fare_class)
+        region, service, sqm_earning_rate = self._earning_rate(origin, destination, fare_brand, fare_class)
         sqm = max(distance * sqm_earning_rate, aeroplan_status.min_earning_value) if self.earns_sqm else 0
 
         return SegmentCalculation(
@@ -153,6 +154,8 @@ class Airline:
             int(app_bonus),
             int(sqm),
             sqm_earning_rate,
+            region,
+            service,
         )
 
 
