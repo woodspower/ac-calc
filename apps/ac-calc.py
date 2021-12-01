@@ -221,7 +221,7 @@ def calculate_points_miles(title):
             (
                 airline.name,
                 f"{origin.airport_code}–{destination.airport_code}",
-                calc.region,
+                "" if calc.region == "*" else calc.region,
                 fare_brand.name if fare_brand != NoBrand else calc.service,
                 fare_class,
                 calc.distance,
