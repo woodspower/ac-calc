@@ -81,7 +81,7 @@ def calculate_points_miles(title):
 
     def segments():
         for i in range(st.session_state["num_segments"]):
-            yield [st.session_state[f"{key}-{i}"] for key in SEGMENT_KEYS]
+            yield [i] + [st.session_state[f"{key}-{i}"] for key in SEGMENT_KEYS]
 
     st.markdown("""
         <style>
@@ -180,14 +180,14 @@ def calculate_points_miles(title):
 
     # Perform calculations for the segments.
     segments_and_calculations = [
-        (airline, origin, destination, fare_brand, fare_class, colour, airline.calculate(origin, destination, fare_brand, fare_class, st.session_state.ticket_number, st.session_state.aeroplan_status))
-        for airline, origin, destination, fare_brand, fare_class, colour in segments()
+        (index, airline, origin, destination, fare_brand, fare_class, colour, airline.calculate(origin, destination, fare_brand, fare_class, st.session_state.ticket_number, st.session_state.aeroplan_status))
+        for index, airline, origin, destination, fare_brand, fare_class, colour in segments()
     ]
 
-    total_distance = sum((calc.distance for _, _, _, _, _, _, calc in segments_and_calculations))
-    total_pts = sum((calc.pts for _, _, _, _, _, _, calc in segments_and_calculations))
-    total_pts_bonus = sum((calc.pts_bonus for _, _, _, _, _, _, calc in segments_and_calculations))
-    total_sqm = sum((calc.sqm for _, _, _, _, _, _, calc in segments_and_calculations))
+    total_distance = sum((calc.distance for _,  _, _, _, _, _, _, calc in segments_and_calculations))
+    total_pts = sum((calc.pts for _, _, _, _, _, _, _, calc in segments_and_calculations))
+    total_pts_bonus = sum((calc.pts_bonus for _, _, _, _, _, _, _, calc in segments_and_calculations))
+    total_sqm = sum((calc.sqm for _, _, _, _, _, _, _, calc in segments_and_calculations))
 
     # Show the itinerary/segments stats.
     with calc1_col:
@@ -211,7 +211,7 @@ def calculate_points_miles(title):
                 "source_colour": ImageColor.getrgb(colour),
                 "target_colour": [c * .85 for c in ImageColor.getrgb(colour)],
             }
-            for airline, origin, destination, fare_brand, fare_class, colour, calc in segments_and_calculations
+            for index, airline, origin, destination, fare_brand, fare_class, colour, calc in segments_and_calculations
         ]
 
         _render_map(map_data)
@@ -220,6 +220,7 @@ def calculate_points_miles(title):
     with st.expander("Calculation Details", expanded=True):
         calculations_df = pd.DataFrame([
             (
+                index,
                 airline.name,
                 f"{origin.airport_code}–{destination.airport_code}",
                 "" if calc.region == "*" else calc.region,
@@ -235,10 +236,12 @@ def calculate_points_miles(title):
                 calc.pts_bonus,
                 calc.pts + calc.pts_bonus,
             )
-            for airline, origin, destination, fare_brand, fare_class, colour, calc in segments_and_calculations
-        ], columns=("Airline", "Flight", "Region", "Service", "Fare Class", "Distance", "SQM %", "SQM", "SQD", "Aeroplan %", "Aeroplan", "Bonus %", "Bonus", "Aeroplan Points"))
+            for index, airline, origin, destination, fare_brand, fare_class, colour, calc in segments_and_calculations
+        ], columns=("#", "Airline", "Flight", "Region", "Service", "Fare Class", "Distance", "SQM %", "SQM", "SQD", "Aeroplan %", "Aeroplan", "Bonus %", "Bonus", "Aeroplan Points"))
 
-        st.dataframe(calculations_df)
+        calculations_df = calculations_df.style.applymap(lambda v: f"color: {st.session_state[f'colour-{v}']}; background-color: {st.session_state[f'colour-{v}']}", subset="#")
+
+        st.table(calculations_df)
 
 
 def browse_airlines(title):
