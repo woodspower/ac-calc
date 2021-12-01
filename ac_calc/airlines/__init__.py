@@ -165,10 +165,10 @@ def _load_airline_partners():
     with resources.open_text("ac_calc.airlines", "partners.json") as f:
         partners = json.load(f)
 
-    return tuple((
+    return tuple(sorted((
         Airline(**partner)
         for partner in partners
-    ))
+    ), key=lambda airline: airline.name))
 
 
 AirCanada = AirCanadaAirline(
