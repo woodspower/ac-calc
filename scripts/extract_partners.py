@@ -15,8 +15,8 @@ import typer
 
 
 def main(
-    partners_file: Path = typer.Argument("airline-en.json", help="Airline partners data file."),
-    output_file: Optional[Path] = typer.Argument(None),
+    partners_file: Path = typer.Argument("/project/ac_data/airline-en.json", help="Airline partners data file."),
+    output_file: Optional[Path] = typer.Argument("/project/ac_calc/airlines/partners.json"),
 ):
     airline_partners = srsly.read_json(partners_file)
 
@@ -57,12 +57,12 @@ def main(
                         continue
 
                     if len(tds) == 4:
-                        region = tds[0].text.rstrip("§* \n")
+                        region = tds[0].text.strip("§*¥ \n")
                     if len(tds) >= 3:
-                        cos = tds[-3].text.strip()
+                        cos = tds[-3].text.strip("§*¥ \n")
 
                     try:
-                        rate = float(tds[-1].text.rstrip("% \n")) / 100.0
+                        rate = float(tds[-1].text.strip("% \n")) / 100.0
                     except:
                         rate = 0.0
                     rates = {
@@ -82,6 +82,7 @@ def main(
             "website": partner["website"],
             "logo": partner["logo"],
             "star_alliance_member": partner.get("group") == "Star alliance member",
+            "codeshare_partner": partner.get("groupCompany") == "Air Canada codeshare partner",
             "earns_app": earns_app,
             "earns_sqm": earns_sqm,
             "earning_rates": earning_rates,

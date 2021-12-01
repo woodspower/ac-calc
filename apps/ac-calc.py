@@ -1,3 +1,4 @@
+from itertools import groupby
 from PIL import ImageColor
 import string
 
@@ -226,8 +227,43 @@ def browse_airlines(title):
         help="Operating airline.",
     )
 
-    st.header(airline.name)
-    st.markdown(airline.region)
+    st.markdown(f'<div style="font-size:1.666rem">{airline.name}</div>', unsafe_allow_html=True)
+
+    website_col, star_col, app_col, sqm_col = st.columns(4)
+    website_col.markdown(f'<div><a href="{airline.website}">{airline.website}</a></div>', unsafe_allow_html=True)
+    star_col.markdown(
+        "⭐️ Star Alliance member" if airline.star_alliance_member
+        else "✈️ Codeshare partner" if airline.codeshare_partner
+        else "🧳 Aeroplan partner")
+    app_col.markdown("👍 Earn Aeroplan points" if airline.earns_app else "👎 No Aeroplan points")
+    sqm_col.markdown("👍 Earn SQM" if airline.earns_sqm else "👎 No SQM")
+
+    # Show the eligible flights for each region and class of service.
+    if not airline.earning_rates:
+        if airline.codeshare_partner:
+            st.markdown(f"Earn Aeroplan points on flights operated by **{airline.name}** with a **4-digit Air Canada flight number**. See **Air Canada** for accrual details.")
+        else:
+            st.markdown("Redeem Aeroplan points only.")
+        return
+
+    for col, earning_rates_item in zip(st.columns(len(airline.earning_rates)), airline.earning_rates.items()):
+        region, services = earning_rates_item
+
+        with col:
+            rates = []
+            for service, fare_classes in services.items():
+                rates.extend([
+                    (service, ", ".join(code[0] for code in codes), f"{int(rate * 100)}%")
+                    for rate, codes in groupby(fare_classes.items(), key=lambda item: item[1])
+                ])
+
+            rates_df = pd.DataFrame(rates, columns=(
+                "Class of service", "Eligible booking classes", "Rate",
+            ))
+            rates_df.set_index(["Class of service"], inplace=True)
+
+            st.markdown("#### " +  ("All Regions" if region == "*" else region))
+            st.dataframe(rates_df)
 
 
 def browse_airports(title):

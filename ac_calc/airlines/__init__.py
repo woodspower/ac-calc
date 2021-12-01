@@ -29,6 +29,7 @@ class Airline:
     website: str
     logo: str
     star_alliance_member: bool
+    codeshare_partner: bool
     earns_app: bool
     earns_sqm: bool
     earning_rates: dict
@@ -177,6 +178,7 @@ AirCanada = AirCanadaAirline(
     website="http://www.aircanda.com",
     logo=None,
     star_alliance_member=True,
+    codeshare_partner=False,
     earns_app=True,
     earns_sqm=True,
     earning_rates={
