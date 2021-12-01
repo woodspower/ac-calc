@@ -105,7 +105,14 @@ def calculate_points_miles(title):
     # with st.container():
     with st.expander("Segments", expanded=True):
         for index in range(st.session_state["num_segments"]):
-            airline_col, origin_col, destination_col, fare_brand_col, fare_class_col, color_col, remove_col = st.columns((24, 16, 16, 24, 12, 4, 4))
+            color_col, airline_col, origin_col, destination_col, fare_brand_col, fare_class_col, remove_col = st.columns((4, 24, 16, 16, 24, 12, 6))
+
+            color_col.color_picker(
+                # "🎨",
+                "",
+                value=SEGMENT_COLOURS[index % len(SEGMENT_COLOURS)],
+                key=f"colour-{index}",
+            )
 
             airline = airline_col.selectbox(
                 "Airline ✈️",
@@ -150,12 +157,6 @@ def calculate_points_miles(title):
                 "Fare Class 🎫",
                 list(string.ascii_uppercase) if fare_brand == NoBrand else fare_brand.fare_classes,
                 key=f"fare_class-{index}",
-            )
-
-            color_col.color_picker(
-                "🎨",
-                value=SEGMENT_COLOURS[index % len(SEGMENT_COLOURS)],
-                key=f"colour-{index}",
             )
 
         # Cheat a bit with the columns. Put the "Add Segment" button in airline_col, and
