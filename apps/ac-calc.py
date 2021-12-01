@@ -221,7 +221,9 @@ def calculate_points_miles(title):
             (
                 airline.name,
                 f"{origin.airport_code}–{destination.airport_code}",
-                f"{fare_class} ({fare_brand.name})" if fare_brand != NoBrand else fare_class,
+                calc.region,
+                fare_brand.name if fare_brand != NoBrand else calc.service,
+                fare_class,
                 calc.distance,
                 round(calc.sqm_earning_rate * 100),
                 calc.sqm,
@@ -233,7 +235,7 @@ def calculate_points_miles(title):
                 calc.app + calc.app_bonus,
             )
             for airline, origin, destination, fare_brand, fare_class, colour, calc in segments_and_calculations
-        ], columns=("Airline", "Flight", "Fare (Brand)", "Distance", "SQM %", "SQM", "SQD", "Aeroplan %", "Aeroplan", "Bonus %", "Bonus", "Aeroplan Points"))
+        ], columns=("Airline", "Flight", "Region", "Service", "Fare Class", "Distance", "SQM %", "SQM", "SQD", "Aeroplan %", "Aeroplan", "Bonus %", "Bonus", "Aeroplan Points"))
 
         st.dataframe(calculations_df)
 
