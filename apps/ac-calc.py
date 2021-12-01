@@ -231,13 +231,19 @@ def browse_airlines(title):
 
     website_col, star_col, app_col, sqm_col = st.columns(4)
     website_col.markdown(f'<div><a href="{airline.website}">{airline.website}</a></div>', unsafe_allow_html=True)
-    star_col.markdown("⭐️ Star Alliance member" if airline.star_alliance_member else "🧳 Aeroplan partner")
+    star_col.markdown(
+        "⭐️ Star Alliance member" if airline.star_alliance_member
+        else "✈️ Codeshare partner" if airline.codeshare_partner
+        else "🧳 Aeroplan partner")
     app_col.markdown("👍 Earn Aeroplan points" if airline.earns_app else "👎 No Aeroplan points")
     sqm_col.markdown("👍 Earn SQM" if airline.earns_app else "👎 No SQM")
 
     # Show the eligible flights for each region and class of service.
     if not airline.earning_rates:
-        st.markdown("No data available.")
+        if airline.codeshare_partner:
+            st.markdown(f"Earn Aeroplan points on flights operated by **{airline.name}** with a **4-digit Air Canada flight number**. See **Air Canada** for accrual details.")
+        else:
+            st.markdown("Redeem Aeroplan points only.")
         return
 
     for col, earning_rates_item in zip(st.columns(len(airline.earning_rates)), airline.earning_rates.items()):

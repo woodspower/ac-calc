@@ -6,6 +6,7 @@
     "website":"http://www.canadiannorth.com",
     "logo":"/content/dam/aircanada/loyalty-content/images/logo/partners/canadian-north.svg",
     "star_alliance_member":false,
+    "codeshare_partner":false,
     "earns_app":true,
     "earns_sqm":false,
     "earning_rates":{
@@ -31,6 +32,7 @@
     "website":"http://www.airindia.com",
     "logo":"/content/dam/aircanada/loyalty-content/images/logo/partners/air_india_tail.svg",
     "star_alliance_member":false,
+    "codeshare_partner":false,
     "earns_app":true,
     "earns_sqm":true,
     "earning_rates":{
@@ -99,6 +101,7 @@
     "website":"https://www.gulfair.com/",
     "logo":"/content/dam/aircanada/loyalty-content/images/logo/partners/gulfair.svg",
     "star_alliance_member":false,
+    "codeshare_partner":false,
     "earns_app":true,
     "earns_sqm":false,
     "earning_rates":{
@@ -136,6 +139,7 @@
     "website":"https://www.airdolomiti.eu",
     "logo":"/content/dam/aircanada/loyalty-content/images/logo/partners/air-dolomiti.svg",
     "star_alliance_member":false,
+    "codeshare_partner":false,
     "earns_app":true,
     "earns_sqm":true,
     "earning_rates":{
@@ -171,6 +175,7 @@
     "website":"http://www.cathaypacific.com",
     "logo":"/content/dam/aircanada/loyalty-content/images/logo/partners/cathay_pacific.svg",
     "star_alliance_member":false,
+    "codeshare_partner":false,
     "earns_app":true,
     "earns_sqm":false,
     "earning_rates":{
@@ -210,6 +215,7 @@
     "website":"https://www.airserbia.com/en/",
     "logo":"/content/dam/aircanada/loyalty-content/images/logo/partners/air-serbia.png",
     "star_alliance_member":false,
+    "codeshare_partner":false,
     "earns_app":false,
     "earns_sqm":false,
     "earning_rates":null
@@ -221,6 +227,7 @@
     "website":"http://www.croatiaairlines.com/",
     "logo":"/content/dam/aircanada/loyalty-content/images/logo/partners/croatia_airlines_right_tailfin.svg",
     "star_alliance_member":true,
+    "codeshare_partner":false,
     "earns_app":true,
     "earns_sqm":true,
     "earning_rates":{
@@ -259,6 +266,7 @@
     "website":"http://www.brusselsairlines.com",
     "logo":"/content/dam/aircanada/loyalty-content/images/logo/partners/brussels_right_tailfin.svg",
     "star_alliance_member":true,
+    "codeshare_partner":false,
     "earns_app":true,
     "earns_sqm":true,
     "earning_rates":{
@@ -298,6 +306,7 @@
     "website":"https://www.eurowings.com/en.html",
     "logo":"/content/dam/aircanada/loyalty-content/images/logo/partners/eurowings.png",
     "star_alliance_member":false,
+    "codeshare_partner":false,
     "earns_app":true,
     "earns_sqm":true,
     "earning_rates":{
@@ -340,6 +349,7 @@
     "website":"http://www.singaporeair.com",
     "logo":"/content/dam/aircanada/loyalty-content/images/logo/partners/singapore_airlines_right_tailfin.svg",
     "star_alliance_member":true,
+    "codeshare_partner":false,
     "earns_app":true,
     "earns_sqm":true,
     "earning_rates":{
@@ -380,6 +390,7 @@
     "website":"http://www.aegeanair.com",
     "logo":"/content/dam/aircanada/loyalty-content/images/logo/partners/aegean.svg",
     "star_alliance_member":false,
+    "codeshare_partner":false,
     "earns_app":true,
     "earns_sqm":true,
     "earning_rates":{
@@ -419,6 +430,7 @@
     "website":"https://global.shenzhenair.com/",
     "logo":"/content/dam/aircanada/loyalty-content/images/logo/partners/shenzhen_airlines_right_tailfin.svg",
     "star_alliance_member":true,
+    "codeshare_partner":false,
     "earns_app":true,
     "earns_sqm":true,
     "earning_rates":{
@@ -457,6 +469,7 @@
     "website":"https://www.airvistara.com/in/en",
     "logo":"/content/dam/aircanada/loyalty-content/images/logo/partners/vistara.png",
     "star_alliance_member":false,
+    "codeshare_partner":false,
     "earns_app":true,
     "earns_sqm":false,
     "earning_rates":{
@@ -495,6 +508,7 @@
     "website":"http://www.avianca.com/",
     "logo":"/content/dam/aircanada/loyalty-content/images/logo/partners/avianca_right_tailfin.svg",
     "star_alliance_member":false,
+    "codeshare_partner":false,
     "earns_app":true,
     "earns_sqm":true,
     "earning_rates":{
@@ -559,6 +573,7 @@
     "website":"http://www.olympicair.com",
     "logo":"/content/dam/aircanada/loyalty-content/images/logo/partners/olympic.svg",
     "star_alliance_member":false,
+    "codeshare_partner":false,
     "earns_app":true,
     "earns_sqm":true,
     "earning_rates":{
@@ -598,6 +613,7 @@
     "website":"http://www.united.com",
     "logo":"/content/dam/aircanada/loyalty-content/images/logo/partners/united.svg",
     "star_alliance_member":true,
+    "codeshare_partner":false,
     "earns_app":true,
     "earns_sqm":true,
     "earning_rates":{
@@ -643,6 +659,7 @@
     "website":"https://discover.aero/en/",
     "logo":"/content/dam/aircanada/loyalty-content/images/logo/partners/eurowings.png",
     "star_alliance_member":false,
+    "codeshare_partner":false,
     "earns_app":true,
     "earns_sqm":true,
     "earning_rates":{
@@ -704,6 +721,7 @@
     "website":"https://www.srilankan.com/en_uk/lk",
     "logo":"/content/dam/aircanada/loyalty-content/images/logo/partners/air-canada.svg",
     "star_alliance_member":false,
+    "codeshare_partner":true,
     "earns_app":true,
     "earns_sqm":false,
     "earning_rates":null
@@ -715,6 +733,7 @@
     "website":"https://www.thaiairways.com/",
     "logo":"/content/dam/aircanada/loyalty-content/images/logo/partners/thai_airways_right_tailfin.svg",
     "star_alliance_member":true,
+    "codeshare_partner":false,
     "earns_app":true,
     "earns_sqm":true,
     "earning_rates":{
@@ -750,6 +769,7 @@
     "website":"http://www.flysaa.com",
     "logo":"/content/dam/aircanada/loyalty-content/images/logo/partners/south_african_airways_right_tailfin.svg",
     "star_alliance_member":true,
+    "codeshare_partner":false,
     "earns_app":true,
     "earns_sqm":true,
     "earning_rates":{
@@ -819,6 +839,7 @@
     "website":"https://www.virginaustralia.com/eu/en/",
     "logo":"/content/dam/aircanada/loyalty-content/images/logo/partners/virgin.svg",
     "star_alliance_member":false,
+    "codeshare_partner":false,
     "earns_app":true,
     "earns_sqm":true,
     "earning_rates":{
@@ -857,6 +878,7 @@
     "website":"http://www.austrian.com",
     "logo":"/content/dam/aircanada/loyalty-content/images/logo/partners/austrian_right_tailfin.svg",
     "star_alliance_member":false,
+    "codeshare_partner":false,
     "earns_app":true,
     "earns_sqm":true,
     "earning_rates":{
@@ -918,6 +940,7 @@
     "website":"http://www.egyptair.com",
     "logo":"/content/dam/aircanada/loyalty-content/images/logo/partners/egypt_air_right_tailfin.svg",
     "star_alliance_member":true,
+    "codeshare_partner":false,
     "earns_app":true,
     "earns_sqm":true,
     "earning_rates":{
@@ -968,6 +991,7 @@
     "website":"http://www.swiss.com",
     "logo":"/content/dam/aircanada/loyalty-content/images/logo/partners/swiss_right_tailfin.svg",
     "star_alliance_member":true,
+    "codeshare_partner":false,
     "earns_app":true,
     "earns_sqm":true,
     "earning_rates":{
@@ -1030,6 +1054,7 @@
     "website":"http://www.fly-ana.com",
     "logo":"/content/dam/aircanada/loyalty-content/images/logo/partners/ana_right_tailfin.svg",
     "star_alliance_member":false,
+    "codeshare_partner":false,
     "earns_app":true,
     "earns_sqm":true,
     "earning_rates":{
@@ -1074,6 +1099,7 @@
     "website":"http://www.lot.com",
     "logo":"/content/dam/aircanada/loyalty-content/images/logo/partners/lot_polish.svg",
     "star_alliance_member":true,
+    "codeshare_partner":false,
     "earns_app":true,
     "earns_sqm":true,
     "earning_rates":{
@@ -1116,6 +1142,7 @@
     "website":"http://www.copaair.com/",
     "logo":"/content/dam/aircanada/loyalty-content/images/logo/partners/copa_right_tailfin.svg",
     "star_alliance_member":true,
+    "codeshare_partner":false,
     "earns_app":true,
     "earns_sqm":true,
     "earning_rates":{
@@ -1153,6 +1180,7 @@
     "website":"https://www.etihad.com/en-ca/",
     "logo":"/content/dam/aircanada/loyalty-content/images/logo/partners/etihad_social_profile_tailfin.svg",
     "star_alliance_member":false,
+    "codeshare_partner":false,
     "earns_app":true,
     "earns_sqm":false,
     "earning_rates":{
@@ -1196,6 +1224,7 @@
     "website":"https://www.voeazul.com.br/en/home",
     "logo":"/content/dam/aircanada/loyalty-content/images/logo/partners/azul.svg",
     "star_alliance_member":false,
+    "codeshare_partner":false,
     "earns_app":true,
     "earns_sqm":false,
     "earning_rates":{
@@ -1237,6 +1266,7 @@
     "website":"http://www.airchina.com/index.shtml",
     "logo":"/content/dam/aircanada/loyalty-content/images/logo/partners/air_china_right_tailfin.svg",
     "star_alliance_member":false,
+    "codeshare_partner":false,
     "earns_app":true,
     "earns_sqm":true,
     "earning_rates":{
@@ -1281,6 +1311,7 @@
     "website":"http://www.flytap.com",
     "logo":"/content/dam/aircanada/loyalty-content/images/logo/partners/tap_portugal_right_tailfin.svg",
     "star_alliance_member":true,
+    "codeshare_partner":false,
     "earns_app":true,
     "earns_sqm":true,
     "earning_rates":{
@@ -1347,6 +1378,7 @@
     "website":"http://www.aircreebec.ca",
     "logo":"/content/dam/aircanada/loyalty-content/images/logo/partners/air_creebec_yn.svg",
     "star_alliance_member":false,
+    "codeshare_partner":false,
     "earns_app":true,
     "earns_sqm":false,
     "earning_rates":{
@@ -1370,6 +1402,7 @@
     "website":"http://www.turkishairlines.com",
     "logo":"/content/dam/aircanada/loyalty-content/images/logo/partners/turkish_airlines.png",
     "star_alliance_member":true,
+    "codeshare_partner":false,
     "earns_app":true,
     "earns_sqm":true,
     "earning_rates":{
@@ -1405,6 +1438,7 @@
     "website":"http://www.ethiopianairlines.com",
     "logo":"/content/dam/aircanada/loyalty-content/images/logo/partners/ethiopian_airlines_right_tailfin.svg",
     "star_alliance_member":true,
+    "codeshare_partner":false,
     "earns_app":true,
     "earns_sqm":true,
     "earning_rates":{
@@ -1441,6 +1475,7 @@
     "website":"http://www.evaair.com",
     "logo":"/content/dam/aircanada/loyalty-content/images/logo/partners/eva_air_right_tailfin.svg",
     "star_alliance_member":true,
+    "codeshare_partner":false,
     "earns_app":true,
     "earns_sqm":true,
     "earning_rates":{
@@ -1474,6 +1509,7 @@
     "website":"http://www.flyasiana.com",
     "logo":"/content/dam/aircanada/loyalty-content/images/logo/partners/asiana_airlines_right_tailfin.svg",
     "star_alliance_member":false,
+    "codeshare_partner":false,
     "earns_app":true,
     "earns_sqm":true,
     "earning_rates":{
@@ -1526,6 +1562,7 @@
     "website":"https://www.mea.com.lb",
     "logo":"/content/dam/aircanada/loyalty-content/images/logo/partners/air-canada.svg",
     "star_alliance_member":false,
+    "codeshare_partner":true,
     "earns_app":true,
     "earns_sqm":false,
     "earning_rates":null
@@ -1537,6 +1574,7 @@
     "website":"https://www.calmair.com",
     "logo":"/content/dam/aircanada/loyalty-content/images/logo/partners/calm-air.svg",
     "star_alliance_member":false,
+    "codeshare_partner":false,
     "earns_app":false,
     "earns_sqm":false,
     "earning_rates":null
@@ -1548,6 +1586,7 @@
     "website":"http://www.voegol.com.br/en-us/Paginas/default.aspx",
     "logo":"/content/dam/aircanada/loyalty-content/images/logo/partners/gol.svg",
     "star_alliance_member":false,
+    "codeshare_partner":false,
     "earns_app":true,
     "earns_sqm":false,
     "earning_rates":{
@@ -1580,6 +1619,7 @@
     "website":"https://www.airnewzealand.ca/",
     "logo":"/content/dam/aircanada/loyalty-content/images/logo/partners/air_new_zealand_right_tailfin.svg",
     "star_alliance_member":false,
+    "codeshare_partner":false,
     "earns_app":true,
     "earns_sqm":true,
     "earning_rates":{
@@ -1653,6 +1693,7 @@
     "website":"http://www.lufthansa.com",
     "logo":"/content/dam/aircanada/loyalty-content/images/logo/partners/lufthansa.svg",
     "star_alliance_member":true,
+    "codeshare_partner":false,
     "earns_app":true,
     "earns_sqm":true,
     "earning_rates":{
@@ -1718,6 +1759,7 @@
     "website":"https://flycma.com/",
     "logo":"/content/dam/aircanada/loyalty-content/images/logo/partners/air-canada.svg",
     "star_alliance_member":false,
+    "codeshare_partner":true,
     "earns_app":true,
     "earns_sqm":false,
     "earning_rates":null
@@ -1729,6 +1771,7 @@
     "website":"https://www.aerlingus.com",
     "logo":"/content/dam/aircanada/loyalty-content/images/logo/partners/air-canada.svg",
     "star_alliance_member":false,
+    "codeshare_partner":true,
     "earns_app":true,
     "earns_sqm":false,
     "earning_rates":null
@@ -1740,6 +1783,7 @@
     "website":"https://global.juneyaoair.com",
     "logo":"/content/dam/aircanada/loyalty-content/images/logo/partners/juneyao.svg",
     "star_alliance_member":false,
+    "codeshare_partner":false,
     "earns_app":true,
     "earns_sqm":true,
     "earning_rates":{
@@ -1771,6 +1815,7 @@
     "website":"http://www.flysas.com",
     "logo":"/content/dam/aircanada/loyalty-content/images/logo/partners/sas_right_tailfin.svg",
     "star_alliance_member":true,
+    "codeshare_partner":false,
     "earns_app":true,
     "earns_sqm":true,
     "earning_rates":{

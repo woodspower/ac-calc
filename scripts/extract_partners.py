@@ -15,8 +15,8 @@ import typer
 
 
 def main(
-    partners_file: Path = typer.Argument("airline-en.json", help="Airline partners data file."),
-    output_file: Optional[Path] = typer.Argument(None),
+    partners_file: Path = typer.Argument("/project/ac_data/airline-en.json", help="Airline partners data file."),
+    output_file: Optional[Path] = typer.Argument("/project/ac_calc/airlines/partners.json"),
 ):
     airline_partners = srsly.read_json(partners_file)
 
@@ -82,6 +82,7 @@ def main(
             "website": partner["website"],
             "logo": partner["logo"],
             "star_alliance_member": partner.get("group") == "Star alliance member",
+            "codeshare_partner": partner.get("groupCompany") == "Air Canada codeshare partner",
             "earns_app": earns_app,
             "earns_sqm": earns_sqm,
             "earning_rates": earning_rates,
