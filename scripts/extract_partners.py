@@ -81,7 +81,7 @@ def main(
             "region": partner["region"],
             "website": partner["website"],
             "logo": partner["logo"],
-            "star_alliance_member": partner.get("group") == "Star alliance member",
+            "star_alliance_member": "star alliance" in partner.get("group", "").lower(),
             "codeshare_partner": partner.get("groupCompany") == "Air Canada codeshare partner",
             "earns_app": earns_app,
             "earns_sqm": earns_sqm,
