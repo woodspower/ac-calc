@@ -76,19 +76,12 @@ def main():
 
 
 def calculate_points_miles(title):
+    if not "num_segments" in st.session_state:
+        st.session_state["num_segments"] = 1
+
     def segments():
         for i in range(st.session_state["num_segments"]):
             yield [st.session_state[f"{key}-{i}"] for key in SEGMENT_KEYS]
-
-    with st.sidebar:
-        st.number_input(
-            "Number of Segments:",
-            min_value=1,
-            max_value=99,
-            value=1,
-            key="num_segments",
-            help="Number of segments.",
-        )
 
     st.markdown("""
         <style>
@@ -164,6 +157,27 @@ def calculate_points_miles(title):
                 value=SEGMENT_COLOURS[index % len(SEGMENT_COLOURS)],
                 key=f"colour-{index}",
             )
+
+        add_col, remove_col, reset_col, _ = st.columns([1, 1, 1, 5])
+        if add_col.button("Add Segment"):
+            last_segment = st.session_state["num_segments"] - 1
+            next_segment = last_segment + 1
+
+            st.session_state[f"airline-{next_segment}"] = st.session_state[f"airline-{last_segment}"]
+            st.session_state[f"origin-{next_segment}"] = st.session_state[f"destination-{last_segment}"]
+            st.session_state[f"destination-{next_segment}"] = st.session_state[f"origin-{last_segment}"]
+            st.session_state[f"fare_brand-{next_segment}"] = st.session_state[f"fare_brand-{last_segment}"]
+            st.session_state[f"fare_class-{next_segment}"] = st.session_state[f"fare_class-{last_segment}"]
+
+            st.session_state["num_segments"] = next_segment + 1
+
+            st.experimental_rerun()
+        if st.session_state["num_segments"] > 1 and remove_col.button("Remove Segment"):
+            st.session_state["num_segments"] -= 1
+            st.experimental_rerun()
+        # if reset_col.button("Reset Segments"):
+        #     st.session_state["num_segments"] = 1
+        #     st.experimental_rerun()
 
     # Perform calculations for the segments.
     segments_and_calculations = [
