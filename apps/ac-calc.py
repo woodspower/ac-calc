@@ -1,3 +1,4 @@
+from itertools import groupby
 from PIL import ImageColor
 import string
 
@@ -226,8 +227,42 @@ def browse_airlines(title):
         help="Operating airline.",
     )
 
-    st.header(airline.name)
-    st.markdown(airline.region)
+    st.markdown(f'''
+        <div style="font-size:1.666rem">{airline.name}</div>
+        <div><a href="{airline.website}">{airline.website}</a></div>
+    ''', unsafe_allow_html=True)
+
+    # Show the eligible flights for each region and class of service.
+    if not airline.earning_rates:
+        st.markdown("No data available.")
+        return
+
+    for col, earning_rates_item in zip(st.columns(len(airline.earning_rates)), airline.earning_rates.items()):
+        region, services = earning_rates_item
+
+        with col:
+            rates = []
+            for service, fare_classes in services.items():
+                rates.extend([
+                    (service, ", ".join(code[0] for code in codes), f"{int(rate * 100)}%")
+                    for rate, codes in groupby(fare_classes.items(), key=lambda item: item[1])
+                ])
+
+            if airline.earns_app:
+                if airline.earns_sqm:
+                    rate_label = "Aeroplan points & SQM"
+                else:
+                    rate_label = "Aeroplan points"
+            else:
+                rate_label = "None"
+
+            rates_df = pd.DataFrame(rates, columns=(
+                "Class of service", "Eligible booking classes", rate_label
+            ))
+            rates_df.set_index(["Class of service"], inplace=True)
+
+            st.markdown("#### " +  ("All Regions" if region == "*" else region))
+            st.dataframe(rates_df)
 
 
 def browse_airports(title):
