@@ -67,6 +67,13 @@ def airports():
             for airport_data in airports_data
         ]
 
+    # Sort the airports by city and country, starting with Canada and US.
+    airports.sort(key=lambda airport:
+        f" 0{airport.city}" if airport.country_code == "CA"
+        else f" 1{airport.city}" if airport.country_code == "US"
+        else airport.city or f"ZZZ{airport.airport_code}"
+    )
+
     return airports
 
 

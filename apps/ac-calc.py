@@ -25,7 +25,7 @@ SEGMENT_COLOURS = (
 MARKET_COLOURS = {
     "DOM": (202, 42, 54),
     "TNB": (34, 132, 161),
-    "SUN": (233, 171, 154),
+    "SUN": (253, 192, 68),
     "INT": (100, 100, 100),
 }
 
@@ -46,23 +46,21 @@ def main():
         "Browse Airlines": browse_airlines,
         "Browse Airports": browse_airports,
     }
-    tool_title = st.sidebar.radio("Tool:", tools.keys())
-    tool = tools[tool_title]
-    tool(tool_title)
-
-
-def calculate_points_miles(title):
-    def segments():
-        for i in range(st.session_state["num_segments"]):
-            yield [st.session_state[f"{key}-{i}"] for key in SEGMENT_KEYS]
 
     with st.sidebar:
-        st.text_input(
-            "Ticket Number:",
-            value="014",
-            key="ticket_number",
-            help="First three digits or full ticket number. Air Canada is 014.",
+        tool_title = st.radio("Tool:", tools.keys())
+        tool = tools[tool_title]
+
+        st.markdown("<hr />", unsafe_allow_html=True)
+
+        ticket_stock = st.radio(
+            "Ticket Stock:",
+            ("Air Canada", "Other"),
+            index=0,
+            key="ticket_stock",
+            help="The airline that issued the ticket.",
         )
+        st.session_state["ticket_number"] = "014" if ticket_stock == "Air Canada" else ""
 
         st.radio(
             "Aeroplan Status:",
@@ -73,14 +71,17 @@ def calculate_points_miles(title):
             help="Air Canada Aeroplan elite status.",
         )
 
-        st.number_input(
-            "Number of Segments:",
-            min_value=1,
-            max_value=99,
-            value=1,
-            key="num_segments",
-            help="Number of segments.",
-        )
+    tool = tools[tool_title]
+    tool(tool_title)
+
+
+def calculate_points_miles(title):
+    if not "num_segments" in st.session_state:
+        st.session_state["num_segments"] = 1
+
+    def segments():
+        for i in range(st.session_state["num_segments"]):
+            yield [st.session_state[f"{key}-{i}"] for key in SEGMENT_KEYS]
 
     st.markdown("""
         <style>
@@ -157,6 +158,25 @@ def calculate_points_miles(title):
                 key=f"colour-{index}",
             )
 
+        # Cheat a bit with the columns. Put the "Add Segment" button in airline_col, and
+        # "Remove Segment" button in fare_class_col.
+        if airline_col.button("Add Segment"):
+            last_segment = st.session_state["num_segments"] - 1
+            next_segment = last_segment + 1
+
+            st.session_state[f"airline-{next_segment}"] = st.session_state[f"airline-{last_segment}"]
+            st.session_state[f"origin-{next_segment}"] = st.session_state[f"destination-{last_segment}"]
+            st.session_state[f"destination-{next_segment}"] = st.session_state[f"origin-{last_segment}"]
+            st.session_state[f"fare_brand-{next_segment}"] = st.session_state[f"fare_brand-{last_segment}"]
+            st.session_state[f"fare_class-{next_segment}"] = st.session_state[f"fare_class-{last_segment}"]
+
+            st.session_state["num_segments"] = next_segment + 1
+
+            st.experimental_rerun()
+        if st.session_state["num_segments"] > 1 and fare_class_col.button("Remove Segment"):
+            st.session_state["num_segments"] -= 1
+            st.experimental_rerun()
+
     # Perform calculations for the segments.
     segments_and_calculations = [
         (airline, origin, destination, fare_brand, fare_class, colour, airline.calculate(origin, destination, fare_brand, fare_class, st.session_state.ticket_number, st.session_state.aeroplan_status))
@@ -201,7 +221,9 @@ def calculate_points_miles(title):
             (
                 airline.name,
                 f"{origin.airport_code}–{destination.airport_code}",
-                f"{fare_class} ({fare_brand.name})" if fare_brand != NoBrand else fare_class,
+                "" if calc.region == "*" else calc.region,
+                fare_brand.name if fare_brand != NoBrand else calc.service,
+                fare_class,
                 calc.distance,
                 round(calc.sqm_earning_rate * 100),
                 calc.sqm,
@@ -213,7 +235,7 @@ def calculate_points_miles(title):
                 calc.app + calc.app_bonus,
             )
             for airline, origin, destination, fare_brand, fare_class, colour, calc in segments_and_calculations
-        ], columns=("Airline", "Flight", "Fare (Brand)", "Distance", "SQM %", "SQM", "SQD", "Aeroplan %", "Aeroplan", "Bonus %", "Bonus", "Aeroplan Points"))
+        ], columns=("Airline", "Flight", "Region", "Service", "Fare Class", "Distance", "SQM %", "SQM", "SQD", "Aeroplan %", "Aeroplan", "Bonus %", "Bonus", "Aeroplan Points"))
 
         st.dataframe(calculations_df)
 
@@ -281,48 +303,47 @@ def browse_airports(title):
 
     st.markdown(f"<div style='font-size:1.666rem'>{origin.airport}</div>\n\n**{origin.city}**, " + (f"{origin.state}, " if origin.state else "") + origin.country, unsafe_allow_html=True)
 
+    distances_data = []
     destination_airports = []
-    destination_names = []
-    destination_codes = []
-    countries = []
-    old_distances = []
-    new_distances = []
 
     for _, distance in origin.distances.items():
         destination_airport = airports_by_code()[distance.destination]
         destination_airports.append(destination_airport)
 
-        destination_names.append(destination_airport.airport)
-        destination_codes.append(destination_airport.airport_code)
-        countries.append(destination_airport.country)
-        old_distances.append(distance.old_distance)
-        new_distances.append(distance.distance)
+        distances_data.append((
+            destination_airport.market,
+            destination_airport.airport,
+            destination_airport.airport_code,
+            destination_airport.country,
+            distance.old_distance,
+            distance.distance,
+            distance.distance or distance.old_distance,
+        ))
 
-    distances_df = pd.DataFrame({
-        "Destination Name": destination_names,
-        "Destination Code": destination_codes,
-        "Country": countries,
-        "Distance (Old)": old_distances,
-        "Distance (New)": new_distances,
-    })
+    distances_df = pd.DataFrame(distances_data, columns=(
+        "Market", "Airport", "Code", "Country", "Distance (Old)", "Distance (New)", "Distance (Combined)",
+    ))
+    distances_df["Market"] = distances_df["Market"].astype(pd.CategoricalDtype(("DOM", "TNB", "SUN", "INT"), ordered=True))
+    distances_df = distances_df.sort_values(["Market", "Distance (Combined)"])
+    distances_df.set_index("Market", inplace=True)
 
     map_data = [
         {
             "label": destination.airport_code,
-            "distance": new_distance or old_distance,
+            "distance": data[-1] or data[-2],
             "source_position": (origin.longitude, origin.latitude),
             "target_position": (destination.longitude, destination.latitude),
             "source_colour": MARKET_COLOURS.get(destination.market, (180, 180, 180)),
             "target_colour": MARKET_COLOURS.get(destination.market, (180, 180, 180)),
         }
-        for destination, old_distance, new_distance in zip(destination_airports, old_distances, new_distances)
+        for destination, data in zip(destination_airports, distances_data)
     ]
 
-    _render_map(map_data, ctr_lon=origin.longitude, ctr_lat=origin.latitude, zoom=4, get_width=2)
+    _render_map(map_data, ctr_lon=origin.longitude, ctr_lat=origin.latitude, zoom=4, get_width=2, height=540)
     st.table(distances_df)
 
 
-def _render_map(routes, ctr_lon=None, ctr_lat=None, zoom=None, get_width=6):
+def _render_map(routes, ctr_lon=None, ctr_lat=None, zoom=None, get_width=6, height=320):
     if not ctr_lon or not ctr_lat:
         positions = [
             pos for route_positions in (
@@ -361,7 +382,7 @@ def _render_map(routes, ctr_lon=None, ctr_lat=None, zoom=None, get_width=6):
             zoom=zoom,
             bearing=0,
             pitch=0,
-            height=320,
+            height=height,
         ),
         map_style="road",
         layers=[layer],
