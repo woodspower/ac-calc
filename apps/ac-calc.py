@@ -236,7 +236,7 @@ def browse_airlines(title):
         else "✈️ Codeshare partner" if airline.codeshare_partner
         else "🧳 Aeroplan partner")
     app_col.markdown("👍 Earn Aeroplan points" if airline.earns_app else "👎 No Aeroplan points")
-    sqm_col.markdown("👍 Earn SQM" if airline.earns_app else "👎 No SQM")
+    sqm_col.markdown("👍 Earn SQM" if airline.earns_sqm else "👎 No SQM")
 
     # Show the eligible flights for each region and class of service.
     if not airline.earning_rates:
