@@ -184,15 +184,15 @@ def calculate_points_miles(title):
     ]
 
     total_distance = sum((calc.distance for _, _, _, _, _, _, calc in segments_and_calculations))
-    total_app = sum((calc.app for _, _, _, _, _, _, calc in segments_and_calculations))
-    total_app_bonus = sum((calc.app_bonus for _, _, _, _, _, _, calc in segments_and_calculations))
+    total_pts = sum((calc.pts for _, _, _, _, _, _, calc in segments_and_calculations))
+    total_pts_bonus = sum((calc.pts_bonus for _, _, _, _, _, _, calc in segments_and_calculations))
     total_sqm = sum((calc.sqm for _, _, _, _, _, _, calc in segments_and_calculations))
 
     # Show the itinerary/segments stats.
     with calc1_col:
         st.metric("Distance", f"{total_distance} miles")
-        st.metric("Aeroplan Points", total_app)
-        st.metric("Aeroplan Points + Status Bonus", total_app + total_app_bonus, delta=total_app_bonus or None)
+        st.metric("Aeroplan Points", total_pts)
+        st.metric("Aeroplan Points + Status Bonus", total_pts + total_pts_bonus, delta=total_pts_bonus or None)
 
     # Show the overall calculation.
     with calc2_col:
@@ -228,11 +228,11 @@ def calculate_points_miles(title):
                 round(calc.sqm_earning_rate * 100),
                 calc.sqm,
                 0.00,
-                round(calc.app_earning_rate * 100),
-                calc.app,
-                round(calc.app_bonus_factor * 100),
-                calc.app_bonus,
-                calc.app + calc.app_bonus,
+                round(calc.pts_earning_rate * 100),
+                calc.pts,
+                round(calc.pts_bonus_factor * 100),
+                calc.pts_bonus,
+                calc.pts + calc.pts_bonus,
             )
             for airline, origin, destination, fare_brand, fare_class, colour, calc in segments_and_calculations
         ], columns=("Airline", "Flight", "Region", "Service", "Fare Class", "Distance", "SQM %", "SQM", "SQD", "Aeroplan %", "Aeroplan", "Bonus %", "Bonus", "Aeroplan Points"))
@@ -251,13 +251,13 @@ def browse_airlines(title):
 
     st.markdown(f'<div style="font-size:1.666rem">{airline.name}</div>', unsafe_allow_html=True)
 
-    website_col, star_col, app_col, sqm_col = st.columns(4)
+    website_col, star_col, pts_col, sqm_col = st.columns(4)
     website_col.markdown(f'<div><a href="{airline.website}">{airline.website}</a></div>', unsafe_allow_html=True)
     star_col.markdown(
         "⭐️ Star Alliance member" if airline.star_alliance_member
         else "✈️ Codeshare partner" if airline.codeshare_partner
         else "🧳 Aeroplan partner")
-    app_col.markdown("👍 Earn Aeroplan points" if airline.earns_app else "👎 No Aeroplan points")
+    pts_col.markdown("👍 Earn Aeroplan points" if airline.earns_pts else "👎 No Aeroplan points")
     sqm_col.markdown("👍 Earn SQM" if airline.earns_sqm else "👎 No SQM")
 
     # Show the eligible flights for each region and class of service.
