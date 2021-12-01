@@ -25,7 +25,7 @@ SEGMENT_COLOURS = (
 MARKET_COLOURS = {
     "DOM": (202, 42, 54),
     "TNB": (34, 132, 161),
-    "SUN": (233, 171, 154),
+    "SUN": (253, 192, 68),
     "INT": (100, 100, 100),
 }
 
@@ -281,41 +281,40 @@ def browse_airports(title):
 
     st.markdown(f"<div style='font-size:1.666rem'>{origin.airport}</div>\n\n**{origin.city}**, " + (f"{origin.state}, " if origin.state else "") + origin.country, unsafe_allow_html=True)
 
+    distances_data = []
     destination_airports = []
-    destination_names = []
-    destination_codes = []
-    countries = []
-    old_distances = []
-    new_distances = []
 
     for _, distance in origin.distances.items():
         destination_airport = airports_by_code()[distance.destination]
         destination_airports.append(destination_airport)
 
-        destination_names.append(destination_airport.airport)
-        destination_codes.append(destination_airport.airport_code)
-        countries.append(destination_airport.country)
-        old_distances.append(distance.old_distance)
-        new_distances.append(distance.distance)
+        distances_data.append((
+            destination_airport.market,
+            destination_airport.airport,
+            destination_airport.airport_code,
+            destination_airport.country,
+            distance.old_distance,
+            distance.distance,
+            distance.distance or distance.old_distance,
+        ))
 
-    distances_df = pd.DataFrame({
-        "Destination Name": destination_names,
-        "Destination Code": destination_codes,
-        "Country": countries,
-        "Distance (Old)": old_distances,
-        "Distance (New)": new_distances,
-    })
+    distances_df = pd.DataFrame(distances_data, columns=(
+        "Market", "Airport", "Code", "Country", "Distance (Old)", "Distance (New)", "Distance (Combined)",
+    ))
+    distances_df["Market"] = distances_df["Market"].astype(pd.CategoricalDtype(("DOM", "TNB", "SUN", "INT"), ordered=True))
+    distances_df = distances_df.sort_values(["Market", "Distance (Combined)"])
+    distances_df.set_index("Market", inplace=True)
 
     map_data = [
         {
             "label": destination.airport_code,
-            "distance": new_distance or old_distance,
+            "distance": data[-1] or data[-2],
             "source_position": (origin.longitude, origin.latitude),
             "target_position": (destination.longitude, destination.latitude),
             "source_colour": MARKET_COLOURS.get(destination.market, (180, 180, 180)),
             "target_colour": MARKET_COLOURS.get(destination.market, (180, 180, 180)),
         }
-        for destination, old_distance, new_distance in zip(destination_airports, old_distances, new_distances)
+        for destination, data in zip(destination_airports, distances_data)
     ]
 
     _render_map(map_data, ctr_lon=origin.longitude, ctr_lat=origin.latitude, zoom=4, get_width=2, height=540)
