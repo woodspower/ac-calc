@@ -227,10 +227,13 @@ def browse_airlines(title):
         help="Operating airline.",
     )
 
-    st.markdown(f'''
-        <div style="font-size:1.666rem">{airline.name}</div>
-        <div><a href="{airline.website}">{airline.website}</a></div>
-    ''', unsafe_allow_html=True)
+    st.markdown(f'<div style="font-size:1.666rem">{airline.name}</div>', unsafe_allow_html=True)
+
+    website_col, star_col, app_col, sqm_col = st.columns(4)
+    website_col.markdown(f'<div><a href="{airline.website}">{airline.website}</a></div>', unsafe_allow_html=True)
+    star_col.markdown("⭐️ Star Alliance member" if airline.star_alliance_member else "🧳 Aeroplan partner")
+    app_col.markdown("👍 Earn Aeroplan points" if airline.earns_app else "👎 No Aeroplan points")
+    sqm_col.markdown("👍 Earn SQM" if airline.earns_app else "👎 No SQM")
 
     # Show the eligible flights for each region and class of service.
     if not airline.earning_rates:
@@ -248,16 +251,8 @@ def browse_airlines(title):
                     for rate, codes in groupby(fare_classes.items(), key=lambda item: item[1])
                 ])
 
-            if airline.earns_app:
-                if airline.earns_sqm:
-                    rate_label = "Aeroplan points & SQM"
-                else:
-                    rate_label = "Aeroplan points"
-            else:
-                rate_label = "None"
-
             rates_df = pd.DataFrame(rates, columns=(
-                "Class of service", "Eligible booking classes", rate_label
+                "Class of service", "Eligible booking classes", "Rate",
             ))
             rates_df.set_index(["Class of service"], inplace=True)
 
