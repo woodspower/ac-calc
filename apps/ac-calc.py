@@ -158,8 +158,9 @@ def calculate_points_miles(title):
                 key=f"colour-{index}",
             )
 
-        add_col, remove_col, reset_col, _ = st.columns([1, 1, 1, 5])
-        if add_col.button("Add Segment"):
+        # Cheat a bit with the columns. Put the "Add Segment" button in airline_col, and
+        # "Remove Segment" button in fare_class_col.
+        if airline_col.button("Add Segment"):
             last_segment = st.session_state["num_segments"] - 1
             next_segment = last_segment + 1
 
@@ -172,12 +173,9 @@ def calculate_points_miles(title):
             st.session_state["num_segments"] = next_segment + 1
 
             st.experimental_rerun()
-        if st.session_state["num_segments"] > 1 and remove_col.button("Remove Segment"):
+        if st.session_state["num_segments"] > 1 and fare_class_col.button("Remove Segment"):
             st.session_state["num_segments"] -= 1
             st.experimental_rerun()
-        # if reset_col.button("Reset Segments"):
-        #     st.session_state["num_segments"] = 1
-        #     st.experimental_rerun()
 
     # Perform calculations for the segments.
     segments_and_calculations = [
