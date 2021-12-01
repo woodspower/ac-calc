@@ -48,14 +48,19 @@ def main():
     }
 
     with st.sidebar:
-        tool_title = st.sidebar.radio("Tool:", tools.keys())
+        tool_title = st.radio("Tool:", tools.keys())
+        tool = tools[tool_title]
 
-        st.text_input(
-            "Ticket Number:",
-            value="014",
-            key="ticket_number",
-            help="First three digits or full ticket number. Air Canada is 014.",
+        st.markdown("<hr />", unsafe_allow_html=True)
+
+        ticket_stock = st.radio(
+            "Ticket Stock:",
+            ("Air Canada", "Other"),
+            index=0,
+            key="ticket_stock",
+            help="The airline that issued the ticket.",
         )
+        st.session_state["ticket_number"] = "014" if ticket_stock == "Air Canada" else ""
 
         st.radio(
             "Aeroplan Status:",
