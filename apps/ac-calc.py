@@ -202,7 +202,7 @@ def calculate_points_miles(title):
 
     # Show the map.
     with map_col:
-        map_data = [
+        arclayer_data = [
             {
                 "label": f"{origin.airport_code}–{destination.airport_code}",
                 "distance": calc.distance,
@@ -214,7 +214,7 @@ def calculate_points_miles(title):
             for index, airline, origin, destination, fare_brand, fare_class, colour, calc in segments_and_calculations
         ]
 
-        _render_map(map_data)
+        _render_map(arclayer_data)
 
     # Show the calculation details.
     with st.expander("Calculation Details", expanded=True):
@@ -334,7 +334,7 @@ def browse_airports(title):
     distances_df = distances_df.sort_values(["Market", "Distance (Combined)"])
     distances_df.set_index("Market", inplace=True)
 
-    map_data = [
+    arclayer_data = [
         {
             "label": destination.airport_code,
             "distance": data[-1] or data[-2],
@@ -346,11 +346,11 @@ def browse_airports(title):
         for destination, data in zip(destination_airports, distances_data)
     ]
 
-    _render_map(map_data, ctr_lon=origin.longitude, ctr_lat=origin.latitude, zoom=4, get_width=2, height=540)
+    _render_map(arclayer_data, ctr_lon=origin.longitude, ctr_lat=origin.latitude, zoom=4, get_width=2, height=540)
     st.table(distances_df)
 
 
-def _render_map(routes, ctr_lon=None, ctr_lat=None, zoom=None, get_width=6, height=320):
+def _render_map(arclayer_data, ctr_lon=None, ctr_lat=None, zoom=None, get_width=6, height=320):
     if not ctr_lon or not ctr_lat:
         positions = [
             pos for route_positions in (
