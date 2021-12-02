@@ -31,13 +31,13 @@ def main(
         eligible_flights_tab = next(filter(lambda tab: tab["id"] == "1", partner["tabs"]))
 
         if eligibility_text := next(filter(lambda section: section["id"] == "1", eligible_flights_tab["sections"]), {}).get("content"):
-            earns_app = "can earn Aeroplan points" in eligibility_text
+            earns_pts = "can earn Aeroplan points" in eligibility_text
             earns_sqm = (
                 "Status Qualifying Miles" in eligibility_text
                 and not "do not earn Status Qualifying Miles" in eligibility_text
             )
         else:
-            earns_app, earns_sqm = False, False
+            earns_pts, earns_sqm = False, False
 
         if earnings_text := next(filter(lambda section: section["id"] == "2", eligible_flights_tab["sections"]), {}).get("content"):
             soup = BeautifulSoup(earnings_text, "html5lib")
@@ -83,7 +83,7 @@ def main(
             "logo": partner["logo"],
             "star_alliance_member": "star alliance" in partner.get("group", "").lower(),
             "codeshare_partner": partner.get("groupCompany") == "Air Canada codeshare partner",
-            "earns_app": earns_app,
+            "earns_pts": earns_pts,
             "earns_sqm": earns_sqm,
             "earning_rates": earning_rates,
         })

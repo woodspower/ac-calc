@@ -7,7 +7,7 @@
     "logo":"/content/dam/aircanada/loyalty-content/images/logo/partners/canadian-north.svg",
     "star_alliance_member":false,
     "codeshare_partner":false,
-    "earns_app":true,
+    "earns_pts":true,
     "earns_sqm":false,
     "earning_rates":{
       "*":{
@@ -33,7 +33,7 @@
     "logo":"/content/dam/aircanada/loyalty-content/images/logo/partners/air_india_tail.svg",
     "star_alliance_member":true,
     "codeshare_partner":false,
-    "earns_app":true,
+    "earns_pts":true,
     "earns_sqm":true,
     "earning_rates":{
       "International":{
@@ -102,7 +102,7 @@
     "logo":"/content/dam/aircanada/loyalty-content/images/logo/partners/gulfair.svg",
     "star_alliance_member":false,
     "codeshare_partner":false,
-    "earns_app":true,
+    "earns_pts":true,
     "earns_sqm":false,
     "earning_rates":{
       "*":{
@@ -140,7 +140,7 @@
     "logo":"/content/dam/aircanada/loyalty-content/images/logo/partners/air-dolomiti.svg",
     "star_alliance_member":false,
     "codeshare_partner":false,
-    "earns_app":true,
+    "earns_pts":true,
     "earns_sqm":true,
     "earning_rates":{
       "*":{
@@ -176,7 +176,7 @@
     "logo":"/content/dam/aircanada/loyalty-content/images/logo/partners/cathay_pacific.svg",
     "star_alliance_member":false,
     "codeshare_partner":false,
-    "earns_app":true,
+    "earns_pts":true,
     "earns_sqm":false,
     "earning_rates":{
       "*":{
@@ -216,7 +216,7 @@
     "logo":"/content/dam/aircanada/loyalty-content/images/logo/partners/air-serbia.png",
     "star_alliance_member":false,
     "codeshare_partner":false,
-    "earns_app":false,
+    "earns_pts":false,
     "earns_sqm":false,
     "earning_rates":null
   },
@@ -228,7 +228,7 @@
     "logo":"/content/dam/aircanada/loyalty-content/images/logo/partners/croatia_airlines_right_tailfin.svg",
     "star_alliance_member":true,
     "codeshare_partner":false,
-    "earns_app":true,
+    "earns_pts":true,
     "earns_sqm":true,
     "earning_rates":{
       "*":{
@@ -267,7 +267,7 @@
     "logo":"/content/dam/aircanada/loyalty-content/images/logo/partners/brussels_right_tailfin.svg",
     "star_alliance_member":true,
     "codeshare_partner":false,
-    "earns_app":true,
+    "earns_pts":true,
     "earns_sqm":true,
     "earning_rates":{
       "*":{
@@ -307,7 +307,7 @@
     "logo":"/content/dam/aircanada/loyalty-content/images/logo/partners/eurowings.png",
     "star_alliance_member":false,
     "codeshare_partner":false,
-    "earns_app":true,
+    "earns_pts":true,
     "earns_sqm":true,
     "earning_rates":{
       "*":{
@@ -350,7 +350,7 @@
     "logo":"/content/dam/aircanada/loyalty-content/images/logo/partners/singapore_airlines_right_tailfin.svg",
     "star_alliance_member":true,
     "codeshare_partner":false,
-    "earns_app":true,
+    "earns_pts":true,
     "earns_sqm":true,
     "earning_rates":{
       "*":{
@@ -391,7 +391,7 @@
     "logo":"/content/dam/aircanada/loyalty-content/images/logo/partners/aegean.svg",
     "star_alliance_member":true,
     "codeshare_partner":false,
-    "earns_app":true,
+    "earns_pts":true,
     "earns_sqm":true,
     "earning_rates":{
       "*":{
@@ -431,7 +431,7 @@
     "logo":"/content/dam/aircanada/loyalty-content/images/logo/partners/shenzhen_airlines_right_tailfin.svg",
     "star_alliance_member":true,
     "codeshare_partner":false,
-    "earns_app":true,
+    "earns_pts":true,
     "earns_sqm":true,
     "earning_rates":{
       "*":{
@@ -470,7 +470,7 @@
     "logo":"/content/dam/aircanada/loyalty-content/images/logo/partners/vistara.png",
     "star_alliance_member":false,
     "codeshare_partner":false,
-    "earns_app":true,
+    "earns_pts":true,
     "earns_sqm":false,
     "earning_rates":{
       "*":{
@@ -509,7 +509,7 @@
     "logo":"/content/dam/aircanada/loyalty-content/images/logo/partners/avianca_right_tailfin.svg",
     "star_alliance_member":true,
     "codeshare_partner":false,
-    "earns_app":true,
+    "earns_pts":true,
     "earns_sqm":true,
     "earning_rates":{
       "All destinations":{
@@ -574,7 +574,7 @@
     "logo":"/content/dam/aircanada/loyalty-content/images/logo/partners/olympic.svg",
     "star_alliance_member":false,
     "codeshare_partner":false,
-    "earns_app":true,
+    "earns_pts":true,
     "earns_sqm":true,
     "earning_rates":{
       "*":{
@@ -614,7 +614,7 @@
     "logo":"/content/dam/aircanada/loyalty-content/images/logo/partners/united.svg",
     "star_alliance_member":true,
     "codeshare_partner":false,
-    "earns_app":true,
+    "earns_pts":true,
     "earns_sqm":true,
     "earning_rates":{
       "*":{
@@ -660,7 +660,7 @@
     "logo":"/content/dam/aircanada/loyalty-content/images/logo/partners/eurowings.png",
     "star_alliance_member":false,
     "codeshare_partner":false,
-    "earns_app":true,
+    "earns_pts":true,
     "earns_sqm":true,
     "earning_rates":{
       "Intra-European flights":{
@@ -722,7 +722,7 @@
     "logo":"/content/dam/aircanada/loyalty-content/images/logo/partners/air-canada.svg",
     "star_alliance_member":false,
     "codeshare_partner":true,
-    "earns_app":true,
+    "earns_pts":true,
     "earns_sqm":false,
     "earning_rates":null
   },
@@ -734,7 +734,7 @@
     "logo":"/content/dam/aircanada/loyalty-content/images/logo/partners/thai_airways_right_tailfin.svg",
     "star_alliance_member":true,
     "codeshare_partner":false,
-    "earns_app":true,
+    "earns_pts":true,
     "earns_sqm":true,
     "earning_rates":{
       "*":{
@@ -770,7 +770,7 @@
     "logo":"/content/dam/aircanada/loyalty-content/images/logo/partners/south_african_airways_right_tailfin.svg",
     "star_alliance_member":true,
     "codeshare_partner":false,
-    "earns_app":true,
+    "earns_pts":true,
     "earns_sqm":true,
     "earning_rates":{
       "International":{
@@ -840,7 +840,7 @@
     "logo":"/content/dam/aircanada/loyalty-content/images/logo/partners/virgin.svg",
     "star_alliance_member":false,
     "codeshare_partner":false,
-    "earns_app":true,
+    "earns_pts":true,
     "earns_sqm":true,
     "earning_rates":{
       "Domestic":{
@@ -879,7 +879,7 @@
     "logo":"/content/dam/aircanada/loyalty-content/images/logo/partners/austrian_right_tailfin.svg",
     "star_alliance_member":true,
     "codeshare_partner":false,
-    "earns_app":true,
+    "earns_pts":true,
     "earns_sqm":true,
     "earning_rates":{
       "Intra-European flights":{
@@ -941,7 +941,7 @@
     "logo":"/content/dam/aircanada/loyalty-content/images/logo/partners/egypt_air_right_tailfin.svg",
     "star_alliance_member":true,
     "codeshare_partner":false,
-    "earns_app":true,
+    "earns_pts":true,
     "earns_sqm":true,
     "earning_rates":{
       "International":{
@@ -992,7 +992,7 @@
     "logo":"/content/dam/aircanada/loyalty-content/images/logo/partners/swiss_right_tailfin.svg",
     "star_alliance_member":true,
     "codeshare_partner":false,
-    "earns_app":true,
+    "earns_pts":true,
     "earns_sqm":true,
     "earning_rates":{
       "Intra-European flights":{
@@ -1055,7 +1055,7 @@
     "logo":"/content/dam/aircanada/loyalty-content/images/logo/partners/ana_right_tailfin.svg",
     "star_alliance_member":true,
     "codeshare_partner":false,
-    "earns_app":true,
+    "earns_pts":true,
     "earns_sqm":true,
     "earning_rates":{
       "*":{
@@ -1100,7 +1100,7 @@
     "logo":"/content/dam/aircanada/loyalty-content/images/logo/partners/lot_polish.svg",
     "star_alliance_member":true,
     "codeshare_partner":false,
-    "earns_app":true,
+    "earns_pts":true,
     "earns_sqm":true,
     "earning_rates":{
       "*":{
@@ -1143,7 +1143,7 @@
     "logo":"/content/dam/aircanada/loyalty-content/images/logo/partners/copa_right_tailfin.svg",
     "star_alliance_member":true,
     "codeshare_partner":false,
-    "earns_app":true,
+    "earns_pts":true,
     "earns_sqm":true,
     "earning_rates":{
       "*":{
@@ -1181,7 +1181,7 @@
     "logo":"/content/dam/aircanada/loyalty-content/images/logo/partners/etihad_social_profile_tailfin.svg",
     "star_alliance_member":false,
     "codeshare_partner":false,
-    "earns_app":true,
+    "earns_pts":true,
     "earns_sqm":false,
     "earning_rates":{
       "*":{
@@ -1225,7 +1225,7 @@
     "logo":"/content/dam/aircanada/loyalty-content/images/logo/partners/azul.svg",
     "star_alliance_member":false,
     "codeshare_partner":false,
-    "earns_app":true,
+    "earns_pts":true,
     "earns_sqm":false,
     "earning_rates":{
       "*":{
@@ -1267,7 +1267,7 @@
     "logo":"/content/dam/aircanada/loyalty-content/images/logo/partners/air_china_right_tailfin.svg",
     "star_alliance_member":true,
     "codeshare_partner":false,
-    "earns_app":true,
+    "earns_pts":true,
     "earns_sqm":true,
     "earning_rates":{
       "*":{
@@ -1312,7 +1312,7 @@
     "logo":"/content/dam/aircanada/loyalty-content/images/logo/partners/tap_portugal_right_tailfin.svg",
     "star_alliance_member":true,
     "codeshare_partner":false,
-    "earns_app":true,
+    "earns_pts":true,
     "earns_sqm":true,
     "earning_rates":{
       "All destinations":{
@@ -1379,7 +1379,7 @@
     "logo":"/content/dam/aircanada/loyalty-content/images/logo/partners/air_creebec_yn.svg",
     "star_alliance_member":false,
     "codeshare_partner":false,
-    "earns_app":true,
+    "earns_pts":true,
     "earns_sqm":false,
     "earning_rates":{
       "*":{
@@ -1403,7 +1403,7 @@
     "logo":"/content/dam/aircanada/loyalty-content/images/logo/partners/turkish_airlines.png",
     "star_alliance_member":true,
     "codeshare_partner":false,
-    "earns_app":true,
+    "earns_pts":true,
     "earns_sqm":true,
     "earning_rates":{
       "*":{
@@ -1439,7 +1439,7 @@
     "logo":"/content/dam/aircanada/loyalty-content/images/logo/partners/ethiopian_airlines_right_tailfin.svg",
     "star_alliance_member":true,
     "codeshare_partner":false,
-    "earns_app":true,
+    "earns_pts":true,
     "earns_sqm":true,
     "earning_rates":{
       "*":{
@@ -1476,7 +1476,7 @@
     "logo":"/content/dam/aircanada/loyalty-content/images/logo/partners/eva_air_right_tailfin.svg",
     "star_alliance_member":true,
     "codeshare_partner":false,
-    "earns_app":true,
+    "earns_pts":true,
     "earns_sqm":true,
     "earning_rates":{
       "*":{
@@ -1510,7 +1510,7 @@
     "logo":"/content/dam/aircanada/loyalty-content/images/logo/partners/asiana_airlines_right_tailfin.svg",
     "star_alliance_member":true,
     "codeshare_partner":false,
-    "earns_app":true,
+    "earns_pts":true,
     "earns_sqm":true,
     "earning_rates":{
       "International":{
@@ -1563,7 +1563,7 @@
     "logo":"/content/dam/aircanada/loyalty-content/images/logo/partners/air-canada.svg",
     "star_alliance_member":false,
     "codeshare_partner":true,
-    "earns_app":true,
+    "earns_pts":true,
     "earns_sqm":false,
     "earning_rates":null
   },
@@ -1575,7 +1575,7 @@
     "logo":"/content/dam/aircanada/loyalty-content/images/logo/partners/calm-air.svg",
     "star_alliance_member":false,
     "codeshare_partner":false,
-    "earns_app":false,
+    "earns_pts":false,
     "earns_sqm":false,
     "earning_rates":null
   },
@@ -1587,7 +1587,7 @@
     "logo":"/content/dam/aircanada/loyalty-content/images/logo/partners/gol.svg",
     "star_alliance_member":false,
     "codeshare_partner":false,
-    "earns_app":true,
+    "earns_pts":true,
     "earns_sqm":false,
     "earning_rates":{
       "*":{
@@ -1620,7 +1620,7 @@
     "logo":"/content/dam/aircanada/loyalty-content/images/logo/partners/air_new_zealand_right_tailfin.svg",
     "star_alliance_member":true,
     "codeshare_partner":false,
-    "earns_app":true,
+    "earns_pts":true,
     "earns_sqm":true,
     "earning_rates":{
       "International":{
@@ -1694,7 +1694,7 @@
     "logo":"/content/dam/aircanada/loyalty-content/images/logo/partners/lufthansa.svg",
     "star_alliance_member":true,
     "codeshare_partner":false,
-    "earns_app":true,
+    "earns_pts":true,
     "earns_sqm":true,
     "earning_rates":{
       "Intra-European flights":{
@@ -1760,7 +1760,7 @@
     "logo":"/content/dam/aircanada/loyalty-content/images/logo/partners/air-canada.svg",
     "star_alliance_member":false,
     "codeshare_partner":true,
-    "earns_app":true,
+    "earns_pts":true,
     "earns_sqm":false,
     "earning_rates":null
   },
@@ -1772,7 +1772,7 @@
     "logo":"/content/dam/aircanada/loyalty-content/images/logo/partners/air-canada.svg",
     "star_alliance_member":false,
     "codeshare_partner":true,
-    "earns_app":true,
+    "earns_pts":true,
     "earns_sqm":false,
     "earning_rates":null
   },
@@ -1784,7 +1784,7 @@
     "logo":"/content/dam/aircanada/loyalty-content/images/logo/partners/juneyao.svg",
     "star_alliance_member":false,
     "codeshare_partner":false,
-    "earns_app":true,
+    "earns_pts":true,
     "earns_sqm":true,
     "earning_rates":{
       "*":{
@@ -1816,7 +1816,7 @@
     "logo":"/content/dam/aircanada/loyalty-content/images/logo/partners/sas_right_tailfin.svg",
     "star_alliance_member":true,
     "codeshare_partner":false,
-    "earns_app":true,
+    "earns_pts":true,
     "earns_sqm":true,
     "earning_rates":{
       "*":{

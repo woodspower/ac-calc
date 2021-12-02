@@ -11,7 +11,7 @@ from ..locations import Airport
 
 SegmentCalculation = namedtuple("SegmentCalculation", (
     "distance",
-    "app", "app_earning_rate", "app_bonus_factor", "app_bonus",
+    "pts", "pts_earning_rate", "pts_bonus_factor", "pts_bonus",
     "sqm", "sqm_earning_rate",
     "region", "service",
 ))
@@ -31,7 +31,7 @@ class Airline:
     logo: str
     star_alliance_member: bool
     codeshare_partner: bool
-    earns_app: bool
+    earns_pts: bool
     earns_sqm: bool
     earning_rates: dict
 
@@ -133,15 +133,15 @@ class Airline:
         if not distance:
             return SegmentCalculation(distance, 0, 0, 0, 0, 0, 0)
 
-        region, service, app_earning_rate = self._earning_rate(origin, destination, fare_brand, fare_class)
+        region, service, pts_earning_rate = self._earning_rate(origin, destination, fare_brand, fare_class)
         if self.id in FULL_BONUS_AIRLINES:
-            app_bonus_factor = aeroplan_status.bonus_factor
+            pts_bonus_factor = aeroplan_status.bonus_factor
         elif self.id in FIXED25_BONUS_AIRLINES:
-            app_bonus_factor = max(0, min(aeroplan_status.bonus_factor, 0.25))
+            pts_bonus_factor = max(0, min(aeroplan_status.bonus_factor, 0.25))
         else:
-            app_bonus_factor = 0
-        app = max(distance * app_earning_rate, aeroplan_status.min_earning_value) if self.earns_app else 0
-        app_bonus = min(app, distance) * app_bonus_factor
+            pts_bonus_factor = 0
+        app = max(distance * pts_earning_rate, aeroplan_status.min_earning_value) if self.earns_pts else 0
+        pts_bonus = min(app, distance) * pts_bonus_factor
 
         region, service, sqm_earning_rate = self._earning_rate(origin, destination, fare_brand, fare_class)
         sqm = max(distance * sqm_earning_rate, aeroplan_status.min_earning_value) if self.earns_sqm else 0
@@ -149,9 +149,9 @@ class Airline:
         return SegmentCalculation(
             distance,
             int(app),
-            app_earning_rate,
-            app_bonus_factor,
-            int(app_bonus),
+            pts_earning_rate,
+            pts_bonus_factor,
+            int(pts_bonus),
             int(sqm),
             sqm_earning_rate,
             region,
@@ -182,7 +182,7 @@ AirCanada = AirCanadaAirline(
     logo=None,
     star_alliance_member=True,
     codeshare_partner=False,
-    earns_app=True,
+    earns_pts=True,
     earns_sqm=True,
     earning_rates={
         "Domestic": {

@@ -3,6 +3,7 @@ from PIL import ImageColor
 import string
 
 import pydeck as pdk
+from pydeck.types import String
 import pandas as pd
 import streamlit as st
 from streamlit.elements.map import _get_zoom_level
@@ -81,7 +82,7 @@ def calculate_points_miles(title):
 
     def segments():
         for i in range(st.session_state["num_segments"]):
-            yield [st.session_state[f"{key}-{i}"] for key in SEGMENT_KEYS]
+            yield [i] + [st.session_state[f"{key}-{i}"] for key in SEGMENT_KEYS]
 
     st.markdown("""
         <style>
@@ -105,7 +106,14 @@ def calculate_points_miles(title):
     # with st.container():
     with st.expander("Segments", expanded=True):
         for index in range(st.session_state["num_segments"]):
-            airline_col, origin_col, destination_col, fare_brand_col, fare_class_col, color_col = st.columns((24, 16, 16, 24, 12, 4))
+            color_col, airline_col, origin_col, destination_col, fare_brand_col, fare_class_col, remove_col = st.columns((4, 24, 16, 16, 24, 12, 6))
+
+            color_col.color_picker(
+                # "🎨",
+                "",
+                value=SEGMENT_COLOURS[index % len(SEGMENT_COLOURS)],
+                key=f"colour-{index}",
+            )
 
             airline = airline_col.selectbox(
                 "Airline ✈️",
@@ -152,12 +160,6 @@ def calculate_points_miles(title):
                 key=f"fare_class-{index}",
             )
 
-            color_col.color_picker(
-                "🎨",
-                value=SEGMENT_COLOURS[index % len(SEGMENT_COLOURS)],
-                key=f"colour-{index}",
-            )
-
         # Cheat a bit with the columns. Put the "Add Segment" button in airline_col, and
         # "Remove Segment" button in fare_class_col.
         if airline_col.button("Add Segment"):
@@ -173,26 +175,26 @@ def calculate_points_miles(title):
             st.session_state["num_segments"] = next_segment + 1
 
             st.experimental_rerun()
-        if st.session_state["num_segments"] > 1 and fare_class_col.button("Remove Segment"):
+        if st.session_state["num_segments"] > 1 and remove_col.button("🗑"):
             st.session_state["num_segments"] -= 1
             st.experimental_rerun()
 
     # Perform calculations for the segments.
     segments_and_calculations = [
-        (airline, origin, destination, fare_brand, fare_class, colour, airline.calculate(origin, destination, fare_brand, fare_class, st.session_state.ticket_number, st.session_state.aeroplan_status))
-        for airline, origin, destination, fare_brand, fare_class, colour in segments()
+        (index, airline, origin, destination, fare_brand, fare_class, colour, airline.calculate(origin, destination, fare_brand, fare_class, st.session_state.ticket_number, st.session_state.aeroplan_status))
+        for index, airline, origin, destination, fare_brand, fare_class, colour in segments()
     ]
 
-    total_distance = sum((calc.distance for _, _, _, _, _, _, calc in segments_and_calculations))
-    total_app = sum((calc.app for _, _, _, _, _, _, calc in segments_and_calculations))
-    total_app_bonus = sum((calc.app_bonus for _, _, _, _, _, _, calc in segments_and_calculations))
-    total_sqm = sum((calc.sqm for _, _, _, _, _, _, calc in segments_and_calculations))
+    total_distance = sum((calc.distance for _,  _, _, _, _, _, _, calc in segments_and_calculations))
+    total_pts = sum((calc.pts for _, _, _, _, _, _, _, calc in segments_and_calculations))
+    total_pts_bonus = sum((calc.pts_bonus for _, _, _, _, _, _, _, calc in segments_and_calculations))
+    total_sqm = sum((calc.sqm for _, _, _, _, _, _, _, calc in segments_and_calculations))
 
     # Show the itinerary/segments stats.
     with calc1_col:
         st.metric("Distance", f"{total_distance} miles")
-        st.metric("Aeroplan Points", total_app)
-        st.metric("Aeroplan Points + Status Bonus", total_app + total_app_bonus, delta=total_app_bonus or None)
+        st.metric("Aeroplan Points", total_pts)
+        st.metric("Aeroplan Points + Status Bonus", total_pts + total_pts_bonus, delta=total_pts_bonus or None)
 
     # Show the overall calculation.
     with calc2_col:
@@ -201,7 +203,7 @@ def calculate_points_miles(title):
 
     # Show the map.
     with map_col:
-        map_data = [
+        arclayer_data = [
             {
                 "label": f"{origin.airport_code}–{destination.airport_code}",
                 "distance": calc.distance,
@@ -210,10 +212,20 @@ def calculate_points_miles(title):
                 "source_colour": ImageColor.getrgb(colour),
                 "target_colour": [c * .85 for c in ImageColor.getrgb(colour)],
             }
-            for airline, origin, destination, fare_brand, fare_class, colour, calc in segments_and_calculations
+            for index, airline, origin, destination, fare_brand, fare_class, colour, calc in segments_and_calculations
         ]
 
-        _render_map(map_data)
+        textlayer_data = [
+            {
+                "label": f"{origin.airport_code}–{destination.airport_code}",
+                "distance": calc.distance,
+                "text": destination.airport_code,
+                "position": (destination.longitude, destination.latitude),
+            }
+            for index, airline, origin, destination, fare_brand, fare_class, colour, calc in segments_and_calculations
+        ]
+
+        _render_map(arclayer_data, textlayer_data)
 
     # Show the calculation details.
     with st.expander("Calculation Details", expanded=True):
@@ -228,16 +240,22 @@ def calculate_points_miles(title):
                 round(calc.sqm_earning_rate * 100),
                 calc.sqm,
                 0.00,
-                round(calc.app_earning_rate * 100),
-                calc.app,
-                round(calc.app_bonus_factor * 100),
-                calc.app_bonus,
-                calc.app + calc.app_bonus,
+                round(calc.pts_earning_rate * 100),
+                calc.pts,
+                round(calc.pts_bonus_factor * 100),
+                calc.pts_bonus,
+                calc.pts + calc.pts_bonus,
             )
-            for airline, origin, destination, fare_brand, fare_class, colour, calc in segments_and_calculations
+            for index, airline, origin, destination, fare_brand, fare_class, colour, calc in segments_and_calculations
         ], columns=("Airline", "Flight", "Region", "Service", "Fare Class", "Distance", "SQM %", "SQM", "SQD", "Aeroplan %", "Aeroplan", "Bonus %", "Bonus", "Aeroplan Points"))
 
-        st.dataframe(calculations_df)
+        calculations_df.index += 1
+        calculations_df = calculations_df.style.set_table_styles((
+            {"selector": f"th.row{i}", "props": f"color: white; background-color: {st.session_state[f'colour-{i}']}"}
+            for i in range(st.session_state["num_segments"])
+        ))
+
+        st.table(calculations_df)
 
 
 def browse_airlines(title):
@@ -251,13 +269,13 @@ def browse_airlines(title):
 
     st.markdown(f'<div style="font-size:1.666rem">{airline.name}</div>', unsafe_allow_html=True)
 
-    website_col, star_col, app_col, sqm_col = st.columns(4)
+    website_col, star_col, pts_col, sqm_col = st.columns(4)
     website_col.markdown(f'<div><a href="{airline.website}">{airline.website}</a></div>', unsafe_allow_html=True)
     star_col.markdown(
         "⭐️ Star Alliance member" if airline.star_alliance_member
         else "✈️ Codeshare partner" if airline.codeshare_partner
         else "🧳 Aeroplan partner")
-    app_col.markdown("👍 Earn Aeroplan points" if airline.earns_app else "👎 No Aeroplan points")
+    pts_col.markdown("👍 Earn Aeroplan points" if airline.earns_pts else "👎 No Aeroplan points")
     sqm_col.markdown("👍 Earn SQM" if airline.earns_sqm else "👎 No SQM")
 
     # Show the eligible flights for each region and class of service.
@@ -268,7 +286,7 @@ def browse_airlines(title):
             st.markdown("Redeem Aeroplan points only.")
         return
 
-    for col, earning_rates_item in zip(st.columns(len(airline.earning_rates)), airline.earning_rates.items()):
+    for col, earning_rates_item in zip(st.columns(max(len(airline.earning_rates), 2)), airline.earning_rates.items()):
         region, services = earning_rates_item
 
         with col:
@@ -285,7 +303,7 @@ def browse_airlines(title):
             rates_df.set_index(["Class of service"], inplace=True)
 
             st.markdown("#### " +  ("All Regions" if region == "*" else region))
-            st.dataframe(rates_df)
+            st.table(rates_df)
 
 
 def browse_airports(title):
@@ -327,7 +345,7 @@ def browse_airports(title):
     distances_df = distances_df.sort_values(["Market", "Distance (Combined)"])
     distances_df.set_index("Market", inplace=True)
 
-    map_data = [
+    arclayer_data = [
         {
             "label": destination.airport_code,
             "distance": data[-1] or data[-2],
@@ -339,16 +357,26 @@ def browse_airports(title):
         for destination, data in zip(destination_airports, distances_data)
     ]
 
-    _render_map(map_data, ctr_lon=origin.longitude, ctr_lat=origin.latitude, zoom=4, get_width=2, height=540)
+    textlayer_data = [
+        {
+            "label": destination.airport_code,
+            "distance": data[-1] or data[-2],
+            "text": destination.airport_code,
+            "position": (destination.longitude, destination.latitude),
+        }
+        for destination, data in zip(destination_airports, distances_data)
+    ]
+
+    _render_map(arclayer_data, textlayer_data, ctr_lon=origin.longitude, ctr_lat=origin.latitude, zoom=4, get_width=2, height=540)
     st.table(distances_df)
 
 
-def _render_map(routes, ctr_lon=None, ctr_lat=None, zoom=None, get_width=6, height=320):
+def _render_map(arclayer_data=None, textlayer_data=None, ctr_lon=None, ctr_lat=None, zoom=None, get_width=6, height=320):
     if not ctr_lon or not ctr_lat:
         positions = [
             pos for route_positions in (
                 (route["source_position"], route["target_position"])
-                for route in routes
+                for route in arclayer_data
             ) for pos in route_positions
         ]
         min_lon = min(c[0] for c in positions)
@@ -361,20 +389,37 @@ def _render_map(routes, ctr_lon=None, ctr_lat=None, zoom=None, get_width=6, heig
         rng_lat = abs(max_lat - min_lat)
         zoom = zoom or (min(5, max(1, _get_zoom_level(max(rng_lon, rng_lat)))))
 
-    # https://deck.gl/docs/api-reference/geo-layers/great-circle-layer
-    layer = pdk.Layer(
-        "ArcLayer",
-        routes,
-        pickable=True,
-        greatCircle=True,
-        get_width=get_width,
-        get_height=0,
-        get_source_position="source_position",
-        get_target_position="target_position",
-        get_source_color="source_colour",
-        get_target_color="target_colour",
-        auto_highlight=True,
-    )
+    layers = []
+
+    if arclayer_data:
+        # https://deck.gl/docs/api-reference/geo-layers/great-circle-layer
+        layers.append(pdk.Layer(
+            "ArcLayer",
+            arclayer_data,
+            pickable=True,
+            greatCircle=True,
+            get_width=get_width,
+            get_height=0,
+            get_source_position="source_position",
+            get_target_position="target_position",
+            get_source_color="source_colour",
+            get_target_color="target_colour",
+            auto_highlight=True,
+        ))
+
+    if textlayer_data:
+        # https://deck.gl/docs/api-reference/layers/text-layer
+        layers.append(pdk.Layer(
+            "TextLayer",
+            textlayer_data,
+            pickable=True,
+            get_position="position",
+            get_text="text",
+            get_size=18,
+            get_text_anchor=String("middle"),
+            get_alignment_baseline=String("center"),
+        ))
+
     deck = pdk.Deck(
         initial_view_state=pdk.ViewState(
             latitude=ctr_lat,
@@ -385,7 +430,7 @@ def _render_map(routes, ctr_lon=None, ctr_lat=None, zoom=None, get_width=6, heig
             height=height,
         ),
         map_style="road",
-        layers=[layer],
+        layers=layers,
         tooltip={"html": "<strong>{label}</strong><br/>{distance} miles"}
     )
     deck.picking_radius = 20
