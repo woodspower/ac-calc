@@ -106,14 +106,18 @@ def calculate_points_miles(title):
     # with st.container():
     with st.expander("Segments", expanded=True):
         for index in range(st.session_state["num_segments"]):
-            color_col, airline_col, origin_col, destination_col, fare_brand_col, fare_class_col, remove_col = st.columns((4, 24, 16, 16, 24, 12, 6))
+            color_col, airline_col, origin_col, destination_col, fare_brand_col, fare_class_col = st.columns((2, 24, 16, 16, 24, 12))
 
-            color_col.color_picker(
-                # "🎨",
-                "",
-                value=SEGMENT_COLOURS[index % len(SEGMENT_COLOURS)],
-                key=f"colour-{index}",
-            )
+            color_col.markdown(f"""
+            <label style="min-height: 1.5rem;"></label><div style="background-color: {SEGMENT_COLOURS[index % len(SEGMENT_COLOURS)]}; line-height: 1.6; width: 5px; padding: 12px 0">&nbsp;</div>
+            """, unsafe_allow_html=True)
+            st.session_state[f"colour-{index}"] = SEGMENT_COLOURS[index % len(SEGMENT_COLOURS)]
+            # color_col.color_picker(
+            #     # "🎨",
+            #     "",
+            #     value=SEGMENT_COLOURS[index % len(SEGMENT_COLOURS)],
+            #     key=f"colour-{index}",
+            # )
 
             airline = airline_col.selectbox(
                 "Airline ✈️",
@@ -144,7 +148,7 @@ def calculate_points_miles(title):
 
             if airline == AirCanada:
                 fare_brand = fare_brand_col.selectbox(
-                    "Fare Brand 🍷",
+                    "Service 🍷",
                     FARE_BRANDS,
                     index=DEFAULT_FARE_BRAND_INDEX,
                     format_func=lambda brand: brand.name,
@@ -155,14 +159,14 @@ def calculate_points_miles(title):
                 st.session_state[f"fare_brand-{index}"] = fare_brand = NoBrand
 
             fare_class_col.selectbox(
-                "Fare Class 🎫",
+                "Class 🎫",
                 list(string.ascii_uppercase) if fare_brand == NoBrand else fare_brand.fare_classes,
                 key=f"fare_class-{index}",
             )
 
-        # Cheat a bit with the columns. Put the "Add Segment" button in airline_col, and
-        # "Remove Segment" button in fare_class_col.
-        if airline_col.button("Add Segment"):
+        _, add_col, _, _, _, remove_col = st.columns((2, 24, 16, 16, 24, 12))
+
+        if add_col.button("Add Segment"):
             last_segment = st.session_state["num_segments"] - 1
             next_segment = last_segment + 1
 
@@ -329,6 +333,7 @@ def calculate_points_miles(title):
             {
                 "selector": f"th.row{i}",
                 "props": f"color: white; background-color: {st.session_state[f'colour-{i}']}; border-color: {st.session_state[f'colour-{i}']}"
+                # "props": f"color: white; background-color: {SEGMENT_COLOURS[index % len(SEGMENT_COLOURS)]}",
             }
             for i in range(st.session_state["num_segments"])
         ],
