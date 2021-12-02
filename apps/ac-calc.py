@@ -194,7 +194,7 @@ def calculate_points_miles(title):
     with calc1_col:
         st.metric("Distance", f"{total_distance} miles")
         st.metric("Aeroplan Points", total_pts)
-        st.metric("Aeroplan Points + Status Bonus", total_pts + total_pts_bonus, delta=total_pts_bonus or None)
+        st.metric("Aeroplan + Bonus Points", total_pts + total_pts_bonus, delta=total_pts_bonus or None)
 
     # Show the overall calculation.
     with calc2_col:
@@ -228,34 +228,113 @@ def calculate_points_miles(title):
         _render_map(arclayer_data, textlayer_data)
 
     # Show the calculation details.
-    with st.expander("Calculation Details", expanded=True):
-        calculations_df = pd.DataFrame([
-            (
-                airline.name,
-                f"{origin.airport_code}–{destination.airport_code}",
-                "" if calc.region == "*" else calc.region,
-                fare_brand.name if fare_brand != NoBrand else calc.service,
-                fare_class,
-                calc.distance,
-                round(calc.sqm_earning_rate * 100),
-                calc.sqm,
-                0.00,
-                round(calc.pts_earning_rate * 100),
-                calc.pts,
-                round(calc.pts_bonus_factor * 100),
-                calc.pts_bonus,
-                calc.pts + calc.pts_bonus,
-            )
-            for index, airline, origin, destination, fare_brand, fare_class, colour, calc in segments_and_calculations
-        ], columns=("Airline", "Flight", "Region", "Service", "Fare Class", "Distance", "SQM %", "SQM", "SQD", "Aeroplan %", "Aeroplan", "Bonus %", "Bonus", "Aeroplan Points"))
+    # with st.expander("Calculation Details", expanded=True):
+    calculations_data = [
+        (
+            airline.name,
+            f"{origin.airport_code}–{destination.airport_code}",
+            "" if calc.region == "*" else calc.region,
+            calc.distance,
+            fare_brand.name if fare_brand != NoBrand else calc.service,
+            fare_class,
+            f"{round(calc.sqm_earning_rate * 100)}%",
+            calc.sqm,
+            0,
+            f"{round(calc.pts_earning_rate * 100)}%",
+            calc.pts,
+            f"{round(calc.pts_bonus_factor * 100)}%",
+            calc.pts_bonus,
+            calc.pts + calc.pts_bonus,
+        )
+        for index, airline, origin, destination, fare_brand, fare_class, colour, calc in segments_and_calculations
+    ]
+    calculations_cols = pd.MultiIndex.from_frame(pd.DataFrame([
+        ("Flight", "Airline"),
+        ("Flight", "Route"),
+        ("Flight", "Region"),
+        ("Flight", "Distance"),
+        ("Fare", "Service"),
+        ("Fare", "Class"),
+        ("Status Qualifying", "Rate"),
+        ("Status Qualifying", "Miles"),
+        ("Status Qualifying", "Dollars"),
+        ("Aeroplan", "Rate"),
+        ("Aeroplan", "Points"),
+        ("Aeroplan", "Bonus Rate"),
+        ("Aeroplan", "Bonus Points"),
+        ("Aeroplan", "Total Points"),
+    ]))
 
-        calculations_df.index += 1
-        calculations_df = calculations_df.style.set_table_styles((
-            {"selector": f"th.row{i}", "props": f"color: white; background-color: {st.session_state[f'colour-{i}']}"}
+    calculations_df = pd.DataFrame(calculations_data, columns=calculations_cols)
+
+    calculations_df.index += 1
+    calculations_df = calculations_df.style.set_table_styles((
+        {
+            "selector": "",  # table
+            "props": "margin-bottom: 16px; width: 100%",
+        },
+        {
+            "selector": "th",
+            "props": "border-color: #a8afb8; padding: .25rem .5rem",
+        },
+        {
+            "selector": "td",
+            "props": "border-color: #dbdfe5; padding: .25rem .5rem; color: #333",
+        },
+        {
+            "selector": "thead th.index_name",
+            "props": "visibility: hidden",
+        },
+        {
+            "selector": "thead th",
+            "props": "border: 0",
+        },
+        {
+            "selector": "thead th.level0",
+            "props": "background-color: #4a4f55; color: #f8fafd; font-weight: 500; border-right: 1px solid #6f767f; padding: 1rem .5rem .25rem .5rem",
+        },
+        {
+            "selector": "thead th.level0:last-child",
+            "props": "border-right: 0",
+        },
+        {
+            "selector": "thead th.level1",
+            "props": "background-color: #6f767f; color: #f8fafd; font-weight: 500; font-size: .833rem",
+        },
+        {
+            "selector": "tbody th",
+            "props": "font-weight: 500; font-size: 1rem; text-align: center",
+        },
+        {
+            "selector": "tbody tr:first-child, tbody tr:first-child th, tbody tr:first-child td",
+            "props": "border-top: 0",
+        },
+        {
+            "selector": ".data.col1",
+            "props": "white-space: nowrap",
+        },
+        {
+            "selector": ".data.col3",
+            "props": "color: #000; font-weight: 600; background-color: #f9f8f6",
+        },
+        {
+            "selector": ".data.col7, .data.col8, .data.col13",
+            "props": "color: #000; font-weight: 600; background-color: #efefef",
+        },
+        {
+            "selector": ".data.col3, .data.col6, .data.col7, .data.col8, .data.col9, .data.col10, .data.col11, .data.col12, .data.col13",
+            "props": "text-align: right",
+        },
+        *[
+            {
+                "selector": f"th.row{i}",
+                "props": f"color: white; background-color: {st.session_state[f'colour-{i}']}; border-color: {st.session_state[f'colour-{i}']}"
+            }
             for i in range(st.session_state["num_segments"])
-        ))
+        ],
+    ))
 
-        st.table(calculations_df)
+    st.markdown(calculations_df.to_html(), unsafe_allow_html=True)
 
 
 def browse_airlines(title):
