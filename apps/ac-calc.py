@@ -220,7 +220,6 @@ def calculate_points_miles(title):
     with st.expander("Calculation Details", expanded=True):
         calculations_df = pd.DataFrame([
             (
-                index,
                 airline.name,
                 f"{origin.airport_code}–{destination.airport_code}",
                 "" if calc.region == "*" else calc.region,
@@ -237,9 +236,13 @@ def calculate_points_miles(title):
                 calc.pts + calc.pts_bonus,
             )
             for index, airline, origin, destination, fare_brand, fare_class, colour, calc in segments_and_calculations
-        ], columns=("#", "Airline", "Flight", "Region", "Service", "Fare Class", "Distance", "SQM %", "SQM", "SQD", "Aeroplan %", "Aeroplan", "Bonus %", "Bonus", "Aeroplan Points"))
+        ], columns=("Airline", "Flight", "Region", "Service", "Fare Class", "Distance", "SQM %", "SQM", "SQD", "Aeroplan %", "Aeroplan", "Bonus %", "Bonus", "Aeroplan Points"))
 
-        calculations_df = calculations_df.style.applymap(lambda v: f"color: {st.session_state[f'colour-{v}']}; background-color: {st.session_state[f'colour-{v}']}", subset="#")
+        calculations_df.index += 1
+        calculations_df = calculations_df.style.set_table_styles((
+            {"selector": f"th.row{i}", "props": f"color: white; background-color: {st.session_state[f'colour-{i}']}"}
+            for i in range(st.session_state["num_segments"])
+        ))
 
         st.table(calculations_df)
 
