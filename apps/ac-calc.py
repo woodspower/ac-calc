@@ -275,7 +275,7 @@ def browse_airlines(title):
             st.markdown("Redeem Aeroplan points only.")
         return
 
-    for col, earning_rates_item in zip(st.columns(len(airline.earning_rates)), airline.earning_rates.items()):
+    for col, earning_rates_item in zip(st.columns(max(len(airline.earning_rates), 2)), airline.earning_rates.items()):
         region, services = earning_rates_item
 
         with col:
