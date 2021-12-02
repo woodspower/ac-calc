@@ -292,7 +292,7 @@ def browse_airlines(title):
             rates_df.set_index(["Class of service"], inplace=True)
 
             st.markdown("#### " +  ("All Regions" if region == "*" else region))
-            st.dataframe(rates_df)
+            st.table(rates_df)
 
 
 def browse_airports(title):
