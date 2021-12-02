@@ -3,6 +3,7 @@ from PIL import ImageColor
 import string
 
 import pydeck as pdk
+from pydeck.types import String
 import pandas as pd
 import streamlit as st
 from streamlit.elements.map import _get_zoom_level
@@ -214,7 +215,17 @@ def calculate_points_miles(title):
             for index, airline, origin, destination, fare_brand, fare_class, colour, calc in segments_and_calculations
         ]
 
-        _render_map(arclayer_data)
+        textlayer_data = [
+            {
+                "label": f"{origin.airport_code}–{destination.airport_code}",
+                "distance": calc.distance,
+                "text": destination.airport_code,
+                "position": (destination.longitude, destination.latitude),
+            }
+            for index, airline, origin, destination, fare_brand, fare_class, colour, calc in segments_and_calculations
+        ]
+
+        _render_map(arclayer_data, textlayer_data)
 
     # Show the calculation details.
     with st.expander("Calculation Details", expanded=True):
@@ -346,16 +357,26 @@ def browse_airports(title):
         for destination, data in zip(destination_airports, distances_data)
     ]
 
-    _render_map(arclayer_data, ctr_lon=origin.longitude, ctr_lat=origin.latitude, zoom=4, get_width=2, height=540)
+    textlayer_data = [
+        {
+            "label": destination.airport_code,
+            "distance": data[-1] or data[-2],
+            "text": destination.airport_code,
+            "position": (destination.longitude, destination.latitude),
+        }
+        for destination, data in zip(destination_airports, distances_data)
+    ]
+
+    _render_map(arclayer_data, textlayer_data, ctr_lon=origin.longitude, ctr_lat=origin.latitude, zoom=4, get_width=2, height=540)
     st.table(distances_df)
 
 
-def _render_map(arclayer_data, ctr_lon=None, ctr_lat=None, zoom=None, get_width=6, height=320):
+def _render_map(arclayer_data=None, textlayer_data=None, ctr_lon=None, ctr_lat=None, zoom=None, get_width=6, height=320):
     if not ctr_lon or not ctr_lat:
         positions = [
             pos for route_positions in (
                 (route["source_position"], route["target_position"])
-                for route in routes
+                for route in arclayer_data
             ) for pos in route_positions
         ]
         min_lon = min(c[0] for c in positions)
@@ -368,20 +389,37 @@ def _render_map(arclayer_data, ctr_lon=None, ctr_lat=None, zoom=None, get_width=
         rng_lat = abs(max_lat - min_lat)
         zoom = zoom or (min(5, max(1, _get_zoom_level(max(rng_lon, rng_lat)))))
 
-    # https://deck.gl/docs/api-reference/geo-layers/great-circle-layer
-    layer = pdk.Layer(
-        "ArcLayer",
-        routes,
-        pickable=True,
-        greatCircle=True,
-        get_width=get_width,
-        get_height=0,
-        get_source_position="source_position",
-        get_target_position="target_position",
-        get_source_color="source_colour",
-        get_target_color="target_colour",
-        auto_highlight=True,
-    )
+    layers = []
+
+    if arclayer_data:
+        # https://deck.gl/docs/api-reference/geo-layers/great-circle-layer
+        layers.append(pdk.Layer(
+            "ArcLayer",
+            arclayer_data,
+            pickable=True,
+            greatCircle=True,
+            get_width=get_width,
+            get_height=0,
+            get_source_position="source_position",
+            get_target_position="target_position",
+            get_source_color="source_colour",
+            get_target_color="target_colour",
+            auto_highlight=True,
+        ))
+
+    if textlayer_data:
+        # https://deck.gl/docs/api-reference/layers/text-layer
+        layers.append(pdk.Layer(
+            "TextLayer",
+            textlayer_data,
+            pickable=True,
+            get_position="position",
+            get_text="text",
+            get_size=18,
+            get_text_anchor=String("middle"),
+            get_alignment_baseline=String("center"),
+        ))
+
     deck = pdk.Deck(
         initial_view_state=pdk.ViewState(
             latitude=ctr_lat,
@@ -392,7 +430,7 @@ def _render_map(arclayer_data, ctr_lon=None, ctr_lat=None, zoom=None, get_width=
             height=height,
         ),
         map_style="road",
-        layers=[layer],
+        layers=layers,
         tooltip={"html": "<strong>{label}</strong><br/>{distance} miles"}
     )
     deck.picking_radius = 20
