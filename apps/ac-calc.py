@@ -229,14 +229,14 @@ def calculate_points_miles(title):
 
     # Show the calculation details.
     with st.expander("Calculation Details", expanded=True):
-        calculations_df = pd.DataFrame([
+        calculations_data = [
             (
                 airline.name,
                 f"{origin.airport_code}–{destination.airport_code}",
                 "" if calc.region == "*" else calc.region,
+                calc.distance,
                 fare_brand.name if fare_brand != NoBrand else calc.service,
                 fare_class,
-                calc.distance,
                 round(calc.sqm_earning_rate * 100),
                 calc.sqm,
                 0.00,
@@ -247,7 +247,25 @@ def calculate_points_miles(title):
                 calc.pts + calc.pts_bonus,
             )
             for index, airline, origin, destination, fare_brand, fare_class, colour, calc in segments_and_calculations
-        ], columns=("Airline", "Flight", "Region", "Service", "Fare Class", "Distance", "SQM %", "SQM", "SQD", "Aeroplan %", "Aeroplan", "Bonus %", "Bonus", "Aeroplan Points"))
+        ]
+        calculations_cols = pd.MultiIndex.from_frame(pd.DataFrame([
+            ("Flight", "Airline"),
+            ("Flight", "Route"),
+            ("Flight", "Region"),
+            ("Flight", "Distance"),
+            ("Fare", "Service"),
+            ("Fare", "Class"),
+            ("Status Qualifying", "Rate"),
+            ("Status Qualifying", "Miles"),
+            ("Status Qualifying", "Dollars"),
+            ("Aeroplan", "Rate"),
+            ("Aeroplan", "Base Points"),
+            ("Aeroplan", "Bonus Rate"),
+            ("Aeroplan", "Bonus Points"),
+            ("Aeroplan", "Total Points"),
+        ]))
+
+        calculations_df = pd.DataFrame(calculations_data, columns=calculations_cols)
 
         calculations_df.index += 1
         calculations_df = calculations_df.style.set_table_styles((
@@ -255,7 +273,8 @@ def calculate_points_miles(title):
             for i in range(st.session_state["num_segments"])
         ))
 
-        st.table(calculations_df)
+        # st.table(calculations_df)
+        st.markdown(calculations_df.to_html(), unsafe_allow_html=True)
 
 
 def browse_airlines(title):
