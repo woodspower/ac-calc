@@ -314,7 +314,6 @@ def calculate_points_miles(title):
         _render_map(arclayer_and_textlayer_data, arclayer_and_textlayer_data)
 
     # Show the calculation details.
-    # with st.expander("Calculation Details", expanded=True):
     calculations_data = [
         (
             segment.airline.name,
