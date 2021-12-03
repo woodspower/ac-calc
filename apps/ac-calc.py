@@ -371,9 +371,9 @@ def calculate_points_miles(title):
                 align-items: center; justify-content: center; text-align: center;
                 border: .375rem solid #d62c35; border-radius: 50%;
                 background-color: #f9f8f6;
-                font-size: 2rem; line-height: 1.125; font-weight: 600;
+                font-size: 1.666vw; line-height: 1.125; font-weight: 600;
             }
-            #sqx abbr { display: block; font-weight: 500; font-size: 1rem; text-decoration: none }
+            #sqx abbr { display: block; font-weight: 500; font-size: .833vw; text-decoration: none }
         </style>
         """)
 
@@ -395,7 +395,7 @@ def calculate_points_miles(title):
         )), index=(
             "Total Distance",
             "Aeroplan Base Points",
-            "Aeroplan Bonus Points Select Privilege",
+            "Bonus Points Select Privilege",
             "Aeroplan Base + Bonus Points"
         ))
         summary_df = summary_df.style.set_table_styles((
