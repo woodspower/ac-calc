@@ -775,7 +775,7 @@ def _render_map(arclayer_data=None, textlayer_data=None, iconlayer_data=None, ct
             "IconLayer",
             iconlayer_data,
             pickable=True,
-            icon_atlas="https://raw.githubusercontent.com/kinghuang/ac-calc/map-icons/icons/map-icons.png",
+            icon_atlas="https://raw.githubusercontent.com/kinghuang/ac-calc/map-icons/icons/map-icons-sm.png",
             icon_mapping={
                 "airplane": {"x": 0, "y": 0, "width": 128, "height": 128},
                 "small-airplane": {"x": 128, "y": 0, "width": 128, "height": 128},
