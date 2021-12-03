@@ -60,7 +60,7 @@ def main():
 
         st.markdown("<hr />", unsafe_allow_html=True)
 
-        ticket_stock = st.radio(
+        ticket_stock = st.selectbox(
             "Ticket Stock:",
             ("Air Canada", "Other"),
             index=0,
@@ -76,6 +76,17 @@ def main():
             format_func=lambda status: status.name,
             key="aeroplan_status",
             help="Air Canada Aeroplan elite status.",
+        )
+
+        st.radio(
+            "Segments Input Style:",
+            [
+                "Simple Route",
+                "Detailed Route",
+                # "Cowtool",
+            ],
+            key="segments_input_style",
+            help="Segments input interface style.",
         )
 
     tool = tools[tool_title]
@@ -109,13 +120,9 @@ def calculate_points_miles(title):
     # during the loop so that we don't have to grab them from the session
     # state afterwards.
     modified_segments = []
-    input_style = st.selectbox("Segments Input Style:", [
-        "Simple Route",
-        "Detailed Route",
-        # "Cowtool",
-    ])
     with st.expander("Segments", expanded=True):
         should_rerun = False
+        input_style = st.session_state["segments_input_style"]
 
         if input_style == "Simple Route":
             # Unpack the segment data into the session state, if needed.
