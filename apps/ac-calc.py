@@ -435,8 +435,7 @@ def calculate_points_miles(title):
     with map_col:
         arclayer_and_textlayer_data = [
             {
-                "label": f"{segment.origin.airport_code}–{segment.destination.airport_code}",
-                "distance": calc.distance,
+                "tooltip": f'<div><strong>{segment.destination.city}</strong> {segment.destination.airport_code}</div><div style="font-size: .833rem">{segment.destination.airport}<br />{calc.distance} miles</div>',
                 "source_position": (segment.origin.longitude, segment.origin.latitude),
                 "target_position": (segment.destination.longitude, segment.destination.latitude),
                 "source_colour": ImageColor.getrgb(segment.colour),
@@ -447,7 +446,26 @@ def calculate_points_miles(title):
             for segment, calc in zip(segments, calculations)
         ]
 
-        _render_map(arclayer_and_textlayer_data, arclayer_and_textlayer_data)
+        first_segment = segments[0]
+        iconlayer_data = [
+            {
+                "tooltip": f'<div><strong>{first_segment.origin.city}</strong> {first_segment.origin.airport_code}</div><div style="font-size: .833rem">{first_segment.origin.airport}</div>',
+                "marker": "airplane",
+                "position": (first_segment.origin.longitude, first_segment.origin.latitude),
+                "size": 48,
+            },
+            *[
+                {
+                    "tooltip": f'<div><strong>{segment.destination.city}</strong> {segment.destination.airport_code}</div><div style="font-size: .833rem">{segment.destination.airport}<br />{calc.distance} miles</div>',
+                    "marker": f"{segment.destination.market.lower() if segment.destination.market else 'int'}-airport",
+                    "position": (segment.destination.longitude, segment.destination.latitude),
+                    "size": 56,
+                }
+                for segment, calc in zip(segments, calculations)
+            ]
+        ]
+
+        _render_map(arclayer_and_textlayer_data, arclayer_and_textlayer_data, iconlayer_data, height=340)
 
     # Show the calculation details.
     calculations_data = [
@@ -674,8 +692,7 @@ def browse_airports(title):
 
     arclayer_data = [
         {
-            "label": destination.airport_code,
-            "distance": data[-1] or data[-2],
+            "tooltip": f'<div><strong>{destination.city}</strong> {destination.airport_code}</div><div style="font-size: .833rem">{destination.airport}<br />{data[-1] or data[-2]} miles</div>',
             "source_position": (origin.longitude, origin.latitude),
             "target_position": (destination.longitude, destination.latitude),
             "source_colour": MARKET_COLOURS.get(destination.market, (180, 180, 180)),
@@ -686,7 +703,7 @@ def browse_airports(title):
 
     textlayer_data = [
         {
-            "label": destination.airport_code,
+            "tooltip": f'<div><strong>{destination.city}</strong> {destination.airport_code}</div><div style="font-size: .833rem">{destination.airport}<br />{data[-1] or data[-2]} miles</div>',
             "distance": data[-1] or data[-2],
             "text": destination.airport_code,
             "position": (destination.longitude, destination.latitude),
@@ -694,11 +711,29 @@ def browse_airports(title):
         for destination, data in zip(destination_airports, distances_data)
     ]
 
-    _render_map(arclayer_data, textlayer_data, ctr_lon=origin.longitude, ctr_lat=origin.latitude, zoom=4, get_width=2, height=540)
+    iconlayer_data = [
+        {
+            "tooltip": f'<div><strong>{origin.city}</strong> {origin.airport_code}</div><div style="font-size: .833rem">{origin.airport}</div>',
+            "marker": "airplane",
+            "position": (origin.longitude, origin.latitude),
+            "size": 48,
+        },
+        *[
+            {
+                "tooltip": f'<div><strong>{destination.city}</strong> {destination.airport_code}</div><div style="font-size: .833rem">{destination.airport}<br />{data[-1] or data[-2]} miles</div>',
+                "marker": f"{destination.market.lower() if destination.market else 'int'}-airport",
+                "position": (destination.longitude, destination.latitude),
+                "size": 56,
+            }
+            for destination, data in zip(destination_airports, distances_data)
+        ],
+    ]
+
+    _render_map(arclayer_data, textlayer_data, iconlayer_data, ctr_lon=origin.longitude, ctr_lat=origin.latitude, zoom=4, get_width=2, height=540)
     st.table(distances_df)
 
 
-def _render_map(arclayer_data=None, textlayer_data=None, ctr_lon=None, ctr_lat=None, zoom=None, get_width=6, height=340):
+def _render_map(arclayer_data=None, textlayer_data=None, iconlayer_data=None, ctr_lon=None, ctr_lat=None, zoom=None, get_width=6, height=400):
     if not ctr_lon or not ctr_lat:
         positions = [
             pos for route_positions in (
@@ -734,6 +769,29 @@ def _render_map(arclayer_data=None, textlayer_data=None, ctr_lon=None, ctr_lat=N
             auto_highlight=True,
         ))
 
+    if iconlayer_data:
+        # https://deck.gl/docs/api-reference/layers/icon-layer
+        layers.append(pdk.Layer(
+            "IconLayer",
+            iconlayer_data,
+            pickable=True,
+            icon_atlas="https://raw.githubusercontent.com/kinghuang/ac-calc/map-icons/icons/map-icons.png",
+            icon_mapping={
+                "airplane": {"x": 0, "y": 0, "width": 128, "height": 128},
+                "small-airplane": {"x": 128, "y": 0, "width": 128, "height": 128},
+                "airplane-taking-off": {"x": 256, "y": 0, "width": 128, "height": 128},
+                "airplane-landing": {"x": 384, "y": 0, "width": 128, "height": 128},
+
+                "dom-airport": {"x": 0, "y": 256, "width": 128, "height": 128},
+                "tnb-airport": {"x": 128, "y": 256, "width": 128, "height": 128},
+                "sun-airport": {"x": 256, "y": 256, "width": 128, "height": 128},
+                "int-airport": {"x": 384, "y": 256, "width": 128, "height": 128},
+            },
+            get_icon="marker",
+            get_position="position",
+            get_size="size",
+        ))
+
     if textlayer_data:
         # https://deck.gl/docs/api-reference/layers/text-layer
         layers.append(pdk.Layer(
@@ -742,6 +800,7 @@ def _render_map(arclayer_data=None, textlayer_data=None, ctr_lon=None, ctr_lat=N
             pickable=True,
             get_position="position",
             get_text="text",
+            get_font_family='"Source Sans Pro", sans-serif',
             get_size=18,
             get_text_anchor=String("middle"),
             get_alignment_baseline=String("center"),
@@ -758,7 +817,7 @@ def _render_map(arclayer_data=None, textlayer_data=None, ctr_lon=None, ctr_lat=N
         ),
         map_style="road",
         layers=layers,
-        tooltip={"html": "<strong>{label}</strong><br/>{distance} miles"}
+        tooltip={"html": "{tooltip}"},
     )
     deck.picking_radius = 20
 
