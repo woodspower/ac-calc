@@ -1,3 +1,4 @@
+from collections import namedtuple
 from itertools import groupby
 from PIL import ImageColor
 import string
@@ -9,9 +10,12 @@ import pandas as pd
 import streamlit as st
 from streamlit.elements.map import _get_zoom_level
 
-from ac_calc.aeroplan import NoBrand, AEROPLAN_STATUSES, DEFAULT_AEROPLAN_STATUS, DEFAULT_FARE_BRAND_INDEX, FARE_BRANDS
+from ac_calc.aeroplan import Flex, NoBrand, AEROPLAN_STATUSES, DEFAULT_AEROPLAN_STATUS, DEFAULT_FARE_BRAND_INDEX, FARE_BRANDS
 from ac_calc.airlines import AirCanada, AIRLINES
 from ac_calc.locations import airports, airports_by_code
+
+
+Segment = namedtuple("Segment", ("airline", "origin", "destination", "fare_brand", "fare_class", "colour"))
 
 
 SEGMENT_KEYS = ("airline", "origin", "destination", "fare_brand", "fare_class", "colour")
@@ -78,12 +82,21 @@ def main():
 
 
 def calculate_points_miles(title):
-    if not "num_segments" in st.session_state:
-        st.session_state["num_segments"] = 1
+    # Get the stored segment data. We can't rely on the component session states,
+    # because they are removed if the component isn't present anymore, like when
+    # switching between tools.
+    if not "segments" in st.session_state:
+        st.session_state["segments"] = segments = (Segment(
+            AirCanada, airports_by_code()["YYC"], airports_by_code()["YYZ"], Flex, "M", "#d62c35",
+        ),)
+    else:
+        segments = st.session_state["segments"]
 
-    def segments():
-        for i in range(st.session_state["num_segments"]):
-            yield [i] + [st.session_state[f"{key}-{i}"] for key in SEGMENT_KEYS]
+    # Unpack the segment data into the session state, if needed.
+    for index, segment in enumerate(segments):
+        for key, value in segment._asdict().items():
+            if not f"{key}-{index}" in st.session_state:
+                st.session_state[f"{key}-{index}"] = value
 
     st.markdown("""
         <style>
@@ -91,29 +104,24 @@ def calculate_points_miles(title):
                 display: none
             }
         </style>
-        """, unsafe_allow_html=True)
+    """, unsafe_allow_html=True)
 
-    # calc1_col, calc2_col, map_col = st.columns([6, 6, 18])
+    # Reserve space for the calculation summary and segments map.
     summary_col, map_col = st.columns([10, 18])
 
-    # Render segment inputs, first.
-    DEFAULT_AIRLINE, DEFAULT_AIRLINE_INDEX = AirCanada, 0
-    DEFAULT_ORIGIN_AIRPORT_INDEX, DEFAULT_ORIGIN_AIRPORT = next(
-        filter(lambda e: e[1].airport_code == "YYC", enumerate(airports()))
-    )
-    DEFAULT_DESTINATION_AIRPORT_INDEX, DEFAULT_DESTINATION_AIRPORT = next(
-        filter(lambda e: e[1].airport_code == "YYZ", enumerate(airports()))
-    )
-
-    # with st.container():
+    # Iterate through the segments and present input widgets for the fields.
+    # Collect the return field values and construct modified Segment tuples
+    # during the loop so that we don't have to grab them from the session
+    # state afterwards.
+    modified_segments = []
     with st.expander("Segments", expanded=True):
-        for index in range(st.session_state["num_segments"]):
+        for index in range(len(segments)):
             color_col, airline_col, origin_col, destination_col, fare_brand_col, fare_class_col = st.columns((2, 24, 16, 16, 24, 12))
 
             color_col.markdown(f"""
             <label style="min-height: 1.5rem;"></label><div style="background-color: {SEGMENT_COLOURS[index % len(SEGMENT_COLOURS)]}; line-height: 1.6; width: 5px; padding: 12px 0">&nbsp;</div>
             """, unsafe_allow_html=True)
-            st.session_state[f"colour-{index}"] = SEGMENT_COLOURS[index % len(SEGMENT_COLOURS)]
+            st.session_state[f"colour-{index}"] = colour = SEGMENT_COLOURS[index % len(SEGMENT_COLOURS)]
             # color_col.color_picker(
             #     # "🎨",
             #     "",
@@ -124,25 +132,22 @@ def calculate_points_miles(title):
             airline = airline_col.selectbox(
                 "Airline ✈️",
                 AIRLINES,
-                index=DEFAULT_AIRLINE_INDEX,
                 format_func=lambda airline: airline.name,
                 help="Flight segment operating airline.",
                 key=f"airline-{index}",
             )
 
-            origin_col.selectbox(
+            origin = origin_col.selectbox(
                 "Origin 🛫",
                 airports(),
-                index=DEFAULT_ORIGIN_AIRPORT_INDEX,
                 format_func=lambda airport: f"{airport.city} {airport.airport_code}" if airport.city else airport.airport_code,
                 help="Flight segment origin airport code.",
                 key=f"origin-{index}",
             )
 
-            destination_col.selectbox(
+            destination = destination_col.selectbox(
                 "Destination 🛬",
                 airports(),
-                index=DEFAULT_DESTINATION_AIRPORT_INDEX,
                 format_func=lambda airport: f"{airport.city} {airport.airport_code}" if airport.city else airport.airport_code,
                 help="Flight segment destination airport code.",
                 key=f"destination-{index}",
@@ -152,50 +157,71 @@ def calculate_points_miles(title):
                 fare_brand = fare_brand_col.selectbox(
                     "Service 🍷",
                     FARE_BRANDS,
-                    index=DEFAULT_FARE_BRAND_INDEX,
                     format_func=lambda brand: brand.name,
                     help="Air Canada fare brand.",
                     key=f"fare_brand-{index}",
                 )
             else:
-                st.session_state[f"fare_brand-{index}"] = fare_brand = NoBrand
+                fare_brand = NoBrand
 
-            fare_class_col.selectbox(
+            fare_class = fare_class_col.selectbox(
                 "Class 🎫",
                 list(string.ascii_uppercase) if fare_brand == NoBrand else fare_brand.fare_classes,
                 key=f"fare_class-{index}",
             )
 
+            # Construct a new Segment with the values.
+            modified_segments.append(Segment(
+                airline, origin, destination, fare_brand, fare_class, colour
+            ))
+
+        # Present buttons for adding or removing segments.
         _, add_col, _, _, _, remove_col = st.columns((2, 24, 16, 16, 24, 12))
-
+        should_rerun = False
         if add_col.button("Add Segment"):
-            last_segment = st.session_state["num_segments"] - 1
-            next_segment = last_segment + 1
+            last_segment = modified_segments[-1]
+            next_segment = Segment(
+                last_segment.airline,
+                last_segment.destination,
+                last_segment.origin,
+                last_segment.fare_brand,
+                last_segment.fare_class,
+                last_segment.colour
+            )
 
-            st.session_state[f"airline-{next_segment}"] = st.session_state[f"airline-{last_segment}"]
-            st.session_state[f"origin-{next_segment}"] = st.session_state[f"destination-{last_segment}"]
-            st.session_state[f"destination-{next_segment}"] = st.session_state[f"origin-{last_segment}"]
-            st.session_state[f"fare_brand-{next_segment}"] = st.session_state[f"fare_brand-{last_segment}"]
-            st.session_state[f"fare_class-{next_segment}"] = st.session_state[f"fare_class-{last_segment}"]
+            modified_segments.append(next_segment)
+            should_rerun = True
+        elif len(segments) > 1 and remove_col.button("🗑"):
+            del modified_segments[-1]
+            should_rerun = True
 
-            st.session_state["num_segments"] = next_segment + 1
+        # Store the modified segments for the next loop.
+        segments = tuple(modified_segments)
+        st.session_state["segments"] = segments
 
+        # If a segment was added or removed, rerun the app to update the input components.
+        if should_rerun:
             st.experimental_rerun()
-        if st.session_state["num_segments"] > 1 and remove_col.button("🗑"):
-            st.session_state["num_segments"] -= 1
-            st.experimental_rerun()
 
-    # Perform calculations for the segments.
-    segments_and_calculations = [
-        (index, airline, origin, destination, fare_brand, fare_class, colour, airline.calculate(origin, destination, fare_brand, fare_class, st.session_state.ticket_number, st.session_state.aeroplan_status))
-        for index, airline, origin, destination, fare_brand, fare_class, colour in segments()
+    # Calculate all the things for the segments.
+    calculations = [
+        segment.airline.calculate(
+            segment.origin,
+            segment.destination,
+            segment.fare_brand,
+            segment.fare_class,
+            st.session_state.ticket_number,
+            st.session_state.aeroplan_status,
+        )
+        for segment in segments
     ]
 
-    total_distance = sum((calc.distance for _,  _, _, _, _, _, _, calc in segments_and_calculations))
-    base_pts = sum((calc.pts for _, _, _, _, _, _, _, calc in segments_and_calculations))
-    bonus_pts = sum((calc.pts_bonus for _, _, _, _, _, _, _, calc in segments_and_calculations))
-    total_sqm = sum((calc.sqm for _, _, _, _, _, _, _, calc in segments_and_calculations))
+    total_distance = sum((calc.distance for calc in calculations))
+    base_pts = sum((calc.pts for calc in calculations))
+    bonus_pts = sum((calc.pts_bonus for calc in calculations))
+    total_sqm = sum((calc.sqm for calc in calculations))
 
+    # Show the calculation summary.
     with summary_col:
         summary_code = dedent("""
         <style>
@@ -220,7 +246,7 @@ def calculate_points_miles(title):
         summary_code += dedent(f"""
         <div id="sqx">
             <div><div>{total_sqm} <abbr title="Status Qualifying Miles">SQM</abbr></div></div>
-            <div><div>{st.session_state["num_segments"]} <abbr title="Status Qualifying Segments">SQS</abbr></div></div>
+            <div><div>{len(segments)} <abbr title="Status Qualifying Segments">SQS</abbr></div></div>
             <div><div>0 <abbr title="Status Qualifying Dollars">SQD</abbr></div></div>
         </div>
         """)
@@ -271,40 +297,32 @@ def calculate_points_miles(title):
 
     # Show the map.
     with map_col:
-        arclayer_data = [
+        arclayer_and_textlayer_data = [
             {
-                "label": f"{origin.airport_code}–{destination.airport_code}",
+                "label": f"{segment.origin.airport_code}–{segment.destination.airport_code}",
                 "distance": calc.distance,
-                "source_position": (origin.longitude, origin.latitude),
-                "target_position": (destination.longitude, destination.latitude),
-                "source_colour": ImageColor.getrgb(colour),
-                "target_colour": [c * .85 for c in ImageColor.getrgb(colour)],
+                "source_position": (segment.origin.longitude, segment.origin.latitude),
+                "target_position": (segment.destination.longitude, segment.destination.latitude),
+                "source_colour": ImageColor.getrgb(segment.colour),
+                "target_colour": [c * .85 for c in ImageColor.getrgb(segment.colour)],
+                "text": segment.destination.airport_code,
+                "position": (segment.destination.longitude, segment.destination.latitude),
             }
-            for index, airline, origin, destination, fare_brand, fare_class, colour, calc in segments_and_calculations
+            for segment, calc in zip(segments, calculations)
         ]
 
-        textlayer_data = [
-            {
-                "label": f"{origin.airport_code}–{destination.airport_code}",
-                "distance": calc.distance,
-                "text": destination.airport_code,
-                "position": (destination.longitude, destination.latitude),
-            }
-            for index, airline, origin, destination, fare_brand, fare_class, colour, calc in segments_and_calculations
-        ]
-
-        _render_map(arclayer_data, textlayer_data)
+        _render_map(arclayer_and_textlayer_data, arclayer_and_textlayer_data)
 
     # Show the calculation details.
     # with st.expander("Calculation Details", expanded=True):
     calculations_data = [
         (
-            airline.name,
-            f"{origin.airport_code}–{destination.airport_code}",
+            segment.airline.name,
+            f"{segment.origin.airport_code}–{segment.destination.airport_code}",
             "" if calc.region == "*" else calc.region,
             calc.distance,
-            fare_brand.name if fare_brand != NoBrand else calc.service,
-            fare_class,
+            segment.fare_brand.name if segment.fare_brand != NoBrand else calc.service,
+            segment.fare_class,
             f"{round(calc.sqm_earning_rate * 100)}%",
             calc.sqm,
             0,
@@ -314,7 +332,7 @@ def calculate_points_miles(title):
             calc.pts_bonus,
             calc.pts + calc.pts_bonus,
         )
-        for index, airline, origin, destination, fare_brand, fare_class, colour, calc in segments_and_calculations
+        for segment, calc in zip(segments, calculations)
     ]
     calculations_cols = pd.MultiIndex.from_tuples([
         ("Flight", "Airline"),
@@ -395,11 +413,10 @@ def calculate_points_miles(title):
         },
         *[
             {
-                "selector": f"th.row{i}",
-                "props": f"color: white; background-color: {st.session_state[f'colour-{i}']}; border-color: {st.session_state[f'colour-{i}']}"
-                # "props": f"color: white; background-color: {SEGMENT_COLOURS[index % len(SEGMENT_COLOURS)]}",
+                "selector": f"th.row{index}",
+                "props": f"color: white; background-color: {segment.colour}; border-color: {segment.colour}"
             }
-            for i in range(st.session_state["num_segments"])
+            for index, segment in enumerate(segments)
         ],
     ))
 
