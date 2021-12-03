@@ -83,7 +83,7 @@ def main():
             [
                 "Simple Route",
                 "Detailed Route",
-                # "Cowtool",
+                "Cowtool",
             ],
             key="segments_input_style",
             help="Segments input interface style.",
@@ -278,6 +278,55 @@ def calculate_points_miles(title):
                 del modified_segments[-1]
                 should_rerun = True
 
+        elif input_style == "Cowtool":
+            # Unpack the segment data into the session state, if needed.
+            if not "itinerary" in st.session_state:
+                itinerary_parts = []
+                for segment in segments:
+                    itinerary_parts.append(",".join((
+                        segment.airline.codes[0],
+                        segment.origin.airport_code,
+                        segment.destination.airport_code,
+                        segment.fare_class,
+                        segment.fare_brand.basis_codes[0] if segment.airline == AirCanada else ""
+                    )))
+                itinerary = "\n".join(itinerary_parts)
+                st.session_state["itinerary"] = itinerary
+
+            itinerary = st.text_area(
+                "Itinerary",
+                height=160,
+                key="itinerary",
+                help="Flight itinerary with airline,origin,destination,fare class,brand code per line.",
+            )
+
+            # Form new Segments from the itinerary.
+            for line in itinerary.strip().split("\n"):
+                line = line.strip()
+                if not line:
+                    continue
+
+                parts = line.split(",")
+                if len(parts) == 5:
+                    airline_code, origin_airport_code, destination_airport_code, fare_class, fare_brand_code = parts
+                elif len(parts) == 4:
+                    airline_code, origin_airport_code, destination_airport_code, fare_class = parts
+                    fare_brand_code = ""
+                else:
+                    st.error(f"Line does not have 4 or 5 parts: {line}")
+
+                try:
+                    modified_segments.append(Segment(
+                        next(filter(lambda airline: airline_code in airline.codes, AIRLINES)),
+                        airports_by_code()[origin_airport_code],
+                        airports_by_code()[destination_airport_code],
+                        next(filter(lambda fare_brand: fare_brand_code in fare_brand.basis_codes, FARE_BRANDS)),
+                        fare_class,
+                        SEGMENT_COLOURS[len(modified_segments) % len(SEGMENT_COLOURS)],
+                    ))
+                except:
+                    st.error(f"Error parsing line: {line}")
+
         # Store the modified segments for the next loop.
         segments = tuple(modified_segments)
         st.session_state["segments"] = segments
@@ -306,6 +355,10 @@ def calculate_points_miles(title):
 
     # Show the calculation summary.
     with summary_col:
+        if len(segments) < 1:
+            st.info("No segments.")
+            return
+
         summary_code = dedent("""
         <style>
             #calc-summary { position: relative; height: 340px }
