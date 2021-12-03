@@ -1,6 +1,7 @@
 from itertools import groupby
 from PIL import ImageColor
 import string
+from textwrap import dedent
 
 import pydeck as pdk
 from pydeck.types import String
@@ -15,7 +16,7 @@ from ac_calc.locations import airports, airports_by_code
 
 SEGMENT_KEYS = ("airline", "origin", "destination", "fare_brand", "fare_class", "colour")
 SEGMENT_COLOURS = (
-    "#c50014",
+    "#d62c35",
     "#8dd15a",
     "#ffc133",
     "#732d9d",
@@ -92,7 +93,8 @@ def calculate_points_miles(title):
         </style>
         """, unsafe_allow_html=True)
 
-    calc1_col, calc2_col, map_col = st.columns([6, 6, 18])
+    # calc1_col, calc2_col, map_col = st.columns([6, 6, 18])
+    summary_col, map_col = st.columns([10, 18])
 
     # Render segment inputs, first.
     DEFAULT_AIRLINE, DEFAULT_AIRLINE_INDEX = AirCanada, 0
@@ -190,20 +192,82 @@ def calculate_points_miles(title):
     ]
 
     total_distance = sum((calc.distance for _,  _, _, _, _, _, _, calc in segments_and_calculations))
-    total_pts = sum((calc.pts for _, _, _, _, _, _, _, calc in segments_and_calculations))
-    total_pts_bonus = sum((calc.pts_bonus for _, _, _, _, _, _, _, calc in segments_and_calculations))
+    base_pts = sum((calc.pts for _, _, _, _, _, _, _, calc in segments_and_calculations))
+    bonus_pts = sum((calc.pts_bonus for _, _, _, _, _, _, _, calc in segments_and_calculations))
     total_sqm = sum((calc.sqm for _, _, _, _, _, _, _, calc in segments_and_calculations))
 
-    # Show the itinerary/segments stats.
-    with calc1_col:
-        st.metric("Distance", f"{total_distance} miles")
-        st.metric("Aeroplan Points", total_pts)
-        st.metric("Aeroplan + Bonus Points", total_pts + total_pts_bonus, delta=total_pts_bonus or None)
+    with summary_col:
+        summary_code = dedent("""
+        <style>
+            #calc-summary { position: relative; height: 320px }
 
-    # Show the overall calculation.
-    with calc2_col:
-        st.metric("Status Qualifying Miles", f"{total_sqm} SQM")
-        st.metric("Status Qualifying Dollars", f"0 SQD")
+            #sqx { display: flex; flex-direction: row; justify-content: space-around; max-height: 160px }
+            #sqx > div:before { content: ""; float: left; padding-top: 100% }
+            #sqx > div {
+                display: flex; flex: 1 0 auto; margin: 0 3%;
+                width: 28%; height: auto;
+                align-items: center; justify-content: center; text-align: center;
+                border: .375rem solid #d62c35; border-radius: 50%;
+                background-color: #f9f8f6;
+                font-size: 2rem; line-height: 1.125; font-weight: 600;
+            }
+            #sqx abbr { display: block; font-weight: 500; font-size: 1rem; text-decoration: none }
+        </style>
+        """)
+
+        summary_code += '<div id="calc-summary">'
+
+        summary_code += dedent(f"""
+        <div id="sqx">
+            <div><div>{total_sqm} <abbr title="Status Qualifying Miles">SQM</abbr></div></div>
+            <div><div>{st.session_state["num_segments"]} <abbr title="Status Qualifying Segments">SQS</abbr></div></div>
+            <div><div>0 <abbr title="Status Qualifying Dollars">SQD</abbr></div></div>
+        </div>
+        """)
+
+        summary_df = pd.DataFrame(((
+            f"{total_distance} miles",
+            base_pts,
+            bonus_pts,
+            f"{base_pts + bonus_pts} points",
+        )), index=(
+            "Total Distance",
+            "Aeroplan Base Points",
+            "Aeroplan Bonus Points Select Privilege",
+            "Aeroplan Base + Bonus Points"
+        ))
+        summary_df = summary_df.style.set_table_styles((
+            {
+                "selector": "",  # table
+                "props": "position: absolute; bottom: 0; width: 100%",
+            },
+            {
+                "selector": "thead",
+                "props": "display: none",
+            },
+            {
+                "selector": "tbody th",
+                "props": "border: 0; padding: .25rem .5rem; background-color: #4a4f55; color: #f8fafd; font-weight: 500"
+            },
+            {
+                "selector": "tbody td",
+                "props": "border-color: #dbdfe5; padding: .25rem .5rem; color: #333; text-align: right"
+            },
+            {
+                "selector": "tbody td.row0",
+                "props": "color: #000; font-weight: 600; background-color: #f9f8f6"
+            },
+            {
+                "selector": "tbody td.row3",
+                "props": "color: #000; font-weight: 600; background-color: #efefef"
+            },
+
+        ))
+        summary_code += summary_df.to_html()
+
+        summary_code += "</div>"
+
+        st.markdown(summary_code, unsafe_allow_html=True)
 
     # Show the map.
     with map_col:
@@ -275,7 +339,7 @@ def calculate_points_miles(title):
     calculations_df = calculations_df.style.set_table_styles((
         {
             "selector": "",  # table
-            "props": "margin-bottom: 16px; width: 100%",
+            "props": "margin-bottom: 1rem; width: 100%",
         },
         {
             "selector": "th",
