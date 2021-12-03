@@ -1,6 +1,7 @@
 from collections import namedtuple
 from itertools import groupby
 from PIL import ImageColor
+import re
 import string
 from textwrap import dedent
 
@@ -92,12 +93,6 @@ def calculate_points_miles(title):
     else:
         segments = st.session_state["segments"]
 
-    # Unpack the segment data into the session state, if needed.
-    for index, segment in enumerate(segments):
-        for key, value in segment._asdict().items():
-            if not f"{key}-{index}" in st.session_state:
-                st.session_state[f"{key}-{index}"] = value
-
     st.markdown("""
         <style>
             div[data-testid="stBlock"] div[data-testid="stBlock"]:not([style]):not(:first-child) label {
@@ -114,43 +109,44 @@ def calculate_points_miles(title):
     # during the loop so that we don't have to grab them from the session
     # state afterwards.
     modified_segments = []
+    input_style = st.selectbox("Segments Input Style:", [
+        "Simple Route",
+        "Detailed Route",
+        # "Cowtool",
+    ])
     with st.expander("Segments", expanded=True):
-        for index in range(len(segments)):
-            color_col, airline_col, origin_col, destination_col, fare_brand_col, fare_class_col = st.columns((2, 24, 16, 16, 24, 12))
+        should_rerun = False
 
-            color_col.markdown(f"""
-            <label style="min-height: 1.5rem;"></label><div style="background-color: {SEGMENT_COLOURS[index % len(SEGMENT_COLOURS)]}; line-height: 1.6; width: 5px; padding: 12px 0">&nbsp;</div>
-            """, unsafe_allow_html=True)
-            st.session_state[f"colour-{index}"] = colour = SEGMENT_COLOURS[index % len(SEGMENT_COLOURS)]
-            # color_col.color_picker(
-            #     # "🎨",
-            #     "",
-            #     value=SEGMENT_COLOURS[index % len(SEGMENT_COLOURS)],
-            #     key=f"colour-{index}",
-            # )
+        if input_style == "Simple Route":
+            # Unpack the segment data into the session state, if needed.
+            first_segment_dict = segments[0]._asdict()
+            for key in Segment._fields:
+                if key == "route":
+                    continue
+                if not key in st.session_state:
+                    st.session_state[key] = first_segment_dict[key]
+            if "route" not in st.session_state:
+                route_str = ""
+                for segment in segments:
+                    if not route_str.endswith(segment.origin.airport_code):
+                        route_str += f",{segment.origin.airport_code}"
+                    route_str += f"-{segment.destination.airport_code}"
+                route_str = route_str.strip(",-")
+                st.session_state["route"] = route_str
+
+            airline_col, route_col, fare_brand_col, fare_class_col = st.columns((24, 32, 24, 12))
 
             airline = airline_col.selectbox(
                 "Airline ✈️",
                 AIRLINES,
                 format_func=lambda airline: airline.name,
                 help="Flight segment operating airline.",
-                key=f"airline-{index}",
+                key="airline",
             )
 
-            origin = origin_col.selectbox(
-                "Origin 🛫",
-                airports(),
-                format_func=lambda airport: f"{airport.city} {airport.airport_code}" if airport.city else airport.airport_code,
-                help="Flight segment origin airport code.",
-                key=f"origin-{index}",
-            )
-
-            destination = destination_col.selectbox(
-                "Destination 🛬",
-                airports(),
-                format_func=lambda airport: f"{airport.city} {airport.airport_code}" if airport.city else airport.airport_code,
-                help="Flight segment destination airport code.",
-                key=f"destination-{index}",
+            route = route_col.text_input(
+                "Route 🛫 🛬",
+                key="route",
             )
 
             if airline == AirCanada:
@@ -159,7 +155,7 @@ def calculate_points_miles(title):
                     FARE_BRANDS,
                     format_func=lambda brand: brand.name,
                     help="Air Canada fare brand.",
-                    key=f"fare_brand-{index}",
+                    key=f"fare_brand",
                 )
             else:
                 fare_brand = NoBrand
@@ -167,33 +163,113 @@ def calculate_points_miles(title):
             fare_class = fare_class_col.selectbox(
                 "Class 🎫",
                 list(string.ascii_uppercase) if fare_brand == NoBrand else fare_brand.fare_classes,
-                key=f"fare_class-{index}",
+                key=f"fare_class",
             )
 
-            # Construct a new Segment with the values.
-            modified_segments.append(Segment(
-                airline, origin, destination, fare_brand, fare_class, colour
-            ))
+            # Form new Segments with the values.
+            modified_segments = []
+            for route_part in re.split(r"[,;]", route):
+                last_airport = None
+                for airport_code in re.split(r"[-–—]", route_part):
+                    airport_code = airport_code.strip().upper()
+                    airport = airports_by_code().get(airport_code)
 
-        # Present buttons for adding or removing segments.
-        _, add_col, _, _, _, remove_col = st.columns((2, 24, 16, 16, 24, 12))
-        should_rerun = False
-        if add_col.button("Add Segment"):
-            last_segment = modified_segments[-1]
-            next_segment = Segment(
-                last_segment.airline,
-                last_segment.destination,
-                last_segment.origin,
-                last_segment.fare_brand,
-                last_segment.fare_class,
-                last_segment.colour
-            )
+                    if last_airport:
+                        modified_segments.append(Segment(
+                            airline,
+                            last_airport,
+                            airport,
+                            fare_brand,
+                            fare_class,
+                            SEGMENT_COLOURS[len(modified_segments) % len(SEGMENT_COLOURS)],
+                        ))
+                    last_airport = airport
 
-            modified_segments.append(next_segment)
-            should_rerun = True
-        elif len(segments) > 1 and remove_col.button("🗑"):
-            del modified_segments[-1]
-            should_rerun = True
+        elif input_style == "Detailed Route":
+            # Unpack the segment data into the session state, if needed.
+            for index, segment in enumerate(segments):
+                for key, value in segment._asdict().items():
+                    if not f"{key}-{index}" in st.session_state:
+                        st.session_state[f"{key}-{index}"] = value
+
+            for index in range(len(segments)):
+                color_col, airline_col, origin_col, destination_col, fare_brand_col, fare_class_col = st.columns((2, 24, 16, 16, 24, 12))
+
+                color_col.markdown(f"""
+                <label style="min-height: 1.5rem;"></label><div style="background-color: {SEGMENT_COLOURS[index % len(SEGMENT_COLOURS)]}; line-height: 1.6; width: 5px; padding: 12px 0">&nbsp;</div>
+                """, unsafe_allow_html=True)
+                st.session_state[f"colour-{index}"] = colour = SEGMENT_COLOURS[index % len(SEGMENT_COLOURS)]
+                # color_col.color_picker(
+                #     # "🎨",
+                #     "",
+                #     value=SEGMENT_COLOURS[index % len(SEGMENT_COLOURS)],
+                #     key=f"colour-{index}",
+                # )
+
+                airline = airline_col.selectbox(
+                    "Airline ✈️",
+                    AIRLINES,
+                    format_func=lambda airline: airline.name,
+                    help="Flight segment operating airline.",
+                    key=f"airline-{index}",
+                )
+
+                origin = origin_col.selectbox(
+                    "Origin 🛫",
+                    airports(),
+                    format_func=lambda airport: f"{airport.city} {airport.airport_code}" if airport.city else airport.airport_code,
+                    help="Flight segment origin airport code.",
+                    key=f"origin-{index}",
+                )
+
+                destination = destination_col.selectbox(
+                    "Destination 🛬",
+                    airports(),
+                    format_func=lambda airport: f"{airport.city} {airport.airport_code}" if airport.city else airport.airport_code,
+                    help="Flight segment destination airport code.",
+                    key=f"destination-{index}",
+                )
+
+                if airline == AirCanada:
+                    fare_brand = fare_brand_col.selectbox(
+                        "Service 🍷",
+                        FARE_BRANDS,
+                        format_func=lambda brand: brand.name,
+                        help="Air Canada fare brand.",
+                        key=f"fare_brand-{index}",
+                    )
+                else:
+                    fare_brand = NoBrand
+
+                fare_class = fare_class_col.selectbox(
+                    "Class 🎫",
+                    list(string.ascii_uppercase) if fare_brand == NoBrand else fare_brand.fare_classes,
+                    key=f"fare_class-{index}",
+                )
+
+                # Construct a new Segment with the values.
+                modified_segments.append(Segment(
+                    airline, origin, destination, fare_brand, fare_class, colour
+                ))
+
+            # Present buttons for adding or removing segments.
+            _, add_col, _, _, _, remove_col = st.columns((2, 24, 16, 16, 24, 12))
+            if add_col.button("Add Segment"):
+                last_segment = modified_segments[-1]
+                next_segment = Segment(
+                    last_segment.airline,
+                    last_segment.destination,
+                    last_segment.origin,
+                    last_segment.fare_brand,
+                    last_segment.fare_class,
+                    last_segment.colour
+                )
+
+                modified_segments.append(next_segment)
+                should_rerun = True
+            elif len(segments) > 1 and remove_col.button("🗑"):
+                del modified_segments[-1]
+                should_rerun = True
 
         # Store the modified segments for the next loop.
         segments = tuple(modified_segments)
