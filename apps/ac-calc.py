@@ -199,9 +199,9 @@ def calculate_points_miles(title):
     with summary_col:
         summary_code = dedent("""
         <style>
-            #calc-summary { position: relative; height: 320px }
+            #calc-summary { position: relative; height: 340px }
 
-            #sqx { display: flex; flex-direction: row; justify-content: space-around; max-height: 160px }
+            #sqx { display: flex; flex-direction: row; justify-content: space-around; max-height: 180px }
             #sqx > div:before { content: ""; float: left; padding-top: 100% }
             #sqx > div {
                 display: flex; flex: 1 0 auto; margin: 0 3%;
@@ -316,7 +316,7 @@ def calculate_points_miles(title):
         )
         for index, airline, origin, destination, fare_brand, fare_class, colour, calc in segments_and_calculations
     ]
-    calculations_cols = pd.MultiIndex.from_frame(pd.DataFrame([
+    calculations_cols = pd.MultiIndex.from_tuples([
         ("Flight", "Airline"),
         ("Flight", "Route"),
         ("Flight", "Region"),
@@ -331,7 +331,7 @@ def calculate_points_miles(title):
         ("Aeroplan", "Bonus Rate"),
         ("Aeroplan", "Bonus Points"),
         ("Aeroplan", "Total Points"),
-    ]))
+    ])
 
     calculations_df = pd.DataFrame(calculations_data, columns=calculations_cols)
 
@@ -448,10 +448,37 @@ def browse_airlines(title):
             rates_df = pd.DataFrame(rates, columns=(
                 "Class of service", "Eligible booking classes", "Rate",
             ))
-            rates_df.set_index(["Class of service"], inplace=True)
+            rates_df = rates_df.set_index(["Class of service"])
+            rates_df.index.rename(None, inplace=True)
+            rates_df = rates_df.rename_axis("Class of Service", axis=1)
+            rates_df = rates_df.style.set_table_styles((
+                {
+                    "selector": "",  # table
+                    "props": "width: 100%",
+                },
+                {
+                    "selector": "th",
+                    "props": "border-color: #a8afb8; padding: .25rem .5rem",
+                },
+                {
+                    "selector": "td",
+                    "props": "border-color: #dbdfe5; padding: .25rem .5rem; color: #333",
+                },
+                {
+                    "selector": "thead th.level0",
+                    "props": "background-color: #4a4f55; color: #f8fafd; font-weight: 500; border-right: 1px solid #6f767f; padding: 1rem .5rem .25rem .5rem",
+                },
+                {
+                    "selector": "tbody th",
+                    "props": "background-color: #6f767f; color: #f8fafd; font-weight: 500",
+                },
+                {
+                    "selector": "tbody td.col1",
+                    "props": "text-align: right",
+                }
+            ))
 
-            st.markdown("#### " +  ("All Regions" if region == "*" else region))
-            st.table(rates_df)
+            st.markdown("#### " +  ("All Regions" if region == "*" else region) + "\n" + rates_df.to_html(), unsafe_allow_html=True)
 
 
 def browse_airports(title):
@@ -519,7 +546,7 @@ def browse_airports(title):
     st.table(distances_df)
 
 
-def _render_map(arclayer_data=None, textlayer_data=None, ctr_lon=None, ctr_lat=None, zoom=None, get_width=6, height=320):
+def _render_map(arclayer_data=None, textlayer_data=None, ctr_lon=None, ctr_lat=None, zoom=None, get_width=6, height=340):
     if not ctr_lon or not ctr_lat:
         positions = [
             pos for route_positions in (
