@@ -395,7 +395,7 @@ def calculate_points_miles(title):
         )), index=(
             "Total Distance",
             "Aeroplan Base Points",
-            "Aeroplan Bonus Points Select Privilege",
+            "Bonus Points Select Privilege",
             "Aeroplan Base + Bonus Points"
         ))
         summary_df = summary_df.style.set_table_styles((
