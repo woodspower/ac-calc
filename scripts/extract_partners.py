@@ -14,6 +14,48 @@ import typer
 # https://www.aircanada.com/ca/en/aco/home/aeroplan/partners.html
 
 
+PARTNER_IDS_TO_CODES = {
+    "aegean": ("A3",),
+    "azul": ("AD",),
+    "air-india": ("AI",),
+    "avianca": ("AV",),
+    "eva-air": ("BR",),
+    "air-china": ("CA",),
+    "copa-airlines": ("CM",),
+    "cathay-pacific": ("CX", "KA"),
+    "air-dolomiti": ("EN",),
+    "ethiopian-airlines": ("ET",),
+    "eurowings": ("EW",),
+    "etihad-airways": ("EY",),
+    "gol": ("G3",),
+    "gulf-air": ("GF",),
+    "juneyao-airlines": ("HO",),
+    "lufthansa": ("LH", "CL"),
+    "lot-polish-airlines": ("LO",),
+    "swiss": ("LX",),
+    "egyptair": ("MS",),
+    "ana": ("NH", "NQ"),
+    "air-new-zealand": ("NZ",),
+    "olympic-air": ("OA",),
+    "austrian-airlines": ("OS",),
+    "croatia-airlines": ("OU",),
+    "asiana": ("OZ",),
+    "south-african-airways": ("SA",),
+    "scandinavian-airlines": ("SK",),
+    "brussels-airlines": ("SN",),
+    "singapore-airlines": ("SQ",),
+    "thai": ("TG",),
+    "turkish-airlines": ("TK",),
+    "tap-air-portugal": ("TP",),
+    "united": ("UA",),
+    "vistara": ("UK",),
+    "air-creebec": ("YN",),
+    "shenzen-airlines": ("ZH",),
+    "eurowings-discover": ("4Y",),
+    "canadian-north": ("5T"),
+}
+
+
 def main(
     partners_file: Path = typer.Argument("/project/ac_data/airline-en.json", help="Airline partners data file."),
     output_file: Optional[Path] = typer.Argument("/project/ac_calc/airlines/partners.json"),
@@ -77,6 +119,7 @@ def main(
 
         parsed_partners.append({
             "id": partner["id"],
+            "codes": PARTNER_IDS_TO_CODES.get(partner["id"], []),
             "name": partner["name"],
             "region": partner["region"],
             "website": partner["website"],

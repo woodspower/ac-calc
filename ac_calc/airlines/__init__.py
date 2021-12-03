@@ -25,6 +25,7 @@ FIXED25_BONUS_AIRLINES = {"austrian-airlines", "brussels-airlines", "lufthansa",
 class Airline:
 
     id: str
+    codes: list[str]
     name: str
     region: str
     website: str
@@ -176,6 +177,7 @@ def _load_airline_partners():
 
 AirCanada = AirCanadaAirline(
     id="air-canada",
+    codes=["AC", "KV", "QK", "RV", "ZX"],
     name="Air Canada",
     region="Canada & U.S.",
     website="http://www.aircanda.com",
