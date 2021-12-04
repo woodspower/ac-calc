@@ -83,7 +83,7 @@ def main():
             [
                 "Simple Route",
                 "Detailed Route",
-                "Cowtool",
+                "Cowculator",
             ],
             key="segments_input_style",
             help="Segments input interface style.",
