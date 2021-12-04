@@ -278,7 +278,7 @@ def calculate_points_miles(title):
                 del modified_segments[-1]
                 should_rerun = True
 
-        elif input_style == "Cowtool":
+        elif input_style == "Cowculator":
             # Unpack the segment data into the session state, if needed.
             if not "itinerary" in st.session_state:
                 itinerary_parts = []
